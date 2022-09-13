@@ -8,13 +8,13 @@ const GameSelect = (props: PropsType) => {
     <div className="max-w-2xl text-center">
       <h1
         onClick={() => setGameType("poker")}
-        className="text-6xl mb-20 sm:text-5xl capitalize tracking-widest text-gray-900 lg:text-7xl"
+        className="text-6xl mb-20 sm:text-5xl capitalize tracking-widest lg:text-7xl"
       >
         poker
       </h1>
       <h1
         onClick={() => setGameType("mahjong")}
-        className="text-6xl mb-20 sm:text-5xl capitalize tracking-widest text-gray-900 lg:text-7xl"
+        className="text-6xl mb-20 sm:text-5xl capitalize tracking-widest lg:text-7xl"
       >
         mahjong
       </h1>
