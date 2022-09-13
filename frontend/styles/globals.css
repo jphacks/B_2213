@@ -1,0 +1,16 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* poker用カラー設定 */
+.bg-poker-color {
+  background-color: #2d2d2d;
+}
+
+.font-poker-color {
+  color: #95913f;
+}
+
+.font-poker-family {
+  font-family: serif;
+}
