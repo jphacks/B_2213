@@ -1,6 +1,6 @@
 import CreateRoomLink from "../../../atoms/link/start/CreateRoomLink";
 import JoinRoomLink from "../../../atoms/link/start/JoinRoomLink";
-import type { GameProps } from "../../../../types/type";
+import type { GameProps } from "../../../../types/game/type";
 
 const StartTypeSelect = (props: GameProps) => {
   return (

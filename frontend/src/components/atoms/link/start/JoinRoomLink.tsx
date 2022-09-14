@@ -1,5 +1,5 @@
 import Link from "next/link";
-import type { GameProps } from "../../../../types/type";
+import type { GameProps } from "../../../../types/game/type";
 
 const JoinRoomLink = (props: GameProps) => {
   const { gameType } = props;

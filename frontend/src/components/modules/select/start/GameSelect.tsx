@@ -1,8 +1,6 @@
-type PropsType = {
-  setGameType: (gameType: string) => void;
-};
+import type { SetGameProps } from "../../../../types/game/type";
 
-const GameSelect = (props: PropsType) => {
+const GameSelect = (props: SetGameProps) => {
   const { setGameType } = props;
   return (
     <div className="max-w-2xl text-center">
