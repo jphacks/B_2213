@@ -1,12 +1,12 @@
 import Link from "next/link";
-import type { GameProps } from "../../../../types/type";
+import type { GameProps } from "../../../../types/game/type";
 
 const JoinRoomLink = (props: GameProps) => {
   const { gameType } = props;
 
   return (
     <Link href={"/join-room/" + gameType}>
-      <h1 className="text-6xl mb-20 sm:text-5xl capitalize tracking-widest lg:text-7xl">
+      <h1 className="text-[50px] mb-20 sm:text-5xl capitalize tracking-widest lg:text-7xl">
         Join Room
       </h1>
     </Link>
