@@ -7,7 +7,7 @@ services:
       context: .
       dockerfile: ./docker/app/Dockerfile
     ports:
-      - "3000:8080"
+      - "8000:8080"
     tty: true
     environment:
       TZ: Asia/Tokyo
