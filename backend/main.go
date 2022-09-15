@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"pms/src/controller"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -48,6 +49,9 @@ func main() {
 			"message": "hi",
 		})
 	})
+	status := r.Group("/api/status")
+
+	status.GET("/:game", controller.GetStatus)
 
 	r.GET("/createRoom/:id", func(c *gin.Context) {
 		id := c.Param("id")
