@@ -49,19 +49,24 @@ func main() {
 			"message": "hi",
 		})
 	})
-	status := r.Group("/api/status")
+
+	api := r.Group("/api")
+
+	api.GET("/createRoom/:game", controller.CreateRoom)
+
+	status := api.Group("/status")
 
 	status.GET("/:game", controller.GetStatus)
 
-	r.GET("/createRoom/:id", func(c *gin.Context) {
-		id := c.Param("id")
-		if _, existBool := rms[id]; existBool {
-			c.JSON(400, gin.H{"message": "Room already exists"})
-		} else {
-			rms[id] = clients{}
-			c.JSON(http.StatusOK, gin.H{"message": "Room Created!"})
-		}
-	})
+	// r.GET("/createRoom/:id", func(c *gin.Context) {
+	// 	id := c.Param("id")
+	// 	if _, existBool := rms[id]; existBool {
+	// 		c.JSON(400, gin.H{"message": "Room already exists"})
+	// 	} else {
+	// 		rms[id] = clients{}
+	// 		c.JSON(http.StatusOK, gin.H{"message": "Room Created!"})
+	// 	}
+	// })
 
 	r.GET("/ws/:id", func(c *gin.Context) {
 		id := c.Param("id")
