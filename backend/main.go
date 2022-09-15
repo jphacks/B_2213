@@ -109,11 +109,11 @@ func wshandler(w http.ResponseWriter, r *http.Request, id string) {
 		log.Println(msg.Str)
 		if err != nil {
 			if websocket.IsCloseError(err, 1005) {
-				rms[id][conn] = false
 				log.Printf("Disconnected")
 			}
 			log.Println("!!!")
 			log.Println(err)
+			rms[id][conn] = false
 			return
 		}
 		wsWriter(msg, id)
