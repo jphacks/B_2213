@@ -7,11 +7,9 @@ describe("Test Start Page", () => {
   // render時のUIテスト
   test("render startUI", async () => {
     render(<Start />);
-    const poker_heading = screen.getByText("poker");
-    const mahjong_heading = screen.getByText("mahjong");
 
-    expect(poker_heading).toBeInTheDocument();
-    expect(mahjong_heading).toBeInTheDocument();
+    expect(screen.getByText("poker")).toBeInTheDocument();
+    expect(screen.getByText("mahjong")).toBeInTheDocument();
   });
 
   // poker選択時のUI変更テスト
@@ -21,13 +19,9 @@ describe("Test Start Page", () => {
 
     fireEvent.click(poker_heading);
 
-    const new_heading = screen.getByText("New Room");
-    const join_heading = screen.getByText("Join Room");
-    const back_button = screen.getByText("back");
-
-    expect(new_heading).toBeInTheDocument();
-    expect(join_heading).toBeInTheDocument();
-    expect(back_button).toBeInTheDocument();
+    expect(screen.getByText("New Room")).toBeInTheDocument();
+    expect(screen.getByText("Join Room")).toBeInTheDocument();
+    expect(screen.getByText("back")).toBeInTheDocument();
   });
 
   // mahjong選択時のUI変更テスト
@@ -37,12 +31,34 @@ describe("Test Start Page", () => {
 
     fireEvent.click(mahjong_heading);
 
-    const new_heading = screen.getByText("New Room");
-    const join_heading = screen.getByText("Join Room");
-    const back_button = screen.getByText("back");
+    expect(screen.getByText("New Room")).toBeInTheDocument();
+    expect(screen.getByText("Join Room")).toBeInTheDocument();
+    expect(screen.getByText("back")).toBeInTheDocument();
+  });
 
-    expect(new_heading).toBeInTheDocument();
-    expect(join_heading).toBeInTheDocument();
-    expect(back_button).toBeInTheDocument();
+  // backボタン機能テスト
+  test("back function", async () => {
+    render(<Start />);
+    // mahjongおしてback押す
+    const mahjong_heading = screen.getByRole("heading", { name: "mahjong" });
+    fireEvent.click(mahjong_heading);
+
+    let back_button = screen.getByRole("heading", { name: "back" });
+    fireEvent.click(back_button);
+
+    expect(screen.getByText("poker")).toBeInTheDocument();
+    expect(screen.getByText("mahjong")).toBeInTheDocument();
+    expect(screen.queryByText("back")).not.toBeInTheDocument(); // backはないことを期待する
+
+    // pokerおしてback押す
+    const poker_heading = screen.getByRole("heading", { name: "poker" });
+    fireEvent.click(poker_heading);
+
+    back_button = screen.getByRole("heading", { name: "back" });
+    fireEvent.click(back_button);
+
+    expect(screen.getByText("poker")).toBeInTheDocument();
+    expect(screen.getByText("mahjong")).toBeInTheDocument();
+    expect(screen.queryByText("back")).not.toBeInTheDocument(); // backはないことを期待する
   });
 });
