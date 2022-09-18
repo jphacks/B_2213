@@ -15,3 +15,23 @@
   font-family: serif;
   font-weight: bolder;
 }
+
+.border-gold {
+  border-color: #95913f;
+  border-width: 1px;
+}
+
+.border-gold-button {
+  background-color: transparent;
+  border-color: #95913f;
+  border-width: 1px;
+}
+.border-gold-button:hover {
+  background-color: #95913f;
+  color: #2d2d2d;
+}
+.border-gold-button:active {
+  background-color: transparent;
+  border-color: #95913f;
+  border-width: 1px;
+}

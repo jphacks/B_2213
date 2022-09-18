@@ -1,8 +1,8 @@
 import { NextPage } from "next";
 import { useState } from "react";
-import BackGameSelect from "../src/components/atoms/transition/start/BackGameSelect";
-import GameSelect from "../src/components/modules/select/start/GameSelect";
-import StartTypeSelect from "../src/components/modules/select/start/StartTypeSelect";
+import BackGameSelect from "../../src/components/atoms/transition/start/BackGameSelect";
+import GameSelect from "../../src/components/modules/select/start/GameSelect";
+import StartTypeSelect from "../../src/components/modules/select/start/StartTypeSelect";
 
 const Start: NextPage = () => {
   const [gameType, setGameType] = useState<string | null>(null);
