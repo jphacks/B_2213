@@ -22,29 +22,51 @@
 
 ### リクエスト
 
-`GET /api/createRoom/poker`
+`POST /api/createRoom/poker`
 
 ### レスポンス
 
 | Column | type | Details |
 | -------- | -------- | -------- |
-| roomID | string | RoomID |
+| userID | int | userID |
+| roomID | string | A-Z, 0-9の5文字 |
+| userName | string | 表示名 |
 
 ```json
 {
-    "roomID": "a0s9d8fy"
+    "userInfo": {
+        "userID": number,
+        "roomID": string,
+        "userName": string,
+        "permission": "admin"
+    }
 }
 ```
 
-## ルーム参加
+## ルーム作成
 
 ### リクエスト
 
-`WebSocket /room/{roomID}`
+`POST /api/joinRoom/poker`
 
 ### レスポンス
 
-別に詳述
+| Column | type | Details |
+| -------- | -------- | -------- |
+| userID | int | userID |
+| roomID | string | roomID |
+| userName | string | 表示名 |
+
+```json
+{
+    "register_info": {
+        "userID": 901723,
+        "roomID": SOIUQ,
+        "userName": "KF",
+        "permission": "normal"
+    }
+}
+```
 
 ## ルームステータス
 
