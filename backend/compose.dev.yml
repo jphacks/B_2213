@@ -1,8 +1,8 @@
 version: '3.9'
 
 services:
-  app:
-    container_name: app
+  dev-app:
+    container_name: dev_app
     build:
       context: .
       dockerfile: ./docker/dev_app/Dockerfile
