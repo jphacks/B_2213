@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"pms/src/controller"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -49,15 +50,25 @@ func main() {
 		})
 	})
 
-	r.GET("/createRoom/:id", func(c *gin.Context) {
-		id := c.Param("id")
-		if _, existBool := rms[id]; existBool {
-			c.JSON(400, gin.H{"message": "Room already exists"})
-		} else {
-			rms[id] = clients{}
-			c.JSON(http.StatusOK, gin.H{"message": "Room Created!"})
-		}
-	})
+	api := r.Group("/api")
+
+	api.GET("/createRoom/:game", controller.CreateRoom)
+
+	status := api.Group("/status")
+
+	status.GET("/:game", controller.GetStatus)
+
+	// r.GET("/createRoom/:id", func(c *gin.Context) {
+	// 	id := c.Param("id")
+	// 	if _, existBool := rms[id]; existBool {
+	// 		c.JSON(400, gin.H{"message": "Room already exists"})
+	// 	} else {
+	// 		rms[id] = clients{}
+	// 		c.JSON(http.StatusOK, gin.H{"message": "Room Created!"})
+	// 	}
+	// })
+	status.GET("/:game/:roomID", controller.RoomStatus)
+
 
 	r.GET("/ws/:id", func(c *gin.Context) {
 		id := c.Param("id")

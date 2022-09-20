@@ -1,4 +1,4 @@
-module ws_prac
+module pms
 
 go 1.18
 
