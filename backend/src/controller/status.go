@@ -52,3 +52,20 @@ func CreateRoom(c *gin.Context) {
 	var res = map[string]string{"roomID": result}
 	view.StatusOK(c, res)
 }
+
+func RoomStatus(c *gin.Context) {
+	game := c.Param("game")
+	roomID := c.Param("roomID")
+	if game != "poker" {
+		view.RequestError(c, "no such game is supported in PMC")
+		return
+	}
+	_, existbool := rms[roomID]
+	if existbool {
+		res := map[string]string{"status": "waiting"}
+		view.StatusOK(c, res)
+	} else {
+		res := map[string]string{"status": "finished"}
+		view.StatusOK(c, res)
+	}
+}

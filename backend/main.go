@@ -67,6 +67,8 @@ func main() {
 	// 		c.JSON(http.StatusOK, gin.H{"message": "Room Created!"})
 	// 	}
 	// })
+	status.GET("/:game/:roomID", controller.RoomStatus)
+
 
 	r.GET("/ws/:id", func(c *gin.Context) {
 		id := c.Param("id")
