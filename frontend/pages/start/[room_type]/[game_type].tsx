@@ -14,6 +14,9 @@ const JoinRoom: NextPage = () => {
     (game_type !== "poker" && game_type !== "mahjong") ||
     (room_type !== "create_room" && room_type !== "join_room")
   ) {
+    // 初回ロード時は最初queryの値を取ってこれずqueryはundifindとなる
+    // またその時にpushメソッドを呼んでも準備ができておらず以下を実行できないためエラーとなる
+    // isReadyでバグ修正必須
     router.push("/start");
   }
 
