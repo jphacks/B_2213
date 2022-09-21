@@ -5,7 +5,11 @@ import { useState } from "react";
 const CreateRoomForm = () => {
   const [user_name, setUserName] = useState<string>("");
   const handleSendButton = () => {
-    console.log(user_name);
+    if (user_name.replace(/\s+/g, "")) {
+      console.log(user_name);
+    } else {
+      console.log("空欄です");
+    }
   };
 
   return (
