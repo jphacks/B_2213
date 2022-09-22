@@ -6,6 +6,12 @@ MYSQL_DATABASE=****
 TZ=Asia/Tokyo
 ```
 
+# 起動方法
+
+`make run`
+or
+`docker compose up`
+
 # API Endpoints
 
 [RestAPI](./doc/restapi.md)
