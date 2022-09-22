@@ -1,11 +1,14 @@
 DOCKER=docker compose
 
 run:
-	$(DOCKER) down --remove-orphans
+	make down
 	$(DOCKER) up --build -d
 down:
-	$(DOCKER) down --remove-orphans
+	$(DOCKER) down
 
 dev-run:
-	$(DOCKER) down --remove-orphans
+	make dev-down
 	$(DOCKER) -f ./compose.dev.yml up -d
+
+dev-down:
+	$(DOCKER) -f ./compose.dev.yml down
