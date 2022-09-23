@@ -24,44 +24,66 @@
 
 `POST /api/createRoom/poker`
 
+| Column     | type   | Details                       |
+| ---------- | ------ | ----------------------------- |
+| userName | string | userName |
+
+```json
+{
+	"userName": "KF"
+}
+```
+
 ### レスポンス
 
-| Column | type | Details |
-| -------- | -------- | -------- |
-| userID | int | userID |
-| roomID | string | A-Z, 0-9の5文字 |
-| userName | string | 表示名 |
+| Column     | type   | Details                       |
+| ---------- | ------ | ----------------------------- |
+| regsiterInfo.userID     | string | 頭文字はU固定、合計7文字      |
+| regsiterInfo.roomID     | string | 頭文字はR固定、A-Z/0-9の5文字 |
+| regsiterInfo.userName   | string | 表示名                        |
+| regsiterInfo.permission | string | "admin" or "normal" <br> ゲーム内でadminのみが使えるコマンドが存在する |
 
 ```json
 {
     "userInfo": {
-        "userID": number,
-        "roomID": string,
-        "userName": string,
+        "userID": "U901723",
+        "roomID": "RSOIUQ",
+        "userName": "KF",
         "permission": "admin"
     }
 }
 ```
 
-## ルーム作成
+## ルーム参加
 
 ### リクエスト
 
 `POST /api/joinRoom/poker`
 
+| Column     | type   | Details                       |
+| ---------- | ------ | ----------------------------- |
+| userName | string | userName |
+
+```json
+{
+	"userName": "KF"
+}
+```
+
 ### レスポンス
 
 | Column | type | Details |
 | -------- | -------- | -------- |
-| userID | int | userID |
-| roomID | string | roomID |
-| userName | string | 表示名 |
+| regsiterInfo.userID | string | 頭文字はU固定、合計7文字 |
+| regsiterInfo.roomID | string | 頭文字はR固定、A-Z/0-9の5文字 |
+| regsiterInfo.userName | string | 表示名 |
+| regsiterInfo.permission | string | "admin" or "normal" <br> ゲーム内でadminのみが使えるコマンドが存在する |
 
 ```json
 {
     "register_info": {
-        "userID": 901723,
-        "roomID": SOIUQ,
+        "userID": "U901723",
+        "roomID": "RSOIUQ",
         "userName": "KF",
         "permission": "normal"
     }
