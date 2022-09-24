@@ -6,13 +6,13 @@ import GameSelect from "../../src/components/modules/select/start/GameSelect";
 import StartTypeSelect from "../../src/components/modules/select/start/StartTypeSelect";
 
 const Start: NextPage = () => {
-  // queryにgame_typeの値があれば使用。
-  // 違うページから遷移してきた場合にgame_typeの値をqueryに持していることがあるため。
+  // queryにgameTypeの値があれば使用。
+  // 違うページから遷移してきた場合にgameTypeの値をqueryに持していることがあるため。
   const router = useRouter();
-  // game_typeにstring[]がないことを強制させる
-  const game_type = (router.query.game_type ?? null) as string | null;
+  // gameTypeにstring[]がないことを強制させる
+  const gameType_from_query = (router.query.gameType ?? null) as string | null;
 
-  const [gameType, setGameType] = useState<string | null>(game_type);
+  const [gameType, setGameType] = useState<string | null>(gameType_from_query);
 
   return (
     <div className="bg-poker-color font-poker-color font-poker-family">
