@@ -11,7 +11,7 @@ const CreateRoomForm = () => {
   const handleSendButton = async () => {
     if (user_name.replace(/\s+/g, "")) {
       try {
-        const apiUrl = process.env.NEXT_PUBLIC_API_URL + "/create_room/poker";
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL + "/createRoom/poker";
         const res = await axios.post(apiUrl, {
           user_name: user_name,
         });

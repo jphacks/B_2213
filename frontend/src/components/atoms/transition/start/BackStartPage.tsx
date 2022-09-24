@@ -1,12 +1,12 @@
 import { useRouter } from "next/router";
 
-const BackStartPage = ({ game_type }: { game_type: string }) => {
+const BackStartPage = ({ gameType }: { gameType: string }) => {
   const router = useRouter();
 
   const handleBackButton = () => {
     // URLに含まずにqueryとして値を渡す
     router.push(
-      { pathname: "/start", query: { game_type: game_type } },
+      { pathname: "/start", query: { gameType: gameType } },
       "/start"
     );
   };

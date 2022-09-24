@@ -18,12 +18,12 @@ const JoinRoom: NextPage = () => {
     return <Loading />;
   }
 
-  const { game_type, room_type } = router.query;
+  const { gameType, roomType } = router.query;
 
   // 指定の動的ルーティング以外はstartページへリダイレクト
   if (
-    (game_type !== "poker" && game_type !== "mahjong") ||
-    (room_type !== "create_room" && room_type !== "join_room")
+    (gameType !== "poker" && gameType !== "mahjong") ||
+    (roomType !== "createRoom" && roomType !== "joinRoom")
   ) {
     router.push("/start");
   }
@@ -32,8 +32,8 @@ const JoinRoom: NextPage = () => {
     <div className="bg-poker-color font-poker-color font-poker-family">
       <section className="h-screen bg-cover">
         <div className="flex h-full w-full items-center justify-center container mx-auto px-8">
-          <BackStartPage game_type={game_type as string} />
-          {room_type === "create_room" ? (
+          <BackStartPage gameType={gameType as string} />
+          {roomType === "createRoom" ? (
             <div>
               <CreateRoomForm />
             </div>
