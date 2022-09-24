@@ -60,7 +60,9 @@ func CreateRoom(c *gin.Context) {
 		UserName:   r.UserName,
 		Permission: "admin",
 	}
-	model.CreateUser(&u)
+	if err := model.CreateUser(&u); err != nil {
+		view.RequestError(c, "error occured")
+	}
 
 	rms[result] = clients{}
 
