@@ -18,6 +18,7 @@ const CreateRoomForm = () => {
 
         console.log(res.data);
       } catch (e) {
+        console.log(e);
         setErrorMessage("unexpected error");
       }
     } else {

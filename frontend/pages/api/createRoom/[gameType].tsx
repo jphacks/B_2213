@@ -3,19 +3,19 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { useRouter } from "next/router";
 
 type Data = {
-  user_id: number;
-  room_id: string;
-  user_name: string;
+  userID: number;
+  roomID: string;
+  userName: string;
 };
 
 export default function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
-  const user_name: string = req.body.user_name;
+  const userName: string = req.body.userName;
   res.status(200).json({
-    user_id: 1,
-    room_id: "angrjk",
-    user_name: user_name,
+    userID: 1,
+    roomID: "angrjk",
+    userName: userName,
   });
 }
