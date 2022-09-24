@@ -5,7 +5,7 @@ const CreateRoomLink = (props: GameProps) => {
   const { gameType } = props;
 
   return (
-    <Link href={"/start/create_room/" + gameType}>
+    <Link href={"/start/createRoom/" + gameType}>
       <h1 className="text-[50px] mb-20 sm:text-5xl capitalize tracking-widest lg:text-7xl">
         New Room
       </h1>
