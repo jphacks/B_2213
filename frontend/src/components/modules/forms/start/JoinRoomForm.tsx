@@ -4,17 +4,17 @@ import RoomIdInput from "../../../atoms/form/start/RoomIdInput";
 import { useState } from "react";
 
 const JoinRoomForm = () => {
-  const [user_name, setUserName] = useState<string>("");
-  const [room_id, setRoomId] = useState<string>("");
+  const [userName, setUserName] = useState<string>("");
+  const [roomID, setRoomID] = useState<string>("");
 
   const handleSendButton = () => {
-    console.log(user_name);
+    console.log(userName);
   };
 
   return (
     <div className="max-w-2xl text-center">
-      <UserNameInput {...{ user_name, setUserName }} />
-      <RoomIdInput {...{ room_id, setRoomId }} />
+      <UserNameInput {...{ userName, setUserName }} />
+      <RoomIdInput {...{ roomID, setRoomID }} />
       <SendButton handleSendButton={() => handleSendButton()} />
     </div>
   );
