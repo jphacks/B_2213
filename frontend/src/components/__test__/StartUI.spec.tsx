@@ -3,6 +3,13 @@ import user from "@testing-library/user-event";
 import "@testing-library/jest-dom";
 import Start from "../../../pages/start";
 
+// useRouterのquery情報をモック化しないとテスト時にエラーが出る。
+jest.mock("next/router", () => ({
+  useRouter: () => ({
+    query: { gameType: undefined },
+  }),
+}));
+
 describe("Test Start Page", () => {
   // render時のUIテスト
   test("render startUI", async () => {
