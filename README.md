@@ -5,6 +5,6 @@ jphacksに向け学生3人で開発中のwebアプリケーションです。
 
 特に海外で使用することを想定し、英語表記となっています。 *日本で実際のお金などを賭けplayすることは違法です。本アプリはあくまでチップのやりとりのみです。
 ## 使用技術
-frontend -  TypeScript Next.js Docker jest
-backend  -  Go gin Docker
-other    -  websocket
+- frontend: TypeScript Next.js Docker jest
+- backend:  Go gin Docker
+- other:    websocket
