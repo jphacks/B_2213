@@ -6,6 +6,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func StatusOK(c *gin.Context, msg any){
+func StatusOK(c *gin.Context, msg any) {
 	c.JSON(http.StatusOK, msg)
 }

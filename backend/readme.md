@@ -15,3 +15,17 @@ or
 # API Endpoints
 
 [RestAPI](./doc/restapi.md)
+
+## 失敗時
+
+原則、GitHub APIに倣って400代のエラーを返す
+
+| Column | type | Details |
+| -------- | -------- | -------- |
+| message | string | エラーに関するメッセージ |
+
+```json
+{
+    "message": "permission denied"
+}
+```

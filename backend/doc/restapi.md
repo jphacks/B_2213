@@ -22,17 +22,35 @@
 
 ### リクエスト
 
-`GET /api/createRoom/poker`
+`POST /api/createRoom/poker`
 
-### レスポンス
-
-| Column | type | Details |
-| -------- | -------- | -------- |
-| roomID | string | RoomID |
+| Column     | type   | Details                       |
+| ---------- | ------ | ----------------------------- |
+| userName | string | userName |
 
 ```json
 {
-    "roomID": "a0s9d8fy"
+	"userName": "KF"
+}
+```
+
+### レスポンス
+
+| Column     | type   | Details                       |
+| ---------- | ------ | ----------------------------- |
+| regsiterInfo.userID     | string | 頭文字はU固定、合計7文字      |
+| regsiterInfo.roomID     | string | 頭文字はR固定、A-Z/0-9の5文字 |
+| regsiterInfo.userName   | string | 表示名                        |
+| regsiterInfo.permission | string | "admin" or "normal" <br> ゲーム内でadminのみが使えるコマンドが存在する |
+
+```json
+{
+    "userInfo": {
+        "userID": "U901723",
+        "roomID": "RSOIUQ",
+        "userName": "KF",
+        "permission": "admin"
+    }
 }
 ```
 
@@ -40,11 +58,37 @@
 
 ### リクエスト
 
-`WebSocket /room/{roomID}`
+`POST /api/joinRoom/poker`
+
+| Column     | type   | Details                       |
+| ---------- | ------ | ----------------------------- |
+| userName | string | userName |
+
+```json
+{
+	"userName": "KF"
+}
+```
 
 ### レスポンス
 
-別に詳述
+| Column | type | Details |
+| -------- | -------- | -------- |
+| regsiterInfo.userID | string | 頭文字はU固定、合計7文字 |
+| regsiterInfo.roomID | string | 頭文字はR固定、A-Z/0-9の5文字 |
+| regsiterInfo.userName | string | 表示名 |
+| regsiterInfo.permission | string | "admin" or "normal" <br> ゲーム内でadminのみが使えるコマンドが存在する |
+
+```json
+{
+    "register_info": {
+        "userID": "U901723",
+        "roomID": "RSOIUQ",
+        "userName": "KF",
+        "permission": "normal"
+    }
+}
+```
 
 ## ルームステータス
 
