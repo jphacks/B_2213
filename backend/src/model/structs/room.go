@@ -14,4 +14,6 @@ type ResRegister struct {
 }
 
 type RegisterJoin struct {
+	UserName string `json:"userName" binding:"required"`
+	RoomID   string `json:"roomID" binding:"required"`
 }

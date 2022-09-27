@@ -56,6 +56,7 @@ func main() {
 	api := r.Group("/api")
 
 	api.GET("/createRoom/:game", controller.CreateRoom)
+	api.GET("/joinRoom/:game", controller.CreateRoom)
 
 	status := api.Group("/status")
 

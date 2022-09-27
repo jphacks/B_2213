@@ -4,8 +4,8 @@ import (
 	// "log"
 	"crypto/rand"
 
-	"pms/src/model/structs"
 	"pms/src/model"
+	"pms/src/model/structs"
 	"pms/src/view"
 
 	"github.com/gin-gonic/gin"
@@ -44,6 +44,46 @@ func CreateRoom(c *gin.Context) {
 
 	// roomID生成
 	existbool := true
+	var roomID string
+
+	for existbool {
+		roomID = "R" + randomString(5)
+		_, existbool = rms[roomID]
+	}
+
+	// userName取得
+	r := structs.Register{}
+	c.BindJSON(&r)
+
+	u := model.User{
+		RoomID:     roomID,
+		UserName:   r.UserName,
+		Permission: "admin",
+	}
+	if err := model.CreateUser(&u); err != nil {
+		view.RequestError(c, "error occured")
+	}
+
+	rms[roomID] = clients{}
+
+	var resreg structs.ResRegister
+	u.ResRegister(&resreg)
+	res := map[string]any{
+		"data": resreg,
+	}
+	view.StatusOK(c, res)
+}
+
+// HandlerFunc for POST /api/joinRoom/[poker or mahjong]
+func JoinRoom(c *gin.Context) {
+	game := c.Param("game")
+	if game != "poker" {
+		view.RequestError(c, "no such game is supported in PMC")
+		return
+	}
+
+	// roomID生成
+	existbool := true
 	var result string
 
 	for existbool {
@@ -52,13 +92,13 @@ func CreateRoom(c *gin.Context) {
 	}
 
 	// userName取得
-	r := structs.Register{}
+	r := structs.RegisterJoin{}
 	c.BindJSON(&r)
 
 	u := model.User{
 		RoomID:     result,
 		UserName:   r.UserName,
-		Permission: "admin",
+		Permission: "normal",
 	}
 	if err := model.CreateUser(&u); err != nil {
 		view.RequestError(c, "error occured")

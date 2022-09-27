@@ -1,11 +1,9 @@
 package model
 
 import (
-	"strconv"
 	"pms/src/model/structs"
+	"strconv"
 )
-
-// "pms/src/model/structs"
 
 type User struct {
 	UserID     int    `json:"userID" gorm:"primaryKey"`
