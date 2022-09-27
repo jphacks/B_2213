@@ -96,7 +96,7 @@ func JoinRoom(c *gin.Context) {
 	c.BindJSON(&r)
 
 	u := model.User{
-		RoomID:     result,
+		RoomID:     r.RoomID,
 		UserName:   r.UserName,
 		Permission: "normal",
 	}
