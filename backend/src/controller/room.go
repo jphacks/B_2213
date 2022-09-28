@@ -24,7 +24,7 @@ func randomString(char int) string {
 
 	// 乱数を生成
 	b := make([]byte, char)
-	rand.Read(b)
+	_, _ = rand.Read(b)
 
 	// letters からランダムに取り出して文字列を生成
 	for _, v := range b {
@@ -53,7 +53,11 @@ func CreateRoom(c *gin.Context) {
 
 	// userName取得
 	r := structs.Register{}
-	c.BindJSON(&r)
+	if err := c.ShouldBindJSON(&r); err != nil {
+		// log.Println(err)
+		view.RequestError(c, "bad JSON")
+		return
+	}
 
 	u := model.User{
 		RoomID:     roomID,
@@ -62,6 +66,7 @@ func CreateRoom(c *gin.Context) {
 	}
 	if err := model.CreateUser(&u); err != nil {
 		view.RequestError(c, "error occured")
+		return
 	}
 
 	rms[roomID] = clients{}
@@ -93,7 +98,11 @@ func JoinRoom(c *gin.Context) {
 
 	// userName取得
 	r := structs.RegisterJoin{}
-	c.BindJSON(&r)
+	if err := c.ShouldBindJSON(&r); err != nil {
+		// log.Println(err)
+		view.RequestError(c, "bad JSON")
+		return
+	}
 
 	u := model.User{
 		RoomID:     r.RoomID,
@@ -102,6 +111,7 @@ func JoinRoom(c *gin.Context) {
 	}
 	if err := model.CreateUser(&u); err != nil {
 		view.RequestError(c, "error occured")
+		return
 	}
 
 	rms[result] = clients{}

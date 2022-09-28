@@ -3,7 +3,7 @@ package main
 import (
 	"bytes"
 	"encoding/json"
-	"io/ioutil"
+	"io"
 	"log"
 	"net/http"
 	"pms/migration"
@@ -55,8 +55,8 @@ func main() {
 
 	api := r.Group("/api")
 
-	api.GET("/createRoom/:game", controller.CreateRoom)
-	api.GET("/joinRoom/:game", controller.JoinRoom)
+	api.POST("/createRoom/:game", controller.CreateRoom)
+	api.POST("/joinRoom/:game", controller.JoinRoom)
 
 	status := api.Group("/status")
 
@@ -84,8 +84,8 @@ func main() {
 
 func logger() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		ByteBody, _ := ioutil.ReadAll(c.Request.Body)
-		c.Request.Body = ioutil.NopCloser(bytes.NewBuffer(ByteBody))
+		ByteBody, _ := io.ReadAll(c.Request.Body)
+		c.Request.Body = io.NopCloser(bytes.NewBuffer(ByteBody))
 		log.Println("Endpoint: " + c.FullPath())
 		log.Println("Body: " + string(ByteBody))
 
@@ -107,7 +107,7 @@ func wshandler(w http.ResponseWriter, r *http.Request, id string) {
 		},
 	}
 	conn, err := wsupgrader.Upgrade(w, r, nil)
-	defer conn.Close()
+	// defer conn.Close()
 
 	if err != nil {
 		log.Println("Failed to set websocket upgrade")
