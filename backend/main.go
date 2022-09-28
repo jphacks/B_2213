@@ -22,19 +22,7 @@ type rooms map[string](clients)
 
 var rms rooms
 
-func main() {
-	// DBマイグレーション
-	// model.Connectionがエラー発生しなくなるまで=DBが立ち上がるまで待機
-	// (docker composeで立ち上げると必ずdbのほうが立ち上がり遅い)
-
-	_, dbConErr := model.Connection()
-	for dbConErr != nil {
-		time.Sleep(time.Second)
-		_, dbConErr = model.Connection()
-	}
-	migration.Migrate()
-	rms = rooms{}
-
+func Router() *gin.Engine {
 	r := gin.Default()
 
 	r.Use(logger())
@@ -47,11 +35,7 @@ func main() {
 	// ルーティング
 	//routing.Routing(r)
 
-	r.GET("/", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{
-			"message": "hi",
-		})
-	})
+	r.GET("/", index)
 
 	api := r.Group("/api")
 
@@ -79,6 +63,23 @@ func main() {
 		wshandler(c.Writer, c.Request, id)
 	})
 
+	return r
+}
+
+func main() {
+	// DBマイグレーション
+	// model.Connectionがエラー発生しなくなるまで=DBが立ち上がるまで待機
+	// (docker composeで立ち上げると必ずdbのほうが立ち上がり遅い)
+
+	_, dbConErr := model.Connection()
+	for dbConErr != nil {
+		time.Sleep(time.Second)
+		_, dbConErr = model.Connection()
+	}
+	migration.Migrate()
+	rms = rooms{}
+
+	r := Router()
 	_ = r.Run()
 }
 
@@ -95,6 +96,12 @@ func logger() gin.HandlerFunc {
 
 		c.Next()
 	}
+}
+
+func index(c *gin.Context) {
+	c.JSON(200, gin.H{
+		"message": "hi",
+	})
 }
 
 func wshandler(w http.ResponseWriter, r *http.Request, id string) {
