@@ -14,7 +14,7 @@ or
 
 # API Endpoints
 
-[RestAPI](./doc/restapi.md)
+[RestAPI](https://dazzling-balmoral-ae7.notion.site/API-Document-53049bbdbf9f46e7800746e36ad44629)
 
 ## 失敗時
 
