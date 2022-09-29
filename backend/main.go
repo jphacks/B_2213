@@ -60,8 +60,10 @@ func Router() *gin.Engine {
 
 	r.GET("/ws/:id", func(c *gin.Context) {
 		id := c.Param("id")
-		wshandler(c.Writer, c.Request, id)
+		wshandlerForDemo(c.Writer, c.Request, id)
 	})
+
+	r.GET("/simpleWs", controller.SimpleWs)
 
 	return r
 }
@@ -104,7 +106,7 @@ func index(c *gin.Context) {
 	})
 }
 
-func wshandler(w http.ResponseWriter, r *http.Request, id string) {
+func wshandlerForDemo(w http.ResponseWriter, r *http.Request, id string) {
 	var wsupgrader = websocket.Upgrader{
 		HandshakeTimeout: 0,
 		ReadBufferSize:   1024,
