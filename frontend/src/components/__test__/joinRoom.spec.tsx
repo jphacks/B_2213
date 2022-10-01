@@ -5,7 +5,7 @@ import JoinRoomForm from "../modules/forms/start/JoinRoomForm";
 describe("Test joinRoom Page", () => {
   // render時のUIテスト
   test("render joinRoom Page", async () => {
-    render(<JoinRoomForm />);
+    render(<JoinRoomForm gameType={"poker"} />);
 
     expect(screen.getByText("user name")).toBeInTheDocument();
     expect(screen.getByText("room id")).toBeInTheDocument();
@@ -18,7 +18,7 @@ describe("Test joinRoom Page", () => {
   // 空欄での送信時処理テスト
   test("send empty", async () => {
     // 何も入力なしで送信
-    render(<JoinRoomForm />);
+    render(<JoinRoomForm gameType={"poker"} />);
     const sendButton = screen.getByRole("button", { name: "Send" });
     fireEvent.click(sendButton);
     expect(
@@ -29,7 +29,7 @@ describe("Test joinRoom Page", () => {
   // usernameのみ空欄での送信時処理テスト
   test("send empty roomid", async () => {
     // 何も入力なしで送信
-    render(<JoinRoomForm />);
+    render(<JoinRoomForm gameType={"poker"} />);
     const input_roomid = screen.getByTestId("roomid");
     const sendButton = screen.getByRole("button", { name: "Send" });
     fireEvent.change(input_roomid, { target: { value: "test" } });
@@ -42,7 +42,7 @@ describe("Test joinRoom Page", () => {
   // roomidのみ空欄での送信時処理テスト
   test("send empty roomid", async () => {
     // 何も入力なしで送信
-    render(<JoinRoomForm />);
+    render(<JoinRoomForm gameType={"poker"} />);
     const input_username = screen.getByTestId("username");
     const sendButton = screen.getByRole("button", { name: "Send" });
     fireEvent.change(input_username, { target: { value: "test" } });
@@ -54,7 +54,7 @@ describe("Test joinRoom Page", () => {
 
   // roomidにスペースのみ入力されて送信
   test("send space", async () => {
-    render(<JoinRoomForm />);
+    render(<JoinRoomForm gameType={"poker"} />);
     const input_roomid = screen.getByTestId("roomid");
     const sendButton = screen.getByRole("button", { name: "Send" });
     fireEvent.change(input_roomid, { target: { value: " " } });

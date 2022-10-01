@@ -5,7 +5,7 @@ import { useState } from "react";
 import ErrorMessage from "../../../atoms/form/start/ErrorMessage";
 import axios from "axios";
 
-const JoinRoomForm = () => {
+const JoinRoomForm = ({ gameType }: { gameType: string }) => {
   const [userName, setUserName] = useState<string>("");
   const [roomID, setRoomID] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string>("");
