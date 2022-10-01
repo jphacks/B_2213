@@ -21,7 +21,8 @@ const UserNameInput = memo<UserStateType>(({ userName, setUserName }) => {
 
       <div className="mt-3">
         <input
-          id="username"
+          data-testid="username"
+          name="username"
           type="text"
           value={userName}
           onChange={(e) => changeUserName(e.target.value)}

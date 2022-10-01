@@ -11,12 +11,13 @@ const RoomIdInput = memo<RoomIdStateType>(({ roomID, setRoomID }) => {
   return (
     <div className="mt-6">
       <h1 className="text-3xl sm:text-4xl capitalize tracking-widest lg:text-4xl">
-        Room ID
+        room id
       </h1>
 
       <div className="mt-3">
         <input
-          id="roomid"
+          data-testid="roomid"
+          name="roomid"
           value={roomID}
           onChange={(e) => setRoomID(e.target.value)}
           type="text"
