@@ -35,3 +35,14 @@
   border-color: #95913f;
   border-width: 1px;
 }
+
+.bg-gold-button {
+  background-color: #95913f;
+  color: #2d2d2d;
+}
+.bg-gold-button:active {
+  background-color: transparent;
+  border-color: #95913f;
+  border-width: 1px;
+  color: #95913f;
+}

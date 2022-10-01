@@ -1,0 +1,22 @@
+name: golang formatting and lint check
+on:
+  pull_request:
+
+jobs:
+  go-formatting:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Set up Go 1.18
+      uses: actions/setup-go@v3
+      with:
+        go-version: 1.18
+      id: go
+    - uses: actions/checkout@v3
+    - name: go format
+      run: if [ "$(gofmt -s -l . | wc -l)" -gt 0 ]; then exit 1; fi
+      working-directory: ./backend
+    - name: golangci-lint
+      uses: golangci/golangci-lint-action@v3.2.0
+      with:
+        version: latest
+        working-directory: ./backend
