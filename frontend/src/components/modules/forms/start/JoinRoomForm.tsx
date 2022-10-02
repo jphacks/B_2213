@@ -5,7 +5,7 @@ import { useState } from "react";
 import ErrorMessage from "../../../atoms/form/start/ErrorMessage";
 import axios from "axios";
 
-const JoinRoomForm = () => {
+const JoinRoomForm = ({ gameType }: { gameType: string }) => {
   const [userName, setUserName] = useState<string>("");
   const [roomID, setRoomID] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string>("");
@@ -13,7 +13,8 @@ const JoinRoomForm = () => {
   const handleSendButton = async () => {
     if (userName.replace(/\s+/g, "") && roomID.replace(/\s+/g, "")) {
       try {
-        const apiUrl = process.env.NEXT_PUBLIC_API_URL + "/joinRoom/poker";
+        const apiUrl =
+          process.env.NEXT_PUBLIC_API_URL + "/joinRoom/" + gameType;
         const res = await axios.post(apiUrl, {
           userName: userName,
         });

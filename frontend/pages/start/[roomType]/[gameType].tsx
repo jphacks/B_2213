@@ -35,10 +35,10 @@ const JoinRoom: NextPage = () => {
           <BackStartPage gameType={gameType as string} />
           {roomType === "createRoom" ? (
             <div>
-              <CreateRoomForm />
+              <CreateRoomForm gameType={gameType as string} />
             </div>
           ) : (
-            <JoinRoomForm />
+            <JoinRoomForm gameType={gameType as string} />
           )}
         </div>
       </section>
