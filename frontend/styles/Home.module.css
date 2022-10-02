@@ -1,3 +1,4 @@
+/* waiting member用アニメーション */
 @keyframes updown-anim {
   0% {
     transform: translateY(110%); /*表示範囲外から*/
@@ -76,4 +77,50 @@
 }
 .updown span:nth-child(16) {
   animation-delay: 0.75s;
+}
+
+/* fadeinアニメーション 下から上 */
+.fadein {
+  width: 100%;
+  height: 40%;
+  z-index: 10;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  opacity: 0;
+  animation-name: fadein;
+  animation-duration: 0.5s;
+  animation-timing-function: ease-out;
+  animation-fill-mode: forwards;
+}
+
+@keyframes fadein {
+  0% {
+    opacity: 0;
+    transform: translateX(-1000px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.fadeout {
+  position: fixed;
+  width: 100%;
+  height: 40%;
+  z-index: 10;
+  bottom: 0;
+  left: -100%;
+  transition: left 0.5s;
+}
+.fadein {
+  position: fixed;
+  width: 100%;
+  height: 40%;
+  z-index: 10;
+  bottom: 0;
+  left: 0;
+  transition: left 0.5s;
 }
