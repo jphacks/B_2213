@@ -1,6 +1,6 @@
 export type UserInfoType = {
-  userId: string | null;
-  roomId: string | null;
+  userID: string | null;
+  roomID: string | null;
   userName: string | null;
   permission: string | null;
   gameType?: string;

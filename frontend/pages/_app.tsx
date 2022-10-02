@@ -6,8 +6,8 @@ import type { UserInfoType } from "../src/types/user/type";
 import { useState } from "react";
 
 const initUserInfoValue = {
-  userId: null,
-  roomId: null,
+  userID: null,
+  roomID: null,
   userName: null,
   permission: null,
 };

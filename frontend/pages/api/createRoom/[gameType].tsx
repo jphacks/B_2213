@@ -6,6 +6,7 @@ type Data = {
   userID: number;
   roomID: string;
   userName: string;
+  permission: string;
 };
 
 export default function handler(
@@ -17,5 +18,6 @@ export default function handler(
     userID: 1,
     roomID: "angrjk",
     userName: userName,
+    permission: "admin",
   });
 }
