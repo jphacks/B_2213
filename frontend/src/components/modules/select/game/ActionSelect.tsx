@@ -1,10 +1,13 @@
-import { useState } from "react";
+import { memo, useState } from "react";
 import styles from "../../../../../styles/Home.module.css";
+
 type ShowActionProps = {
   showAction: Boolean;
   setShowAction: (showAction: Boolean) => void;
 };
-const ActionSelect = (props: ShowActionProps) => {
+
+// eslint-disable-next-line react/display-name
+const ActionSelect = memo<ShowActionProps>((props) => {
   const { showAction, setShowAction } = props;
   const [focusStyle, setFocusStyle] = useState<string>(
     " border-2 border-[#393939]"
@@ -58,6 +61,6 @@ const ActionSelect = (props: ShowActionProps) => {
       </div>
     </div>
   );
-};
+});
 
 export default ActionSelect;
