@@ -5,7 +5,7 @@ NEXT_PUBLIC_API_URL=***
 ```
 
 # 起動方法
-`docker compose run app npm install`
+`docker compose run app npm install` </br>
 `docker compose up`
 
 # テスト方法
