@@ -1,5 +1,5 @@
 version: '3.9'
-name: PMCBE
+name: pmc-backend
 services:
   dev-app:
     container_name: dev_app

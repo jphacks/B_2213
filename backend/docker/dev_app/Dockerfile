@@ -1,9 +1,8 @@
 FROM golang:1.18-alpine
 WORKDIR /go/src
-COPY ../.. .
-RUN apk upgrade --update && \
-    apk --no-cache add git && \
-    go get -u github.com/cosmtrek/air && \
-    go build -o /go/bin/air github.com/cosmtrek/air
+RUN apk upgrade --update
+RUN apk --no-cache add git
+RUN go install github.com/cosmtrek/air@latest
+COPY ./.air.toml .
 
 CMD ["air", "-c", ".air.toml"]

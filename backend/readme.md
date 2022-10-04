@@ -1,4 +1,6 @@
-# Setup .env for root
+# 起動方法
+
+.envを下記の通り準備してください。
 
 ```.env
 MYSQL_ROOT_PASSWORD=******
@@ -6,11 +8,17 @@ MYSQL_DATABASE=****
 TZ=Asia/Tokyo
 ```
 
-# 起動方法
+## 通常時
 
 `make run`
 or
-`docker compose up`
+`docker compose up -d --build`
+
+## 開発ホットリロードを使用する時
+
+`make dev-run`
+or
+`docker compose up -d`
 
 # API Endpoints
 
