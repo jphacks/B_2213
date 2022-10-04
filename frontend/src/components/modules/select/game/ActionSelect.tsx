@@ -52,12 +52,17 @@ const ActionSelect = memo<ShowActionProps>((props) => {
           </div>
         </div>
 
-        <button
-          className="mt-8 px-6 py-2 bg-gold-button transition-colors duration-300 transform rounded-md"
-          onClick={() => setShowAction(false)}
-        >
-          Cancel
-        </button>
+        <div className="mt-8">
+          <button
+            className="px-6 py-2 mr-10 border-gold-button transition-colors duration-300 transform rounded-md"
+            onClick={() => setShowAction(false)}
+          >
+            Cancel
+          </button>
+          <button className="px-6 py-2 bg-gold-button transition-colors duration-300 transform rounded-md">
+            Send
+          </button>
+        </div>
       </div>
     </div>
   );
