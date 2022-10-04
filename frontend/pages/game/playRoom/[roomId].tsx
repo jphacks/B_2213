@@ -1,6 +1,6 @@
 import { NextPage } from "next";
 import { useState } from "react";
-import ActionSelect from "../../../src/components/modules/select/game/ActionSelect";
+import ActionSelect from "../../../src/components/Organisms/game/ActionSelect";
 
 const PlayRoom: NextPage = () => {
   const [showAction, setShowAction] = useState<Boolean>(false);
