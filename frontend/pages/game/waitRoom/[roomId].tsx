@@ -1,4 +1,5 @@
 import { NextPage } from "next";
+import ShowRoomId from "../../../src/components/atoms/show/ShowRoomId";
 import styles from "../../../styles/Home.module.css";
 
 const WaitRoom: NextPage = () => {
@@ -7,7 +8,7 @@ const WaitRoom: NextPage = () => {
       <section className="h-screen bg-cover">
         <div className="flex w-full items-center justify-center container mx-auto px-8">
           <div className="max-w-2xl text-center">
-            <div className="pt-40 pb-8 text-2xl sm:text-3xl capitalize tracking-widest">
+            <div className="pt-10 pb-6 text-2xl sm:text-3xl capitalize tracking-widest">
               <h1 className={styles.updown}>
                 <span>W</span>
                 <span>a</span>
@@ -27,6 +28,8 @@ const WaitRoom: NextPage = () => {
                 <span>...</span>
               </h1>
             </div>
+            <ShowRoomId />
+
             <ul className="pt-8 text-2xl capitalize tracking-widest border-t-2 border-[#95913f]">
               <li className="pb-3">Hasegawa Akito</li>
               <li className="pb-3">Tano</li>

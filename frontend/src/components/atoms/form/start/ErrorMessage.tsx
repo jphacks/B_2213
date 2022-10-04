@@ -9,7 +9,7 @@ type ErrorMessageType = {
 const ErrorMessage = memo<ErrorMessageType>(({ errorMessage }) => {
   return (
     <div className="mt-2">
-      <h1 className="text-[15px] text-red-500 capitalize tracking-widest">
+      <h1 className="text-[15px] text-red-500 tracking-widest">
         {errorMessage}
       </h1>
     </div>
