@@ -5,3 +5,8 @@ export type GameProps = {
 export type SetGameProps = {
   setGameType: (gameType: string | null) => void;
 };
+
+export type BetProps = {
+  bet: number;
+  setBet: (bet: number) => void;
+};
