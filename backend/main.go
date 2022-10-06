@@ -143,7 +143,9 @@ func wshandlerForDemo(w http.ResponseWriter, r *http.Request, id string) {
 }
 
 type message struct {
-	Str string `json:"str"`
+	Str  string `json:"str"`
+	Int  int    `json:"int"`
+	List []any  `json:"list"`
 }
 
 func wsWriter(res message, id string) {

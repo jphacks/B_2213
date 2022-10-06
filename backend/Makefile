@@ -19,3 +19,8 @@ test:
 	open cover_file.html
 	sleep 3
 	rm cover_file.out cover_file.html
+
+lint-fmt-test:
+	golangci-lint run
+	go fmt ./...
+	make test

@@ -18,7 +18,9 @@ var wsupgrader = websocket.Upgrader{
 }
 
 type message struct {
-	Str string `json:"str"`
+	Str  string `json:"str"`
+	Int  int    `json:"int"`
+	List []any  `json:"list"`
 }
 
 func SimpleWs(c *gin.Context) {
@@ -36,7 +38,7 @@ func wshandler(w http.ResponseWriter, r *http.Request) {
 		err := conn.ReadJSON(&msg)
 		if err != nil {
 			if websocket.IsCloseError(err, 1005, 1006) {
-				log.Printf("Disconnected")
+				log.Printf("Websocket Error detected but ignored")
 			} else {
 				log.Panic(err)
 			}
@@ -46,6 +48,5 @@ func wshandler(w http.ResponseWriter, r *http.Request) {
 			log.Panic(err)
 			return
 		}
-
 	}
 }
