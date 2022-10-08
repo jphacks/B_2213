@@ -5,11 +5,13 @@ import ErrorMessage from "../../../atoms/form/start/ErrorMessage";
 import axios from "axios";
 import { useUserInfo } from "../../../hooks/user/useUserInfo";
 import type { UserInfoType } from "../../../../types/user/type";
+import { useRouter } from "next/router";
 
 const CreateRoomForm = ({ gameType }: { gameType: string }) => {
   const [userName, setUserName] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string>("");
   const { userInfo, setUserInfo_context_cookie } = useUserInfo();
+  const router = useRouter();
 
   const handleSendButton = async () => {
     if (userName.replace(/\s+/g, "")) {
@@ -25,6 +27,8 @@ const CreateRoomForm = ({ gameType }: { gameType: string }) => {
         const saveUserInfo: UserInfoType = res.data;
         saveUserInfo.gameType = gameType;
         setUserInfo_context_cookie(saveUserInfo);
+
+        router.push("/game/waitRoom/" + saveUserInfo.roomID);
       } catch (e) {
         console.log(e);
         setErrorMessage("unexpected error");
