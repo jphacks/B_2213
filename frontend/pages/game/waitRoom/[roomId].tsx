@@ -1,8 +1,35 @@
 import { NextPage } from "next";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 import ShowRoomId from "../../../src/components/atoms/show/ShowRoomId";
+import { useUserInfo } from "../../../src/components/hooks/user/useUserInfo";
+import Loading from "../../../src/components/templates/Loading";
 import styles from "../../../styles/Home.module.css";
 
+type ReadyType = {
+  userInfoReady: boolean;
+  memberInfoReady: boolean;
+};
+
 const WaitRoom: NextPage = () => {
+  const [isReady, setIsReady] = useState<ReadyType>({
+    userInfoReady: false, // userInfoが取得できているか
+    memberInfoReady: false, // wsによって一回でもroomのmember情報を取得できているかどうか
+  });
+  const { userInfo, confirmUserInfo_context_cookie } = useUserInfo();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!confirmUserInfo_context_cookie()) {
+      router.push("/start");
+    }
+    setIsReady((isReady) => ({ ...isReady, userInfoReady: true }));
+  }, []);
+
+  if (!(isReady.userInfoReady && isReady.memberInfoReady)) {
+    return <Loading />;
+  }
+
   return (
     <div className="bg-poker-color font-poker-color font-poker-family">
       <section className="h-screen bg-cover">
@@ -28,7 +55,7 @@ const WaitRoom: NextPage = () => {
                 <span>...</span>
               </h1>
             </div>
-            <ShowRoomId />
+            <ShowRoomId roomID={userInfo.roomID as string} />
 
             <ul className="pt-8 text-2xl capitalize tracking-widest border-t-2 border-[#95913f]">
               <li className="pb-3">Hasegawa Akito</li>
