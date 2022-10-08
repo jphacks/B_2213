@@ -12,5 +12,16 @@ export const useUserInfo = () => {
     []
   );
 
-  return { userInfo, setUserInfo_context_cookie };
+  const confirmUserInfo_context_cookie = useCallback((): boolean => {
+    if (!userInfo.userID) {
+      return false;
+    }
+    return true;
+  }, [userInfo]);
+
+  return {
+    userInfo,
+    setUserInfo_context_cookie,
+    confirmUserInfo_context_cookie,
+  };
 };
