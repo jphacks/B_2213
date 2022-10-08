@@ -24,7 +24,7 @@ const CreateRoomForm = ({ gameType }: { gameType: string }) => {
 
         // resとしてはgameTypeはかえってこないため、saveUserInfoにgameTypeを追加し
         // contextとcookieに保存する。
-        const saveUserInfo: UserInfoType = res.data;
+        const saveUserInfo: UserInfoType = res.data.data;
         saveUserInfo.gameType = gameType;
         setUserInfo_context_cookie(saveUserInfo);
 

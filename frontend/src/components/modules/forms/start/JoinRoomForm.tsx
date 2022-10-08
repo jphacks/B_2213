@@ -22,11 +22,12 @@ const JoinRoomForm = ({ gameType }: { gameType: string }) => {
           process.env.NEXT_PUBLIC_API_URL + "/joinRoom/" + gameType;
         const res = await axios.post(apiUrl, {
           userName: userName,
+          roomID: roomID,
         });
 
         // resとしてはgameTypeはかえってこないため、saveUserInfoにgameTypeを追加し
         // contextとcookieに保存する。
-        const saveUserInfo: UserInfoType = res.data;
+        const saveUserInfo: UserInfoType = res.data.data;
         saveUserInfo.gameType = gameType;
         setUserInfo_context_cookie(saveUserInfo);
 
