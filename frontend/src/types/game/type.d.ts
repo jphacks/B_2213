@@ -10,3 +10,5 @@ export type BetProps = {
   bet: number;
   setBet: (bet: number) => void;
 };
+
+export type RoomStatusType = "waiting" | "on game" | "finished";
