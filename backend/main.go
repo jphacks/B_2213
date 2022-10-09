@@ -6,10 +6,7 @@ import (
 	"io"
 	"log"
 	"net/http"
-	"pms/migration"
 	"pms/src/controller"
-	"pms/src/model"
-	"time"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -22,19 +19,7 @@ type rooms map[string](clients)
 
 var rms rooms
 
-func main() {
-	// DBマイグレーション
-	// model.Connectionがエラー発生しなくなるまで=DBが立ち上がるまで待機
-	// (docker composeで立ち上げると必ずdbのほうが立ち上がり遅い)
-
-	_, dbConErr := model.Connection()
-	for dbConErr != nil {
-		time.Sleep(time.Second)
-		_, dbConErr = model.Connection()
-	}
-	migration.Migrate()
-	rms = rooms{}
-
+func Router() *gin.Engine {
 	r := gin.Default()
 
 	r.Use(logger())
@@ -47,38 +32,41 @@ func main() {
 	// ルーティング
 	//routing.Routing(r)
 
-	r.GET("/", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{
-			"message": "hi",
-		})
-	})
+	r.GET("/", index)
 
 	api := r.Group("/api")
-
-	api.POST("/createRoom/:game", controller.CreateRoom)
-	api.POST("/joinRoom/:game", controller.JoinRoom)
+	{
+		api.POST("/createRoom/:game", controller.CreateRoom)
+		api.POST("/joinRoom/:game", controller.JoinRoom)
+	}
 
 	status := api.Group("/status")
+	{
+		status.GET("/:game", controller.GetStatus)
+		status.GET("/:game/:roomID", controller.RoomStatus)
+	}
 
-	status.GET("/:game", controller.GetStatus)
-
-	status.GET("/:game/:roomID", controller.RoomStatus)
-
-	r.GET("/createRoom/:id", func(c *gin.Context) {
-		id := c.Param("id")
-		if _, existBool := rms[id]; existBool {
-			c.JSON(400, gin.H{"message": "Room already exists"})
-		} else {
-			rms[id] = clients{}
-			c.JSON(http.StatusOK, gin.H{"message": "Room Created!"})
-		}
-	})
+	ingame := api.Group("/ingame")
+	{
+		ingame.POST("")
+	}
 
 	r.GET("/ws/:id", func(c *gin.Context) {
 		id := c.Param("id")
-		wshandler(c.Writer, c.Request, id)
+		wshandlerForDemo(c.Writer, c.Request, id)
 	})
 
+	r.GET("/simpleWs", controller.SimpleWs)
+
+	r.GET("/singleRoom", controller.CreateSingleRoom)
+
+	return r
+}
+
+func main() {
+	rms = rooms{}
+
+	r := Router()
 	_ = r.Run()
 }
 
@@ -97,7 +85,13 @@ func logger() gin.HandlerFunc {
 	}
 }
 
-func wshandler(w http.ResponseWriter, r *http.Request, id string) {
+func index(c *gin.Context) {
+	c.JSON(200, gin.H{
+		"message": "hi",
+	})
+}
+
+func wshandlerForDemo(w http.ResponseWriter, r *http.Request, id string) {
 	var wsupgrader = websocket.Upgrader{
 		HandshakeTimeout: 0,
 		ReadBufferSize:   1024,
@@ -107,7 +101,6 @@ func wshandler(w http.ResponseWriter, r *http.Request, id string) {
 		},
 	}
 	conn, err := wsupgrader.Upgrade(w, r, nil)
-	// defer conn.Close()
 
 	if err != nil {
 		log.Println("Failed to set websocket upgrade")
@@ -134,7 +127,9 @@ func wshandler(w http.ResponseWriter, r *http.Request, id string) {
 }
 
 type message struct {
-	Str string `json:"str"`
+	Str  string `json:"str"`
+	Int  int    `json:"int"`
+	List []any  `json:"list"`
 }
 
 func wsWriter(res message, id string) {

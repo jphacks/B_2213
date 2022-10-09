@@ -4,19 +4,19 @@ import (
 	// "log"
 	"crypto/rand"
 
-	"pms/src/model"
-	"pms/src/model/structs"
 	"pms/src/view"
 
 	"github.com/gin-gonic/gin"
-	"github.com/gorilla/websocket"
+	// "github.com/gorilla/websocket"
 )
 
-type clients map[*websocket.Conn]bool
+type PokerRooms map[string]PokerRoom
 
-type rooms map[string](clients)
+var pr = PokerRooms{}
 
-var rms = rooms{}
+func (pr *PokerRooms) AddUser(rid string, uid string, u *User) {
+	(*pr)[rid].Users[uid] = *u
+}
 
 func randomString(char int) string {
 	const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
@@ -34,47 +34,59 @@ func randomString(char int) string {
 	return result
 }
 
+// roomID as r
+func CreatePokerRoom(r string, uid string, u User) PokerRoom {
+	return PokerRoom{
+		RoomID: r,
+		Users: map[string]User{
+			uid: u,
+		},
+	}
+}
+
 // HandlerFunc for POST /api/createRoom/[poker or mahjong]
 func CreateRoom(c *gin.Context) {
 	game := c.Param("game")
 	if game != "poker" {
-		view.RequestError(c, "no such game is supported in PMC")
+		view.RequestError(c, "no such game is supported in PMC: "+game)
 		return
 	}
 
 	// roomID生成
 	existbool := true
 	var roomID string
-
 	for existbool {
 		roomID = "R" + randomString(5)
-		_, existbool = rms[roomID]
+		_, existbool = pr[roomID]
 	}
 
 	// userName取得
-	r := structs.Register{}
+	r := CreateRoomRequest{}
 	if err := c.ShouldBindJSON(&r); err != nil {
 		// log.Println(err)
 		view.RequestError(c, "bad JSON")
 		return
 	}
+	userName := r.UserName
 
-	u := model.User{
+	// UserID生成
+	userID := "U" + randomString(6)
+
+	u := User{
+		UserName: userName,
+		Admin:    true,
+	}
+
+	pr[roomID] = CreatePokerRoom(roomID, userID, u)
+
+	var regres = RegisterRes{
+		UserID:     userID,
 		RoomID:     roomID,
-		UserName:   r.UserName,
+		UserName:   userName,
 		Permission: "admin",
 	}
-	if err := model.CreateUser(&u); err != nil {
-		view.RequestError(c, "error occured")
-		return
-	}
-
-	rms[roomID] = clients{}
-
-	var resreg structs.ResRegister
-	u.ResRegister(&resreg)
 	res := map[string]any{
-		"data": resreg,
+		"data": regres,
 	}
 	view.StatusOK(c, res)
 }
@@ -83,43 +95,41 @@ func CreateRoom(c *gin.Context) {
 func JoinRoom(c *gin.Context) {
 	game := c.Param("game")
 	if game != "poker" {
-		view.RequestError(c, "no such game is supported in PMC")
+		view.RequestError(c, "no such game is supported in PMC: "+game)
 		return
 	}
 
-	// roomID生成
-	existbool := true
-	var result string
-
-	for existbool {
-		result = "R" + randomString(5)
-		_, existbool = rms[result]
-	}
-
-	// userName取得
-	r := structs.RegisterJoin{}
+	// userName, roomID取得
+	r := JoinRoomRequest{}
 	if err := c.ShouldBindJSON(&r); err != nil {
 		// log.Println(err)
 		view.RequestError(c, "bad JSON")
 		return
 	}
+	roomID := r.RoomID
+	userName := r.UserName
 
-	u := model.User{
-		RoomID:     r.RoomID,
-		UserName:   r.UserName,
+	// userID生成・重複確認
+	var userID string
+	for duplicated := true; duplicated; {
+		userID = "R" + randomString(5)
+		_, duplicated = pr[roomID].Users[userID]
+	}
+
+	u := User{
+		UserName: userName,
+		Admin:    false,
+	}
+	pr.AddUser(roomID, userID, &u)
+
+	var regres = RegisterRes{
+		UserID:     userID,
+		RoomID:     roomID,
+		UserName:   userName,
 		Permission: "normal",
 	}
-	if err := model.CreateUser(&u); err != nil {
-		view.RequestError(c, "error occured")
-		return
-	}
-
-	rms[result] = clients{}
-
-	var resreg structs.ResRegister
-	u.ResRegister(&resreg)
 	res := map[string]any{
-		"data": resreg,
+		"data": regres,
 	}
 	view.StatusOK(c, res)
 }
