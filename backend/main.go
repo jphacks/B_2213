@@ -48,7 +48,8 @@ func Router() *gin.Engine {
 
 	ingame := api.Group("/ingame")
 	{
-		ingame.POST("")
+		ingame.GET("/ws/:roomID", controller.ConnectRoom)
+		ingame.GET("/:roomID/", controller.IngameReload)
 	}
 
 	r.GET("/ws/:id", func(c *gin.Context) {
