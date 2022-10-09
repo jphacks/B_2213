@@ -44,7 +44,7 @@ func CreatePokerRoom(r string, uid string, u User) PokerRoom {
 func CreateRoom(c *gin.Context) {
 	game := c.Param("game")
 	if game != "poker" {
-		view.RequestError(c, "no such game is supported in PMC: " + game)
+		view.RequestError(c, "no such game is supported in PMC: "+game)
 		return
 	}
 
@@ -76,9 +76,9 @@ func CreateRoom(c *gin.Context) {
 	PokerRooms[roomID] = CreatePokerRoom(roomID, userID, u)
 
 	var regres = RegisterRes{
-		UserID: userID,
-		RoomID: roomID,
-		UserName: userName,
+		UserID:     userID,
+		RoomID:     roomID,
+		UserName:   userName,
 		Permission: "admin",
 	}
 	res := map[string]any{
@@ -91,7 +91,7 @@ func CreateRoom(c *gin.Context) {
 func JoinRoom(c *gin.Context) {
 	game := c.Param("game")
 	if game != "poker" {
-		view.RequestError(c, "no such game is supported in PMC: " + game)
+		view.RequestError(c, "no such game is supported in PMC: "+game)
 		return
 	}
 
