@@ -1,9 +1,9 @@
 package controller
 
 import (
+	"crypto/rand"
 	"github.com/gorilla/websocket"
 	"log"
-	"crypto/rand"
 
 	"pms/src/view"
 
@@ -81,7 +81,6 @@ func CreateRoom(c *gin.Context) {
 	pr[roomID] = &room
 
 	pr.AddUser(roomID, userID, &u)
-
 
 	var regres = RegisterRes{
 		UserID:     userID,
