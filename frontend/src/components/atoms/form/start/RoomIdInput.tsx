@@ -12,7 +12,7 @@ const RoomIdInput = memo<RoomIdStateType>(({ roomID, setRoomID }) => {
     if (changeValue.length <= 10) setRoomID(changeValue);
   };
   return (
-    <div className="mt-6">
+    <div>
       <h1 className="text-3xl sm:text-4xl tracking-widest lg:text-4xl">
         room id
       </h1>

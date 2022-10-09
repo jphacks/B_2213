@@ -43,9 +43,12 @@ const JoinRoomForm = ({ gameType }: { gameType: string }) => {
 
   return (
     <div className="max-w-2xl text-center">
-      <UserNameInput {...{ userName, setUserName }} />
       <RoomIdInput {...{ roomID, setRoomID }} />
+
+      <UserNameInput {...{ userName, setUserName }} />
+
       <SendButton handleSendButton={() => handleSendButton()} />
+
       <ErrorMessage errorMessage={errorMessage} />
     </div>
   );

@@ -14,7 +14,7 @@ const UserNameInput = memo<UserStateType>(({ userName, setUserName }) => {
   };
 
   return (
-    <div>
+    <div className="pt-6">
       <h1 className="text-3xl sm:text-4xl tracking-widest lg:text-4xl">
         user name
       </h1>
