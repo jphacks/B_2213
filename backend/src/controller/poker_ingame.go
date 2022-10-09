@@ -23,10 +23,12 @@ type message struct {
 	List []any  `json:"list"`
 }
 
+// HandlerFunc for ws://~~~~:8000/simpleWs
 func SimpleWs(c *gin.Context) {
 	wshandler(c.Writer, c.Request)
 }
 
+// main function of websocket
 func wshandler(w http.ResponseWriter, r *http.Request) {
 	conn, err := wsupgrader.Upgrade(w, r, nil)
 	if err != nil {
@@ -49,4 +51,12 @@ func wshandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
+}
+
+var singleRoom = PokerRoom{
+	RoomID: "DAMMY",
+}
+
+func CreateSingleRoom(c *gin.Context) {
+	c.JSON(200, singleRoom)
 }

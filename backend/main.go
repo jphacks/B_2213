@@ -38,25 +38,21 @@ func Router() *gin.Engine {
 	r.GET("/", index)
 
 	api := r.Group("/api")
-
-	api.POST("/createRoom/:game", controller.CreateRoom)
-	api.POST("/joinRoom/:game", controller.JoinRoom)
+	{
+		api.POST("/createRoom/:game", controller.CreateRoom)
+		api.POST("/joinRoom/:game", controller.JoinRoom)
+	}
 
 	status := api.Group("/status")
+	{
+		status.GET("/:game", controller.GetStatus)
+		status.GET("/:game/:roomID", controller.RoomStatus)
+	}
 
-	status.GET("/:game", controller.GetStatus)
-
-	status.GET("/:game/:roomID", controller.RoomStatus)
-
-	r.GET("/createRoom/:id", func(c *gin.Context) {
-		id := c.Param("id")
-		if _, existBool := rms[id]; existBool {
-			c.JSON(400, gin.H{"message": "Room already exists"})
-		} else {
-			rms[id] = clients{}
-			c.JSON(http.StatusOK, gin.H{"message": "Room Created!"})
-		}
-	})
+	ingame := api.Group("/ingame")
+	{
+		ingame.POST("")
+	}
 
 	r.GET("/ws/:id", func(c *gin.Context) {
 		id := c.Param("id")
@@ -64,6 +60,8 @@ func Router() *gin.Engine {
 	})
 
 	r.GET("/simpleWs", controller.SimpleWs)
+
+	r.GET("/singleRoom", controller.CreateSingleRoom)
 
 	return r
 }
@@ -116,7 +114,6 @@ func wshandlerForDemo(w http.ResponseWriter, r *http.Request, id string) {
 		},
 	}
 	conn, err := wsupgrader.Upgrade(w, r, nil)
-	// defer conn.Close()
 
 	if err != nil {
 		log.Println("Failed to set websocket upgrade")
