@@ -1,7 +1,7 @@
 package controller
 
 // CreateRoom時のStruct
-type CreateRoomRequset struct {
+type CreateRoomRequest struct {
 	UserName string `json:"userName"`
 }
 
@@ -42,4 +42,9 @@ type RegisterRes struct {
 	RoomID     string `json:"roomID"`
 	UserName   string `json:"userName"`
 	Permission string `json:"permission"`
+}
+
+type JoinRoomRequest struct {
+	UserName string `json:"userName"`
+	RoomID   string `json:"roomId"`
 }
