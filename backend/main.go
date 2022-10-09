@@ -34,6 +34,7 @@ func Router() *gin.Engine {
 
 	r.GET("/", index)
 
+	ws := r.Group("/ws")
 	api := r.Group("/api")
 	{
 		api.POST("/createRoom/:game", controller.CreateRoom)
@@ -48,14 +49,10 @@ func Router() *gin.Engine {
 
 	ingame := api.Group("/ingame")
 	{
-		ingame.GET("/ws/:roomID", controller.ConnectRoom)
 		ingame.GET("/:roomID/", controller.IngameReload)
 	}
 
-	r.GET("/ws/:id", func(c *gin.Context) {
-		id := c.Param("id")
-		wshandlerForDemo(c.Writer, c.Request, id)
-	})
+	ws.GET("/:roomID", controller.ConnectRoom)
 
 	r.GET("/simpleWs", controller.SimpleWs)
 
