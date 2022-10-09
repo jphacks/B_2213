@@ -36,11 +36,13 @@ const WaitRoom: NextPage = () => {
       // waitingの状態でなければwaitRoomにいる必要はない
       router.push("/start");
     }
+    return;
   }, [router, userInfo.gameType, userInfo.roomID]);
 
   useEffect(() => {
     if (!confirmUserInfo_context_cookie()) {
       router.push("/start");
+      return;
     }
     setIsReady((isReady) => ({ ...isReady, userInfoReady: true }));
 
