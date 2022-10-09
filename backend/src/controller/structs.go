@@ -1,7 +1,7 @@
 package controller
 
 // CreateRoom時のStruct
-type Register struct {
+type CreateRoomRequset struct {
 	UserName string `json:"userName"`
 }
 

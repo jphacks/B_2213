@@ -57,7 +57,7 @@ func CreateRoom(c *gin.Context) {
 	}
 
 	// userName取得
-	r := structs.Register{}
+	r := CreateRoomRequset{}
 	if err := c.ShouldBindJSON(&r); err != nil {
 		// log.Println(err)
 		view.RequestError(c, "bad JSON")
