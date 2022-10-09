@@ -4,16 +4,15 @@ import (
 	"github.com/gorilla/websocket"
 )
 
-// CreateRoom時のStruct
+// CreateRoom時のリクエストのStruct
 type CreateRoomRequest struct {
 	UserName string `json:"userName"`
 }
 
 type PokerRoom struct {
-	RoomID   string                   `json:"roomId"`
-	RoomData RoomData                 `json:"roomData"`
-	Users    map[string]User          `json:"users"`
-	WsCons   map[*websocket.Conn]bool `json:"-"`
+	RoomID   string           `json:"roomId"`
+	RoomData RoomData         `json:"roomData"`
+	Users    map[string]*User `json:"users"`
 }
 
 type RoomData struct {
@@ -33,16 +32,18 @@ type Subpot struct {
 }
 
 type User struct {
-	UserName     string `json:"userName"`
-	Stack        int    `json:"stack"`
-	Joining      bool   `json:"joining"`
-	BettingTips  int    `json:"bettingTips"`
-	AllIn        bool   `json:"allIn"`
-	Actioned     bool   `json:"actioned"`
-	Admin        bool   `json:"admin"`
-	SessionAlive bool   `json:"sessionAlive"`
+	UserName     string          `json:"userName"`
+	Stack        int             `json:"stack"`
+	Joining      bool            `json:"joining"`
+	BettingTips  int             `json:"bettingTips"`
+	AllIn        bool            `json:"allIn"`
+	Actioned     bool            `json:"actioned"`
+	Admin        bool            `json:"admin"`
+	SessionAlive bool            `json:"sessionAlive"`
+	WsCons       *websocket.Conn `json:"-"`
 }
 
+// CreateRoom, JoinRoomのレスポンスのStruct
 type RegisterRes struct {
 	UserID     string `json:"userID"`
 	RoomID     string `json:"roomID"`
@@ -50,6 +51,7 @@ type RegisterRes struct {
 	Permission string `json:"permission"`
 }
 
+// JoinRoomのリクエストのStruct
 type JoinRoomRequest struct {
 	UserName string `json:"userName"`
 	RoomID   string `json:"roomId"`

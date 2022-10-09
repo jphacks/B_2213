@@ -67,24 +67,28 @@ func CreateSingleRoom(c *gin.Context) {
 	c.JSON(200, singleRoom)
 }
 
+func (pr *PokerRooms) UpdateUser(id string, uid string, u *User) {}
+
 // HandlerFunc for WS /ws/:roomID
 func ConnectRoom(c *gin.Context) {
 	roomID := c.Param("roomID")
+	userID := c.Query("userID")
 	if _, ok := pr[roomID]; !ok {
 		view.RequestError(c, "RoomID is Wrong")
 		return
 	}
-	WebSocketServer(c.Writer, c.Request, roomID)
+	WebSocketServer(c.Writer, c.Request, roomID, userID)
 }
 
 // main part of ConnectRoom()
-func WebSocketServer(w http.ResponseWriter, r *http.Request, rid string) {
+func WebSocketServer(w http.ResponseWriter, r *http.Request, rid string, uid string) {
 	conn, err := wsupgrader.Upgrade(w, r, nil)
 	if err != nil {
 		log.Println("Failed to set websocket upgrade")
 		return
 	}
-	pr[rid].WsCons[conn] = true
+	pr[rid].Users[uid].WsCons = conn
+	pr[rid].Users[uid].SessionAlive = true
 	pr.WritePokerRoomtoWS(rid)
 	for {
 		var msg message
@@ -94,7 +98,8 @@ func WebSocketServer(w http.ResponseWriter, r *http.Request, rid string) {
 			} else {
 				log.Println("!!!")
 				log.Println(err)
-				delete((pr)[rid].WsCons, conn)
+				pr[rid].Users[uid].WsCons = nil
+				pr[rid].Users[uid].SessionAlive = false
 			}
 			conn.Close()
 			return
@@ -104,17 +109,12 @@ func WebSocketServer(w http.ResponseWriter, r *http.Request, rid string) {
 
 // PokerRooms[rid]の全てにPokerRoomをJSONで送信
 func (pr *PokerRooms) WritePokerRoomtoWS(rid string) {
-	for conn, alive := range (*pr)[rid].WsCons {
-		if alive {
-			// go func(con *websocket.Conn) {
-			// 	err := conn.WriteJSON((*pr)[rid])
-			// 	if err != nil {
-			// 		delete((*pr)[rid].WsCons, conn)
-			// 	}
-			// }(conn)
-			err := conn.WriteJSON((*pr)[rid])
+	for uid, conn := range (*pr)[rid].Users {
+		if conn.WsCons != nil {
+			err := conn.WsCons.WriteJSON((*pr)[rid])
 			if err != nil {
-				delete((*pr)[rid].WsCons, conn)
+				(*pr)[rid].Users[uid].WsCons = nil
+				(*pr)[rid].Users[uid].SessionAlive = false
 			}
 		}
 	}

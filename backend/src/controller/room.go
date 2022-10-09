@@ -2,7 +2,6 @@ package controller
 
 import (
 	"crypto/rand"
-	"github.com/gorilla/websocket"
 	"log"
 
 	"pms/src/view"
@@ -15,7 +14,7 @@ type PokerRooms map[string]*PokerRoom
 var pr = PokerRooms{}
 
 func (pr *PokerRooms) AddUser(rid string, uid string, u *User) {
-	(*pr)[rid].Users[uid] = *u
+	(*pr)[rid].Users[uid] = u
 }
 
 func randomString(char int) string {
@@ -38,10 +37,9 @@ func randomString(char int) string {
 func CreatePokerRoom(rid string, uid string, u User) PokerRoom {
 	return PokerRoom{
 		RoomID: rid,
-		Users: map[string]User{
-			uid: u,
+		Users: map[string]*User{
+			uid: &u,
 		},
-		WsCons: map[*websocket.Conn]bool{},
 	}
 }
 
