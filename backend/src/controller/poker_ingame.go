@@ -78,6 +78,19 @@ func WebSocketServer(w http.ResponseWriter, r *http.Request, rid string) {
 		return
 	}
 	pr[rid].WsCons[conn] = true
+	for {
+		var msg message
+		if err := conn.ReadJSON(&msg); err != nil {
+			if websocket.IsCloseError(err, 1005) {
+				log.Printf("Disconnected")
+			}
+			log.Println("!!!")
+			log.Println(err)
+			pr[rid].WsCons[conn] = false
+			return
+		}
+
+	}
 }
 
 func (pr *PokerRooms) WritePokerRoomtoWS(rid string) {
