@@ -116,12 +116,13 @@ func JoinRoom(c *gin.Context) {
 	// RoomID確認
 	if _, ok := pr[roomID]; !ok {
 		view.RequestError(c, "no such Room")
+		return
 	}
 
 	// userID生成・重複確認
 	var userID string
 	for duplicated := true; duplicated; {
-		userID = "R" + randomString(5)
+		userID = "U" + randomString(5)
 		_, duplicated = pr[roomID].Users[userID]
 	}
 
@@ -142,4 +143,5 @@ func JoinRoom(c *gin.Context) {
 	}
 	view.StatusOK(c, res)
 	log.Println(pr[roomID])
+	pr.WritePokerRoomtoWS(roomID)
 }
