@@ -6,10 +6,7 @@ import (
 	"io"
 	"log"
 	"net/http"
-	"pms/migration"
 	"pms/src/controller"
-	"pms/src/model"
-	"time"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -67,16 +64,6 @@ func Router() *gin.Engine {
 }
 
 func main() {
-	// DBマイグレーション
-	// model.Connectionがエラー発生しなくなるまで=DBが立ち上がるまで待機
-	// (docker composeで立ち上げると必ずdbのほうが立ち上がり遅い)
-
-	_, dbConErr := model.Connection()
-	for dbConErr != nil {
-		time.Sleep(time.Second)
-		_, dbConErr = model.Connection()
-	}
-	migration.Migrate()
 	rms = rooms{}
 
 	r := Router()

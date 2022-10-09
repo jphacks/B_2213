@@ -1,13 +1,5 @@
 # 起動方法
 
-.envを下記の通り準備してください。
-
-```.env
-MYSQL_ROOT_PASSWORD=******
-MYSQL_DATABASE=****
-TZ=Asia/Tokyo
-```
-
 ## 通常時
 
 `make run`

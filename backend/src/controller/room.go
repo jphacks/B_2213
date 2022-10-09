@@ -4,15 +4,19 @@ import (
 	// "log"
 	"crypto/rand"
 
-	"pms/src/model"
-	"pms/src/model/structs"
 	"pms/src/view"
 
 	"github.com/gin-gonic/gin"
 	// "github.com/gorilla/websocket"
 )
 
-var PokerRooms = map[string]PokerRoom{}
+type PokerRooms map[string]PokerRoom
+
+var pr = PokerRooms{}
+
+func (pr *PokerRooms) AddUser(rid string, uid string, u *User) {
+	(*pr)[rid].Users[uid] = *u
+}
 
 func randomString(char int) string {
 	const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
@@ -53,11 +57,11 @@ func CreateRoom(c *gin.Context) {
 	var roomID string
 	for existbool {
 		roomID = "R" + randomString(5)
-		_, existbool = PokerRooms[roomID]
+		_, existbool = pr[roomID]
 	}
 
 	// userName取得
-	r := CreateRoomRequset{}
+	r := CreateRoomRequest{}
 	if err := c.ShouldBindJSON(&r); err != nil {
 		// log.Println(err)
 		view.RequestError(c, "bad JSON")
@@ -73,7 +77,7 @@ func CreateRoom(c *gin.Context) {
 		Admin:    true,
 	}
 
-	PokerRooms[roomID] = CreatePokerRoom(roomID, userID, u)
+	pr[roomID] = CreatePokerRoom(roomID, userID, u)
 
 	var regres = RegisterRes{
 		UserID:     userID,
@@ -95,39 +99,37 @@ func JoinRoom(c *gin.Context) {
 		return
 	}
 
-	// roomID生成
-	existbool := true
-	var result string
-
-	for existbool {
-		result = "R" + randomString(5)
-		_, existbool = PokerRooms[result]
-	}
-
-	// userName取得
-	r := structs.RegisterJoin{}
+	// userName, roomID取得
+	r := JoinRoomRequest{}
 	if err := c.ShouldBindJSON(&r); err != nil {
 		// log.Println(err)
 		view.RequestError(c, "bad JSON")
 		return
 	}
+	roomID := r.RoomID
+	userName := r.UserName
 
-	u := model.User{
-		RoomID:     r.RoomID,
-		UserName:   r.UserName,
+	// userID生成・重複確認
+	var userID string
+	for duplicated := true; duplicated; {
+		userID = "R" + randomString(5)
+		_, duplicated = pr[roomID].Users[userID]
+	}
+
+	u := User{
+		UserName: userName,
+		Admin:    false,
+	}
+	pr.AddUser(roomID, userID, &u)
+
+	var regres = RegisterRes{
+		UserID:     userID,
+		RoomID:     roomID,
+		UserName:   userName,
 		Permission: "normal",
 	}
-	if err := model.CreateUser(&u); err != nil {
-		view.RequestError(c, "error occured")
-		return
-	}
-
-	// rms[result] = clients{}
-
-	var resreg structs.ResRegister
-	u.ResRegister(&resreg)
 	res := map[string]any{
-		"data": resreg,
+		"data": regres,
 	}
 	view.StatusOK(c, res)
 }
