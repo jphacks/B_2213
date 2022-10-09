@@ -9,14 +9,10 @@ import (
 	"pms/src/view"
 
 	"github.com/gin-gonic/gin"
-	"github.com/gorilla/websocket"
+	// "github.com/gorilla/websocket"
 )
 
-type clients map[*websocket.Conn]bool
-
-type rooms map[string](clients)
-
-var rms = rooms{}
+var PokerRooms = map[string]PokerRoom{}
 
 func randomString(char int) string {
 	const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
@@ -34,21 +30,30 @@ func randomString(char int) string {
 	return result
 }
 
+// roomID as r
+func CreatePokerRoom(r string, uid string, u User) PokerRoom {
+	return PokerRoom{
+		RoomID: r,
+		Users: map[string]User{
+			uid: u,
+		},
+	}
+}
+
 // HandlerFunc for POST /api/createRoom/[poker or mahjong]
 func CreateRoom(c *gin.Context) {
 	game := c.Param("game")
 	if game != "poker" {
-		view.RequestError(c, "no such game is supported in PMC")
+		view.RequestError(c, "no such game is supported in PMC: "+game)
 		return
 	}
 
 	// roomID生成
 	existbool := true
 	var roomID string
-
 	for existbool {
 		roomID = "R" + randomString(5)
-		_, existbool = rms[roomID]
+		_, existbool = PokerRooms[roomID]
 	}
 
 	// userName取得
@@ -58,23 +63,26 @@ func CreateRoom(c *gin.Context) {
 		view.RequestError(c, "bad JSON")
 		return
 	}
+	userName := r.UserName
 
-	u := model.User{
+	// UserID生成
+	userID := "U" + randomString(6)
+
+	u := User{
+		UserName: userName,
+		Admin:    true,
+	}
+
+	PokerRooms[roomID] = CreatePokerRoom(roomID, userID, u)
+
+	var regres = RegisterRes{
+		UserID:     userID,
 		RoomID:     roomID,
-		UserName:   r.UserName,
+		UserName:   userName,
 		Permission: "admin",
 	}
-	if err := model.CreateUser(&u); err != nil {
-		view.RequestError(c, "error occured")
-		return
-	}
-
-	rms[roomID] = clients{}
-
-	var resreg structs.ResRegister
-	u.ResRegister(&resreg)
 	res := map[string]any{
-		"data": resreg,
+		"data": regres,
 	}
 	view.StatusOK(c, res)
 }
@@ -83,7 +91,7 @@ func CreateRoom(c *gin.Context) {
 func JoinRoom(c *gin.Context) {
 	game := c.Param("game")
 	if game != "poker" {
-		view.RequestError(c, "no such game is supported in PMC")
+		view.RequestError(c, "no such game is supported in PMC: "+game)
 		return
 	}
 
@@ -93,7 +101,7 @@ func JoinRoom(c *gin.Context) {
 
 	for existbool {
 		result = "R" + randomString(5)
-		_, existbool = rms[result]
+		_, existbool = PokerRooms[result]
 	}
 
 	// userName取得
@@ -114,7 +122,7 @@ func JoinRoom(c *gin.Context) {
 		return
 	}
 
-	rms[result] = clients{}
+	// rms[result] = clients{}
 
 	var resreg structs.ResRegister
 	u.ResRegister(&resreg)

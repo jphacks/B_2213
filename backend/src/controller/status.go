@@ -22,7 +22,7 @@ func RoomStatus(c *gin.Context) {
 		view.RequestError(c, "no such game is supported in PMC")
 		return
 	}
-	_, existbool := rms[roomID]
+	_, existbool := PokerRooms[roomID]
 	if existbool {
 		res := map[string]string{"status": "waiting"}
 		view.StatusOK(c, res)
