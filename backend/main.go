@@ -26,7 +26,7 @@ func Router() *gin.Engine {
 
 	r.GET("/", index)
 	r.GET("/cookie", func(c *gin.Context) {
-		c.SetCookie("user", "user", 3600, "/", "localhost", false, true)
+		c.SetCookie("user", "user", 3600, "/", "localhost", false, false)
 	})
 	r.GET("checkCookie", func(c *gin.Context) {
 		user, user_cookie_err := c.Cookie("user")
