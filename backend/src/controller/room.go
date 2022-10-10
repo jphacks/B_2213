@@ -37,6 +37,10 @@ func randomString(char int) string {
 func CreatePokerRoom(rid string, uid string, u User) PokerRoom {
 	return PokerRoom{
 		RoomID: rid,
+		RoomData: RoomData{
+			SB: 50,
+			BB: 100,
+		},
 		Users: map[string]*User{
 			uid: &u,
 		},

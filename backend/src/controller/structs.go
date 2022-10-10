@@ -18,6 +18,8 @@ type PokerRoom struct {
 type RoomData struct {
 	Round int `json:"round"`
 	Stage int `json:"stage"`
+	SB    int `json:"sb"`
+	BB    int `json:"bb"`
 	Pot   Pot `json:"pot"`
 }
 

@@ -15,6 +15,7 @@ func GetStatus(c *gin.Context) {
 	})
 }
 
+// HandlerFunc for GET /api/status/[poker or mahjong]
 func RoomStatus(c *gin.Context) {
 	game := c.Param("game")
 	roomID := c.Param("roomID")
@@ -23,10 +24,18 @@ func RoomStatus(c *gin.Context) {
 		return
 	}
 	_, existbool := pr[roomID]
-	if existbool {
+
+	if existbool && pr[roomID].RoomData.Round == 0 {
+		// RoomData.Round == 0 のときは参加待機中
 		res := map[string]string{"status": "waiting"}
 		view.StatusOK(c, res)
+	} else if existbool {
+		// RoomData.Round != 0のときはゲームが始まっている
+		res := map[string]string{"status": "on game"}
+		view.StatusOK(c, res)
 	} else {
+		// RoomIDが存在しない場合、ゲーム終了済みorルームが存在しない
+		// どっちにしてもfinishedを返す。
 		res := map[string]string{"status": "finished"}
 		view.StatusOK(c, res)
 	}

@@ -12,3 +12,17 @@ func RequestError(c *gin.Context, msg string) {
 		"message": msg,
 	})
 }
+
+// 401 Unauthorized
+func RequestUnauthorized(c *gin.Context, msg string) {
+	c.JSON(http.StatusUnauthorized, gin.H{
+		"message": msg,
+	})
+}
+
+// 403 Forbidden
+func RequestForbidden(c *gin.Context, msg string) {
+	c.JSON(http.StatusForbidden, gin.H{
+		"message": msg,
+	})
+}
