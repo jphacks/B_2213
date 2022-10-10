@@ -13,8 +13,8 @@ type PokerRooms map[string]*PokerRoom
 
 var pr = PokerRooms{}
 
-func (pr *PokerRooms) AddUser(rid string, uid string, u *User) {
-	(*pr)[rid].Users[uid] = u
+func (pr *PokerRoom) AddUser(uid string, u *User) {
+	(*pr).Users[uid] = u
 }
 
 func randomString(char int) string {
@@ -78,7 +78,7 @@ func CreateRoom(c *gin.Context) {
 	room := CreatePokerRoom(roomID, userID, u)
 	pr[roomID] = &room
 
-	pr.AddUser(roomID, userID, &u)
+	pr[roomID].AddUser(userID, &u)
 
 	var regres = RegisterRes{
 		UserID:     userID,
@@ -128,7 +128,7 @@ func JoinRoom(c *gin.Context) {
 		UserName: userName,
 		Admin:    false,
 	}
-	pr.AddUser(roomID, userID, &u)
+	pr[roomID].AddUser(userID, &u)
 
 	var regres = RegisterRes{
 		UserID:     userID,
@@ -141,5 +141,5 @@ func JoinRoom(c *gin.Context) {
 	}
 	view.StatusOK(c, res)
 	log.Println(pr[roomID])
-	pr.WritePokerRoomtoWS(roomID)
+	pr[roomID].WritePokerRoomtoWS()
 }

@@ -14,5 +14,5 @@ func IngameReload(c *gin.Context) {
 	}
 
 	view.NoContext(c)
-	pr.WritePokerRoomtoWS(roomID)
+	pr[roomID].WritePokerRoomtoWS()
 }

@@ -67,7 +67,7 @@ func CreateSingleRoom(c *gin.Context) {
 	c.JSON(200, singleRoom)
 }
 
-func (pr *PokerRooms) UpdateUser(id string, uid string, u *User) {}
+func (pr *PokerRoom) UpdateUser(id string, uid string, u *User) {}
 
 // HandlerFunc for WS /ws/:roomID
 func ConnectRoom(c *gin.Context) {
@@ -89,7 +89,7 @@ func WebSocketServer(w http.ResponseWriter, r *http.Request, rid string, uid str
 	}
 	pr[rid].Users[uid].WsCons = conn
 	pr[rid].Users[uid].SessionAlive = true
-	pr.WritePokerRoomtoWS(rid)
+	pr[rid].WritePokerRoomtoWS()
 	for {
 		var msg message
 		if err := conn.ReadJSON(&msg); err != nil {
@@ -107,14 +107,14 @@ func WebSocketServer(w http.ResponseWriter, r *http.Request, rid string, uid str
 	}
 }
 
-// PokerRooms[rid]の全てにPokerRoomをJSONで送信
-func (pr *PokerRooms) WritePokerRoomtoWS(rid string) {
-	for uid, conn := range (*pr)[rid].Users {
+// PokerRoomの全てのUserにPokerRoomをJSONで送信
+func (pr *PokerRoom) WritePokerRoomtoWS() {
+	for uid, conn := range (*pr).Users {
 		if conn.WsCons != nil {
-			err := conn.WsCons.WriteJSON((*pr)[rid])
+			err := conn.WsCons.WriteJSON(*pr)
 			if err != nil {
-				(*pr)[rid].Users[uid].WsCons = nil
-				(*pr)[rid].Users[uid].SessionAlive = false
+				(*pr).Users[uid].WsCons = nil
+				(*pr).Users[uid].SessionAlive = false
 			}
 		}
 	}
