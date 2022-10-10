@@ -13,10 +13,13 @@ FrontendはNext+TS、BackendはGin by Goを用いて開発しており、リア�
 **私達は入賞を熱望しており、チーム一丸となってクオリティの高いアプリケーション開発に努めていくつもりです。**
 
 ## 概要
+- ポーカーをプレイする人たちのうち1人がルームを作成し、他の人達がそれに参加してゲームをスタートします。
 - スマホ上で自分のアクション(レイズ、チェックなど)を行うことで、pokerでのチップのやり取りを自動で計算し、リアルタイムでチップの移動結果を反映するwebアプリケーションです。<br>
 - 特に海外で使用することを想定し、英語表記となっています。 *日本で実際のお金などを賭けplayすることは違法です。本アプリはあくまでチップのやりとりのみです。
 
 ## 使用技術
-- frontend: TypeScript, Next.js, Docker, jest
-- backend:  Go, Gin, Docker
-- other:    websocket, Azure(予定)
+- Frontend: TypeScript, Next.js, Docker, jest
+  - Author: [長谷川祥士](https://github.com/Hasegawa-Akito)
+- Backend:  Go, Gin, Docker
+  - Author: [藤田恭輔](https://github.com/Techondorius)
+- Other:    websocket, Azure(予定)

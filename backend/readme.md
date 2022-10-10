@@ -14,18 +14,4 @@ or
 
 # API Endpoints
 
-[RestAPI](https://dazzling-balmoral-ae7.notion.site/API-Document-53049bbdbf9f46e7800746e36ad44629)
-
-## 失敗時
-
-原則、GitHub APIに倣って400代のエラーを返す
-
-| Column | type | Details |
-| -------- | -------- | -------- |
-| message | string | エラーに関するメッセージ |
-
-```json
-{
-    "message": "permission denied"
-}
-```
+[EndPoints](https://great-bongo-965.notion.site/Backend-Documents-8c7c8d5ee6384ca99aff5a40f8471199)
