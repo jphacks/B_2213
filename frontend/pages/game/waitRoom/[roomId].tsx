@@ -25,7 +25,7 @@ const WaitRoom: NextPage = () => {
   const confirmRoomStatus = useCallback(async () => {
     const apiUrl =
       process.env.NEXT_PUBLIC_API_URL +
-      "/status/" +
+      "/api/status/" +
       userInfo.gameType +
       "/" +
       userInfo.roomID;
@@ -39,11 +39,16 @@ const WaitRoom: NextPage = () => {
     return;
   }, [router, userInfo.gameType, userInfo.roomID]);
 
-  useEffect(() => {
-    if (!confirmUserInfo_context_cookie()) {
+  const confirmUserInfo = useCallback(async () => {
+    const confirmResult = await confirmUserInfo_context_cookie();
+    if (!confirmResult) {
       router.push("/start");
       return;
     }
+  }, []);
+
+  useEffect(() => {
+    confirmUserInfo();
     setIsReady((isReady) => ({ ...isReady, userInfoReady: true }));
 
     confirmRoomStatus();

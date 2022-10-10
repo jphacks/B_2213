@@ -19,7 +19,7 @@ const JoinRoomForm = ({ gameType }: { gameType: string }) => {
     if (userName.replace(/\s+/g, "") && roomID.replace(/\s+/g, "")) {
       try {
         const apiUrl =
-          process.env.NEXT_PUBLIC_API_URL + "/joinRoom/" + gameType;
+          process.env.NEXT_PUBLIC_API_URL + "/api/joinRoom/" + gameType;
         const res = await axios.post(apiUrl, {
           userName: userName,
           roomID: roomID,

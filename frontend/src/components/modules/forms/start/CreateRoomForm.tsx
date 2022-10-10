@@ -17,7 +17,7 @@ const CreateRoomForm = ({ gameType }: { gameType: string }) => {
     if (userName.replace(/\s+/g, "")) {
       try {
         const apiUrl =
-          process.env.NEXT_PUBLIC_API_URL + "/createRoom/" + gameType;
+          process.env.NEXT_PUBLIC_API_URL + "/api/createRoom/" + gameType;
         const res = await axios.post(apiUrl, {
           userName: userName,
         });
