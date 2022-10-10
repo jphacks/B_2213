@@ -12,13 +12,13 @@ export const useUserInfo = () => {
       setUserInfo(saveUserInfo);
 
       // cookie
-      try {
-        const apiUrl = process.env.NEXT_PUBLIC_API_URL + "/cookie";
-        const res = await axios.get(apiUrl);
-        console.log(res);
-      } catch (e) {
-        console.log(e);
-      }
+      // try {
+      //   const apiUrl = process.env.NEXT_PUBLIC_API_URL + "/cookie";
+      //   const res = await axios.get(apiUrl);
+      //   console.log(res);
+      // } catch (e) {
+      //   console.log(e);
+      // }
     },
     []
   );
@@ -26,13 +26,13 @@ export const useUserInfo = () => {
   const confirmUserInfo_context_cookie =
     useCallback(async (): Promise<boolean> => {
       // cookie
-      try {
-        const apiUrl = process.env.NEXT_PUBLIC_API_URL + "/checkCookie";
-        const res = await axios.get(apiUrl);
-        console.log(res);
-      } catch (e) {
-        console.log(e);
-      }
+      // try {
+      //   const apiUrl = process.env.NEXT_PUBLIC_API_URL + "/checkCookie";
+      //   const res = await axios.get(apiUrl);
+      //   console.log(res);
+      // } catch (e) {
+      //   console.log(e);
+      // }
 
       // context
       if (!userInfo.userID) {
