@@ -5,19 +5,11 @@ import (
 	"encoding/json"
 	"io"
 	"log"
-	"net/http"
 	"pms/src/controller"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
-	"github.com/gorilla/websocket"
 )
-
-type clients map[*websocket.Conn]bool
-
-type rooms map[string](clients)
-
-var rms rooms
 
 func Router() *gin.Engine {
 	r := gin.Default()
@@ -33,7 +25,19 @@ func Router() *gin.Engine {
 	//routing.Routing(r)
 
 	r.GET("/", index)
+	r.GET("/cookie", func(c *gin.Context) {
+		c.SetCookie("user", "user", 3600, "/", "localhost", false, true)
+	})
+	r.GET("checkCookie", func(c *gin.Context) {
+		user, user_cookie_err := c.Cookie("user")
+		if user_cookie_err != nil {
+			c.JSON(401, gin.H{"message": "Cookie is null"})
+		} else {
+			c.JSON(200, gin.H{"message": user})
+		}
+	})
 
+	ws := r.Group("/ws")
 	api := r.Group("/api")
 	{
 		api.POST("/createRoom/:game", controller.CreateRoom)
@@ -48,13 +52,10 @@ func Router() *gin.Engine {
 
 	ingame := api.Group("/ingame")
 	{
-		ingame.POST("")
+		ingame.GET("/:roomID/", controller.IngameReload)
 	}
 
-	r.GET("/ws/:id", func(c *gin.Context) {
-		id := c.Param("id")
-		wshandlerForDemo(c.Writer, c.Request, id)
-	})
+	ws.GET("/:roomID", controller.ConnectRoom)
 
 	r.GET("/simpleWs", controller.SimpleWs)
 
@@ -64,8 +65,6 @@ func Router() *gin.Engine {
 }
 
 func main() {
-	rms = rooms{}
-
 	r := Router()
 	_ = r.Run()
 }
@@ -89,56 +88,4 @@ func index(c *gin.Context) {
 	c.JSON(200, gin.H{
 		"message": "hi",
 	})
-}
-
-func wshandlerForDemo(w http.ResponseWriter, r *http.Request, id string) {
-	var wsupgrader = websocket.Upgrader{
-		HandshakeTimeout: 0,
-		ReadBufferSize:   1024,
-		WriteBufferSize:  1024,
-		CheckOrigin: func(r *http.Request) bool {
-			return true
-		},
-	}
-	conn, err := wsupgrader.Upgrade(w, r, nil)
-
-	if err != nil {
-		log.Println("Failed to set websocket upgrade")
-		return
-	}
-	rms[id][conn] = true
-	// defer conn.Close()
-
-	for {
-		var msg message
-		err := conn.ReadJSON(&msg)
-		log.Println(msg.Str)
-		if err != nil {
-			if websocket.IsCloseError(err, 1005) {
-				log.Printf("Disconnected")
-			}
-			log.Println("!!!")
-			log.Println(err)
-			rms[id][conn] = false
-			return
-		}
-		wsWriter(msg, id)
-	}
-}
-
-type message struct {
-	Str  string `json:"str"`
-	Int  int    `json:"int"`
-	List []any  `json:"list"`
-}
-
-func wsWriter(res message, id string) {
-	for client, tf := range rms[id] {
-		if tf {
-			if err := client.WriteJSON(res); err != nil {
-				log.Println("error!!!")
-				log.Println(err)
-			}
-		}
-	}
 }

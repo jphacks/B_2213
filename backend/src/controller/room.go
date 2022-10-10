@@ -1,21 +1,20 @@
 package controller
 
 import (
-	// "log"
 	"crypto/rand"
+	"log"
 
 	"pms/src/view"
 
 	"github.com/gin-gonic/gin"
-	// "github.com/gorilla/websocket"
 )
 
-type PokerRooms map[string]PokerRoom
+type PokerRooms map[string]*PokerRoom
 
 var pr = PokerRooms{}
 
-func (pr *PokerRooms) AddUser(rid string, uid string, u *User) {
-	(*pr)[rid].Users[uid] = *u
+func (pr *PokerRoom) AddUser(uid string, u *User) {
+	(*pr).Users[uid] = u
 }
 
 func randomString(char int) string {
@@ -34,12 +33,12 @@ func randomString(char int) string {
 	return result
 }
 
-// roomID as r
-func CreatePokerRoom(r string, uid string, u User) PokerRoom {
+// roomID as rid, userID as uid and User as u
+func CreatePokerRoom(rid string, uid string, u User) PokerRoom {
 	return PokerRoom{
-		RoomID: r,
-		Users: map[string]User{
-			uid: u,
+		RoomID: rid,
+		Users: map[string]*User{
+			uid: &u,
 		},
 	}
 }
@@ -76,8 +75,10 @@ func CreateRoom(c *gin.Context) {
 		UserName: userName,
 		Admin:    true,
 	}
+	room := CreatePokerRoom(roomID, userID, u)
+	pr[roomID] = &room
 
-	pr[roomID] = CreatePokerRoom(roomID, userID, u)
+	pr[roomID].AddUser(userID, &u)
 
 	var regres = RegisterRes{
 		UserID:     userID,
@@ -89,6 +90,7 @@ func CreateRoom(c *gin.Context) {
 		"data": regres,
 	}
 	view.StatusOK(c, res)
+	log.Println(pr[roomID])
 }
 
 // HandlerFunc for POST /api/joinRoom/[poker or mahjong]
@@ -109,10 +111,16 @@ func JoinRoom(c *gin.Context) {
 	roomID := r.RoomID
 	userName := r.UserName
 
+	// RoomID確認
+	if _, ok := pr[roomID]; !ok {
+		view.RequestError(c, "no such Room")
+		return
+	}
+
 	// userID生成・重複確認
 	var userID string
 	for duplicated := true; duplicated; {
-		userID = "R" + randomString(5)
+		userID = "U" + randomString(5)
 		_, duplicated = pr[roomID].Users[userID]
 	}
 
@@ -120,7 +128,7 @@ func JoinRoom(c *gin.Context) {
 		UserName: userName,
 		Admin:    false,
 	}
-	pr.AddUser(roomID, userID, &u)
+	pr[roomID].AddUser(userID, &u)
 
 	var regres = RegisterRes{
 		UserID:     userID,
@@ -132,4 +140,6 @@ func JoinRoom(c *gin.Context) {
 		"data": regres,
 	}
 	view.StatusOK(c, res)
+	log.Println(pr[roomID])
+	pr[roomID].WritePokerRoomtoWS()
 }
