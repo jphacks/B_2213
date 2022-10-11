@@ -7,7 +7,7 @@ import (
 
 func TestFindRoomByRoomID(t *testing.T) {
 	PR = PokerRooms{
-		"a": PokerRoom{},
+		"a": &PokerRoom{},
 	}
 	cases := []struct {
 		roomID string

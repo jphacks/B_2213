@@ -2,24 +2,13 @@ package model
 
 import (
 	"errors"
-	"github.com/gorilla/websocket"
+	// "github.com/gorilla/websocket"
 )
 
 var PR PokerRooms
 
 func ResetPokerRooms() {
 	PR = PokerRooms{}
-}
-
-func (pr *PokerRoom) UpdateUser(id string, uid string, u *User) {}
-
-// PokerRoom内にいる全てのユーザーのWsConnを取得する
-func (pr *PokerRoom) GetAllUserWebSockets() []*websocket.Conn {
-	res := []*websocket.Conn{}
-	for _, u := range pr.Users {
-		res = append(res, u.WsConn)
-	}
-	return res
 }
 
 func (pr *PokerRoom) AddUser(uid string, u *User) error {
