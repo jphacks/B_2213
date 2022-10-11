@@ -7,7 +7,7 @@ import (
 )
 
 // 500 InternalServerError
-func InternalServerError (c *gin.Context, msg string) {
+func InternalServerError(c *gin.Context, msg string) {
 	c.JSON(http.StatusInternalServerError, gin.H{
 		"message": msg,
 	})

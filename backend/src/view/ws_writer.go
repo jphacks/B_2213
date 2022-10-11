@@ -18,7 +18,7 @@ func WriteJSON(pr *model.PokerRoom) {
 
 func WriteRoomInfoByWS(pr *model.PokerRoom, u *model.User) error {
 	conn := u.WsConn
-	if err := conn.WriteJSON(pr) ; err != nil {
+	if err := conn.WriteJSON(pr); err != nil {
 		return err
 	} else {
 		return nil
