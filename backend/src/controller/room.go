@@ -107,7 +107,10 @@ func JoinRoom(c *gin.Context) {
 		UserName: userName,
 		Admin:    false,
 	}
-	pr.AddUser(userID, &u)
+	err := pr.AddUser(userID, &u)
+	if err != nil {
+		view.InternalServerError(c, "Something error has occured while creating PokerRoom")
+	}
 
 	var regres = model.RegisterRes{
 		UserID:     userID,
@@ -120,5 +123,5 @@ func JoinRoom(c *gin.Context) {
 	}
 	view.StatusOK(c, res)
 	// TODO
-	// pr[roomID].WritePokerRoomtoWS()
+	WritePokerRoombyWS(pr)
 }

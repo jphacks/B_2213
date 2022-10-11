@@ -45,5 +45,4 @@ func RoomStatus(c *gin.Context) {
 		res := map[string]string{"status": "finished"}
 		view.StatusOK(c, res)
 	}
-	return
 }

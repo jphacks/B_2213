@@ -22,12 +22,12 @@ func (pr *PokerRoom) GetAllUserWebSockets() []*websocket.Conn {
 	return res
 }
 
-func (pr *PokerRoom) AddUser(uid string, u * User) error{
+func (pr *PokerRoom) AddUser(uid string, u *User) error {
 	_, ok := pr.FindUserByUserID(uid)
 	if ok {
 		return errors.New("UserID is already taken")
 	} else {
-		pr.Users[uid] = *u
+		pr.Users[uid] = u
 		return nil
 	}
 }
@@ -49,8 +49,8 @@ func CreatePokerRoom(rid string, uid string, u *User) (*PokerRoom, error) {
 			SB: 50,
 			BB: 100,
 		},
-		Users: map[string]User{
-			uid: *u,
+		Users: map[string]*User{
+			uid: u,
 		},
 	}
 	return PR[rid], nil
@@ -58,5 +58,14 @@ func CreatePokerRoom(rid string, uid string, u *User) (*PokerRoom, error) {
 
 func (pr *PokerRoom) FindUserByUserID(uid string) (*User, bool) {
 	u, ok := pr.Users[uid]
-	return &u, ok
+	return u, ok
+}
+
+func (pr *PokerRoom) GetUserByUserID(uid string) *User {
+	u, ok := pr.Users[uid]
+	if ok {
+		return u
+	} else {
+		return nil
+	}
 }

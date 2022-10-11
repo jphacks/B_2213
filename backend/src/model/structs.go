@@ -12,9 +12,9 @@ type CreateRoomRequest struct {
 }
 
 type PokerRoom struct {
-	RoomID   string           `json:"roomId"`
-	RoomData RoomData         `json:"roomData"`
-	Users    map[string]User `json:"users"`
+	RoomID   string          `json:"roomId"`
+	RoomData RoomData        `json:"roomData"`
+	Users    map[string]*User `json:"users"`
 }
 
 type RoomData struct {
@@ -37,6 +37,7 @@ type Subpot struct {
 
 type User struct {
 	UserName     string          `json:"userName"`
+	UserID       string          `json:"-"`
 	Stack        int             `json:"stack"`
 	Joining      bool            `json:"joining"`
 	BettingTips  int             `json:"bettingTips"`
