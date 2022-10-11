@@ -20,6 +20,8 @@ FrontendはNext+TS、BackendはGin by Goを用いて開発しており、リア�
 ## 使用技術
 - Frontend: TypeScript, Next.js, Docker, jest
   - Author: [長谷川祥士](https://github.com/Hasegawa-Akito)
+  - Document: [README](https://github.com/tokyo-azisai-paradise/poker-mahjong-calculation/blob/develop/frontend/README.md)
 - Backend:  Go, Gin, Docker
   - Author: [藤田恭輔](https://github.com/Techondorius)
+  - Document: [README](https://github.com/tokyo-azisai-paradise/poker-mahjong-calculation/blob/develop/backend/readme.md)
 - Other:    websocket, Azure(予定)
