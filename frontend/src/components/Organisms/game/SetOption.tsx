@@ -1,0 +1,22 @@
+import { memo, useState } from "react";
+import styles from "../../../../styles/Home.module.css";
+
+// eslint-disable-next-line react/display-name
+const ActionSelect = memo(() => {
+  return (
+    <section className="h-screen bg-cover">
+      <div className="flex h-full w-full items-center justify-center container mx-auto px-8">
+        <div className="max-w-2xl text-center">
+          <h1 className="text-5xl mb-10 sm:text-5xl capitalize tracking-widest lg:text-7xl">
+            Loading...
+          </h1>
+          <div className="flex justify-center">
+            <div className="animate-spin h-10 w-10 border-4 border-[#95913f] rounded-full border-t-transparent"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+});
+
+export default ActionSelect;
