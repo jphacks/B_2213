@@ -11,9 +11,14 @@ import (
 
 // HandlerFunc for GET /api/status/[poker or mahjong]
 func GetStatus(c *gin.Context) {
-	c.JSON(200, gin.H{
-		"status": "alive",
-	})
+	game := c.Param("game")
+	if game == "poker" {
+		view.StatusOK(c, gin.H{"status": "alive"})
+	} else if game == "mahjong" {
+		view.StatusOK(c, gin.H{"status": "dead"})
+	} else {
+		view.RequestError(c, "no such game is available")
+	}
 }
 
 // HandlerFunc for GET /api/status/{game}/{roomID}
