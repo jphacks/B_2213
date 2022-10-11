@@ -3,6 +3,7 @@
 package controller
 
 import (
+	"pms/src/model"
 	"pms/src/view"
 
 	"github.com/gin-gonic/gin"
@@ -15,7 +16,7 @@ func GetStatus(c *gin.Context) {
 	})
 }
 
-// HandlerFunc for GET /api/status/[poker or mahjong]
+// HandlerFunc for GET /api/status/{game}/{roomID}
 func RoomStatus(c *gin.Context) {
 	game := c.Param("game")
 	roomID := c.Param("roomID")
@@ -23,9 +24,9 @@ func RoomStatus(c *gin.Context) {
 		view.RequestError(c, "no such game is supported in PMC")
 		return
 	}
-	_, existbool := pr[roomID]
+	pr, existbool := model.FindRoomByRoomID(roomID)
 
-	if existbool && pr[roomID].RoomData.Round == 0 {
+	if existbool && pr.RoomData.Round == 0 {
 		// RoomData.Round == 0 のときは参加待機中
 		res := map[string]string{"status": "waiting"}
 		view.StatusOK(c, res)
@@ -39,4 +40,5 @@ func RoomStatus(c *gin.Context) {
 		res := map[string]string{"status": "finished"}
 		view.StatusOK(c, res)
 	}
+	return
 }
