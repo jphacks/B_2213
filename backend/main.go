@@ -58,10 +58,6 @@ func Router() *gin.Engine {
 
 	ws.GET("/:roomID", controller.ConnectRoom)
 
-	r.GET("/simpleWs", controller.SimpleWs)
-
-	r.GET("/singleRoom", controller.CreateSingleRoom)
-
 	return r
 }
 

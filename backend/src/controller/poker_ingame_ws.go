@@ -18,21 +18,13 @@ var wsupgrader = websocket.Upgrader{
 	},
 }
 
-// TODO Mock
 type message struct {
 	Str  string `json:"str"`
 	Int  int    `json:"int"`
 	List []any  `json:"list"`
 }
 
-// TODO mock
-// HandlerFunc for ws://~~~~:8000/simpleWs
-func SimpleWs(c *gin.Context) {
-	wshandler(c.Writer, c.Request)
-}
-
-// TODO mock
-// main function of SimpleWs
+// テストコード用のWS
 func wshandler(w http.ResponseWriter, r *http.Request) {
 	conn, err := wsupgrader.Upgrade(w, r, nil)
 	if err != nil {
@@ -55,16 +47,6 @@ func wshandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
-}
-
-// TODO Mock
-var singleRoom = PokerRoom{
-	RoomID: "DAMMY",
-}
-
-// TODO Mock
-func CreateSingleRoom(c *gin.Context) {
-	c.JSON(200, singleRoom)
 }
 
 func (pr *PokerRoom) UpdateUser(id string, uid string, u *User) {}
