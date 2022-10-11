@@ -1,12 +1,13 @@
 import { memo, useContext, useEffect, useRef, useState } from "react";
 import { UserContext } from "../../../../../pages/_app";
+import { MemberInfoType } from "../../../../types/game/type";
 
 // eslint-disable-next-line react/display-name
 const WaitingMember = memo(() => {
   const { userInfo } = useContext(UserContext);
   const socketRef = useRef<WebSocket>();
   const [isConnected, setIsConnected] = useState<boolean>(false);
-  // const [memberInfo, setMemberInfo] = useState
+  const [memberInfo, setMemberInfo] = useState<MemberInfoType>({}); // このstateは後でaitingRoomのページに持っていく
 
   useEffect(() => {
     socketRef.current = new WebSocket(
@@ -31,8 +32,7 @@ const WaitingMember = memo(() => {
     socketRef.current.onmessage = function (event) {
       const gameInfo_JSON = event.data;
       const gameInfo_obj = JSON.parse(gameInfo_JSON);
-      console.log(gameInfo_obj);
-      console.log(gameInfo_obj.users); // userInfoはnullの時スタート画面に戻るためこの段階でnullであることはない
+      setMemberInfo(gameInfo_obj.users);
     };
 
     return () => {
@@ -44,9 +44,9 @@ const WaitingMember = memo(() => {
   }, []);
   return (
     <ul className="pt-8 text-2xl capitalize tracking-widest border-t-2 border-[#95913f]">
-      <li className="pb-3">Hasegawa Akito</li>
-      <li className="pb-3">Tano</li>
-      <li className="pb-3">Hujithiy</li>
+      {Object.keys(memberInfo).map((key) => (
+        <li key={key}>{memberInfo[key].userName}</li>
+      ))}
     </ul>
   );
 });
