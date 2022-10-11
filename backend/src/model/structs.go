@@ -1,8 +1,10 @@
-package controller
+package model
 
 import (
 	"github.com/gorilla/websocket"
 )
+
+type PokerRooms map[string]*PokerRoom
 
 // CreateRoom時のリクエストのStruct
 type CreateRoomRequest struct {
@@ -35,6 +37,7 @@ type Subpot struct {
 
 type User struct {
 	UserName     string          `json:"userName"`
+	UserID       string          `json:"-"`
 	Stack        int             `json:"stack"`
 	Joining      bool            `json:"joining"`
 	BettingTips  int             `json:"bettingTips"`
@@ -42,7 +45,7 @@ type User struct {
 	Actioned     bool            `json:"actioned"`
 	Admin        bool            `json:"admin"`
 	SessionAlive bool            `json:"sessionAlive"`
-	WsCons       *websocket.Conn `json:"-"`
+	WsConn       *websocket.Conn `json:"-"`
 }
 
 // CreateRoom, JoinRoomのレスポンスのStruct

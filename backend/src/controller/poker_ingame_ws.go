@@ -3,6 +3,7 @@ package controller
 import (
 	"log"
 	"net/http"
+	"pms/src/model"
 	"pms/src/view"
 
 	"github.com/gin-gonic/gin"
@@ -49,13 +50,11 @@ func wshandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (pr *PokerRoom) UpdateUser(id string, uid string, u *User) {}
-
 // HandlerFunc for WS /ws/:roomID
 func ConnectRoom(c *gin.Context) {
 	roomID := c.Param("roomID")
 	userID := c.Query("userID")
-	if _, ok := pr[roomID]; !ok {
+	if _, ok := model.FindRoomByRoomID(roomID); !ok {
 		view.RequestError(c, "RoomID is Wrong")
 		return
 	}
@@ -69,19 +68,20 @@ func WebSocketServer(w http.ResponseWriter, r *http.Request, rid string, uid str
 		log.Println("Failed to set websocket upgrade")
 		return
 	}
-	pr[rid].Users[uid].WsCons = conn
-	pr[rid].Users[uid].SessionAlive = true
-	pr[rid].WritePokerRoomtoWS()
+	pr, _ := model.FindRoomByRoomID(rid)
+	user := pr.GetUserByUserID(uid)
+	user.WsConn = conn
+	user.SessionAlive = true
+	WritePokerRoombyWS(pr)
 	for {
-		var msg message
-		if err := conn.ReadJSON(&msg); err != nil {
+		if _, _, err := conn.ReadMessage(); err != nil {
 			if websocket.IsCloseError(err, 1005) {
 				log.Printf("Disconnected")
 			} else {
 				log.Println("!!!")
 				log.Println(err)
-				pr[rid].Users[uid].WsCons = nil
-				pr[rid].Users[uid].SessionAlive = false
+				user.WsConn = nil
+				user.SessionAlive = false
 			}
 			conn.Close()
 			return
@@ -90,14 +90,14 @@ func WebSocketServer(w http.ResponseWriter, r *http.Request, rid string, uid str
 }
 
 // PokerRoomの全てのUserにPokerRoomをJSONで送信
-func (pr *PokerRoom) WritePokerRoomtoWS() {
-	for uid, conn := range (*pr).Users {
-		if conn.WsCons != nil {
-			err := conn.WsCons.WriteJSON(*pr)
-			if err != nil {
-				(*pr).Users[uid].WsCons = nil
-				(*pr).Users[uid].SessionAlive = false
-			}
+func WritePokerRoombyWS(pr *model.PokerRoom) {
+	for uid, u := range pr.Users {
+		if u.WsConn == nil {
+			// WsConnがnilでWriteJSONするとぬるぽ吐くので振り分け
+		} else if err := view.WriteRoomInfoByWS(pr, u); err != nil {
+			pr.Users[uid].WsConn.Close()
+			pr.Users[uid].WsConn = nil
+			pr.Users[uid].SessionAlive = false
 		}
 	}
 }

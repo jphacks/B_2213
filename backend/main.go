@@ -6,12 +6,14 @@ import (
 	"io"
 	"log"
 	"pms/src/controller"
+	"pms/src/model"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
 func Router() *gin.Engine {
+	model.ResetPokerRooms()
 	r := gin.Default()
 
 	r.Use(logger())
@@ -25,17 +27,6 @@ func Router() *gin.Engine {
 	//routing.Routing(r)
 
 	r.GET("/", index)
-	r.GET("/cookie", func(c *gin.Context) {
-		c.SetCookie("user", "user", 3600, "/", "localhost", false, false)
-	})
-	r.GET("checkCookie", func(c *gin.Context) {
-		user, user_cookie_err := c.Cookie("user")
-		if user_cookie_err != nil {
-			c.JSON(401, gin.H{"message": "Cookie is null"})
-		} else {
-			c.JSON(200, gin.H{"message": user})
-		}
-	})
 
 	ws := r.Group("/ws")
 	api := r.Group("/api")
