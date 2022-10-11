@@ -2,17 +2,11 @@ package controller
 
 import (
 	"crypto/rand"
-	"log"
-
 	"pms/src/model"
 	"pms/src/view"
 
 	"github.com/gin-gonic/gin"
 )
-
-func (pr *PokerRoom) AddUser(uid string, u *User) {
-	(*pr).Users[uid] = u
-}
 
 func randomString(char int) string {
 	const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
@@ -87,9 +81,8 @@ func JoinRoom(c *gin.Context) {
 	}
 
 	// userName, roomID取得
-	r := JoinRoomRequest{}
+	r := model.JoinRoomRequest{}
 	if err := c.ShouldBindJSON(&r); err != nil {
-		// log.Println(err)
 		view.RequestError(c, "bad JSON")
 		return
 	}
@@ -97,7 +90,8 @@ func JoinRoom(c *gin.Context) {
 	userName := r.UserName
 
 	// RoomID確認
-	if _, ok := pr[roomID]; !ok {
+	pr, ok := model.FindRoomByRoomID(roomID)
+	if !ok {
 		view.RequestError(c, "no such Room")
 		return
 	}
@@ -106,16 +100,16 @@ func JoinRoom(c *gin.Context) {
 	var userID string
 	for duplicated := true; duplicated; {
 		userID = "U" + randomString(5)
-		_, duplicated = pr[roomID].Users[userID]
+		_, duplicated = pr.FindUserByUserID(userID)
 	}
 
-	u := User{
+	u := model.User{
 		UserName: userName,
 		Admin:    false,
 	}
-	pr[roomID].AddUser(userID, &u)
+	pr.AddUser(userID, &u)
 
-	var regres = RegisterRes{
+	var regres = model.RegisterRes{
 		UserID:     userID,
 		RoomID:     roomID,
 		UserName:   userName,
@@ -125,6 +119,6 @@ func JoinRoom(c *gin.Context) {
 		"data": regres,
 	}
 	view.StatusOK(c, res)
-	log.Println(pr[roomID])
-	pr[roomID].WritePokerRoomtoWS()
+	// TODO
+	// pr[roomID].WritePokerRoomtoWS()
 }

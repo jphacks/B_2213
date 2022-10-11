@@ -22,6 +22,16 @@ func (pr *PokerRoom) GetAllUserWebSockets() []*websocket.Conn {
 	return res
 }
 
+func (pr *PokerRoom) AddUser(uid string, u * User) error{
+	_, ok := pr.FindUserByUserID(uid)
+	if ok {
+		return errors.New("UserID is already taken")
+	} else {
+		pr.Users[uid] = *u
+		return nil
+	}
+}
+
 // PokerRoomsからroomIDを用いてPokerRoomを取得する
 func FindRoomByRoomID(rid string) (*PokerRoom, bool) {
 	pr, ok := PR[rid]
@@ -44,4 +54,9 @@ func CreatePokerRoom(rid string, uid string, u *User) (*PokerRoom, error) {
 		},
 	}
 	return PR[rid], nil
+}
+
+func (pr *PokerRoom) FindUserByUserID(uid string) (*User, bool) {
+	u, ok := pr.Users[uid]
+	return &u, ok
 }
