@@ -6,12 +6,14 @@ import (
 	"io"
 	"log"
 	"pms/src/controller"
+	"pms/src/model"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
 func Router() *gin.Engine {
+	model.ResetPokerRooms()
 	r := gin.Default()
 
 	r.Use(logger())

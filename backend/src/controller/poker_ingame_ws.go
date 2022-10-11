@@ -3,6 +3,7 @@ package controller
 import (
 	"log"
 	"net/http"
+	"pms/src/model"
 	"pms/src/view"
 
 	"github.com/gin-gonic/gin"
@@ -49,8 +50,6 @@ func wshandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (pr *PokerRoom) UpdateUser(id string, uid string, u *User) {}
-
 // HandlerFunc for WS /ws/:roomID
 func ConnectRoom(c *gin.Context) {
 	roomID := c.Param("roomID")
@@ -91,6 +90,7 @@ func WebSocketServer(w http.ResponseWriter, r *http.Request, rid string, uid str
 
 // PokerRoomの全てのUserにPokerRoomをJSONで送信
 func (pr *PokerRoom) WritePokerRoomtoWS() {
+
 	for uid, conn := range (*pr).Users {
 		if conn.WsCons != nil {
 			err := conn.WsCons.WriteJSON(*pr)

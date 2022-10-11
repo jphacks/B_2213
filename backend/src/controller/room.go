@@ -4,14 +4,11 @@ import (
 	"crypto/rand"
 	"log"
 
+	"pms/src/model"
 	"pms/src/view"
 
 	"github.com/gin-gonic/gin"
 )
-
-type PokerRooms map[string]*PokerRoom
-
-var pr = PokerRooms{}
 
 func (pr *PokerRoom) AddUser(uid string, u *User) {
 	(*pr).Users[uid] = u
@@ -33,20 +30,6 @@ func randomString(char int) string {
 	return result
 }
 
-// roomID as rid, userID as uid and User as u
-func CreatePokerRoom(rid string, uid string, u User) PokerRoom {
-	return PokerRoom{
-		RoomID: rid,
-		RoomData: RoomData{
-			SB: 50,
-			BB: 100,
-		},
-		Users: map[string]*User{
-			uid: &u,
-		},
-	}
-}
-
 // HandlerFunc for POST /api/createRoom/[poker or mahjong]
 func CreateRoom(c *gin.Context) {
 	game := c.Param("game")
@@ -60,13 +43,12 @@ func CreateRoom(c *gin.Context) {
 	var roomID string
 	for existbool {
 		roomID = "R" + randomString(5)
-		_, existbool = pr[roomID]
+		_, existbool = model.FindRoomByRoomID(roomID)
 	}
 
 	// userName取得
-	r := CreateRoomRequest{}
+	r := model.CreateRoomRequest{}
 	if err := c.ShouldBindJSON(&r); err != nil {
-		// log.Println(err)
 		view.RequestError(c, "bad JSON")
 		return
 	}
@@ -75,16 +57,16 @@ func CreateRoom(c *gin.Context) {
 	// UserID生成
 	userID := "U" + randomString(6)
 
-	u := User{
+	u := model.User{
 		UserName: userName,
 		Admin:    true,
 	}
-	room := CreatePokerRoom(roomID, userID, u)
-	pr[roomID] = &room
+	_, err := model.CreatePokerRoom(roomID, userID, &u)
+	if err != nil {
+		view.InternalServerError(c, "Something error has occured while creating PokerRoom")
+	}
 
-	pr[roomID].AddUser(userID, &u)
-
-	var regres = RegisterRes{
+	var regres = model.RegisterRes{
 		UserID:     userID,
 		RoomID:     roomID,
 		UserName:   userName,
@@ -94,7 +76,6 @@ func CreateRoom(c *gin.Context) {
 		"data": regres,
 	}
 	view.StatusOK(c, res)
-	log.Println(pr[roomID])
 }
 
 // HandlerFunc for POST /api/joinRoom/[poker or mahjong]
