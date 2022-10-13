@@ -91,13 +91,13 @@ func WebSocketServer(w http.ResponseWriter, r *http.Request, rid string, uid str
 
 // PokerRoomの全てのUserにPokerRoomをJSONで送信
 func WritePokerRoombyWS(pr *model.PokerRoom) {
-	for uid, u := range pr.Users {
+	for _, u := range pr.Users {
 		if u.WsConn == nil {
 			// WsConnがnilでWriteJSONするとぬるぽ吐くので振り分け
-		} else if err := view.WriteRoomInfoByWS(pr, u); err != nil {
-			pr.Users[uid].WsConn.Close()
-			pr.Users[uid].WsConn = nil
-			pr.Users[uid].SessionAlive = false
+		} else if err := view.WriteRoomInfobyWS(u.WsConn, pr); err != nil {
+			u.WsConn.Close()
+			u.WsConn = nil
+			u.SessionAlive = false
 		}
 	}
 }

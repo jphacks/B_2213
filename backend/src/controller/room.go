@@ -122,6 +122,5 @@ func JoinRoom(c *gin.Context) {
 		"data": regres,
 	}
 	view.StatusOK(c, res)
-	// TODO
 	WritePokerRoombyWS(pr)
 }
