@@ -84,6 +84,7 @@ func WebSocketServer(w http.ResponseWriter, r *http.Request, rid string, uid str
 				user.SessionAlive = false
 			}
 			conn.Close()
+			WritePokerRoombyWS(pr)
 			return
 		}
 	}
