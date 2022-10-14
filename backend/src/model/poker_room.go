@@ -58,3 +58,7 @@ func (pr *PokerRoom) GetUserByUserID(uid string) *User {
 		return nil
 	}
 }
+
+func (pr *PokerRoom) DeleteUserByUserID(uid string) {
+	delete(pr.Users, uid)
+}
