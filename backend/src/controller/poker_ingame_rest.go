@@ -48,3 +48,26 @@ func IngameStartGame(c *gin.Context) {
 	view.NoContext(c)
 	WritePokerRoombyWS(pr)
 }
+
+func IngameQuitGame(c *gin.Context) {
+	rid := c.Param("roomID")
+	uid := c.Query("userID")
+
+	pr, ok := model.FindRoomByRoomID(rid)
+	if !ok {
+		view.RequestError(c, "RoomID is Wrong")
+		return
+	}
+
+	u, ok := pr.FindUserByUserID(uid)
+	if !ok {
+		view.RequestError(c, "UserID is wrong")
+	}
+
+	u.WsConn.Close()
+	pr.DeleteUserByUserID(uid)
+	view.StatusOK(c, gin.H{
+		"message": "deleted successfully",
+	})
+
+}

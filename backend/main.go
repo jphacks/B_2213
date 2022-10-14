@@ -45,6 +45,7 @@ func Router() *gin.Engine {
 	{
 		ingame.GET("/:roomID/", controller.IngameReload)
 		ingame.POST("/:roomID/startGame", controller.IngameStartGame)
+		ingame.POST("/:roomID/quitGame", controller.IngameQuitGame)
 	}
 
 	ws.GET("/:roomID", controller.ConnectRoom)
