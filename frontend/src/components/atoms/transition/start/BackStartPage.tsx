@@ -14,7 +14,7 @@ const BackStartPage = ({ gameType }: { gameType: string }) => {
   return (
     <h1
       onClick={() => handleBackButton()}
-      className="text-2xl sm:text-2xl lg:text-3xl z-10 absolute top-5 left-5"
+      className="text-2xl z-10 absolute top-5 left-5"
     >
       back
     </h1>
