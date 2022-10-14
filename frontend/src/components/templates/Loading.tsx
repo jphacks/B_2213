@@ -4,7 +4,7 @@ const Loading = () => {
       <section className="h-screen bg-cover">
         <div className="flex h-full w-full items-center justify-center container mx-auto px-8">
           <div className="max-w-2xl text-center">
-            <h1 className="text-5xl mb-10 sm:text-5xl capitalize tracking-widest lg:text-7xl">
+            <h1 className="text-5xl mb-10 capitalize tracking-widest">
               Loading...
             </h1>
             <div className="flex justify-center">
