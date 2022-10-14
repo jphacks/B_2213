@@ -9,50 +9,49 @@ import Loading from "../../../src/components/templates/Loading";
 import axios from "axios";
 import type { RoomStatusType } from "../../../src/types/game/type";
 
-type ReadyType = {
-  userInfoReady: boolean;
-  roomStatusReady: boolean;
-};
-
 const WaitRoom: NextPage = () => {
   const { userInfo, confirmUserInfo_context_cookie } = useUserInfo();
   const router = useRouter();
-  const [isReady, setIsReady] = useState<ReadyType>({
+  const [isReady, setIsReady] = useState({
     userInfoReady: false, // userInfoが取得できているか
     roomStatusReady: false, // roomStatusがwaiting状態であるかどうか
   });
 
   const confirmRoomStatus = useCallback(async () => {
-    const apiUrl =
-      process.env.NEXT_PUBLIC_API_URL +
-      "/api/status/" +
-      userInfo.gameType +
-      "/" +
-      userInfo.roomID;
-    const res = await axios.get(apiUrl);
-    const roomStatus: RoomStatusType = res.data.status;
+    try {
+      const apiUrl =
+        process.env.NEXT_PUBLIC_API_URL +
+        "/api/status/" +
+        userInfo.gameType +
+        "/" +
+        userInfo.roomID;
+      const res = await axios.get(apiUrl);
+      const roomStatus: RoomStatusType = res.data.status;
 
-    if (!(roomStatus === "waiting")) {
-      // waitingの状態でなければwaitRoomにいる必要はない
-      router.push("/start");
+      if (!(roomStatus === "waiting")) {
+        // waitingの状態でなければwaitRoomにいる必要はない
+        return false;
+      }
+      return true;
+    } catch (e) {
+      return false;
     }
-    return;
-  }, [router, userInfo.gameType, userInfo.roomID]);
-
-  const confirmUserInfo = useCallback(async () => {
-    const confirmResult = await confirmUserInfo_context_cookie();
-    if (!confirmResult) {
-      router.push("/start");
-      return;
-    }
-  }, []);
+  }, [userInfo.gameType, userInfo.roomID]);
 
   useEffect(() => {
-    confirmUserInfo();
-    setIsReady((isReady) => ({ ...isReady, userInfoReady: true }));
+    (async () => {
+      if (!(await confirmUserInfo_context_cookie())) {
+        router.push("/start");
+        return;
+      }
+      setIsReady((isReady) => ({ ...isReady, userInfoReady: true }));
 
-    confirmRoomStatus();
-    setIsReady((isReady) => ({ ...isReady, roomStatusReady: true }));
+      if (!(await confirmRoomStatus())) {
+        router.push("/start");
+        return;
+      }
+      setIsReady((isReady) => ({ ...isReady, roomStatusReady: true }));
+    })();
   }, []);
 
   if (!(isReady.userInfoReady && isReady.roomStatusReady)) {
