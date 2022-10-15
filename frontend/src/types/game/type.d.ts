@@ -48,10 +48,15 @@ export type MemberContextType = {
   setMemberInfo: (memberInfo: MemberInfoType) => void;
 };
 
-export type OptionType = {
+export type OptionsType = {
   stacks: {
     [key: string]: number;
   };
   bb: number;
   sb: number;
+};
+
+export type OptionsContextType = {
+  options: OptionsType;
+  setOptions: (options: OptionsType) => void;
 };
