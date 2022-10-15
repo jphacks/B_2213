@@ -53,6 +53,8 @@ func CreateRoom(c *gin.Context) {
 
 	u := model.User{
 		UserName: userName,
+		UserID:   userID,
+		Stack:    1000,
 		Admin:    true,
 	}
 	_, err := model.CreatePokerRoom(roomID, userID, &u)

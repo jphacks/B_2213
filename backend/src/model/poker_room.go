@@ -25,8 +25,8 @@ func CreatePokerRoom(rid string, uid string, u *User) (*PokerRoom, error) {
 	PR[rid] = &PokerRoom{
 		RoomID: rid,
 		RoomData: RoomData{
-			SB: 50,
-			BB: 100,
+			SB: Blind{"", 50},
+			BB: Blind{"", 100},
 		},
 		Users: map[string]*User{
 			uid: u,
@@ -62,3 +62,9 @@ func (pr *PokerRoom) GetUserByUserID(uid string) *User {
 func (pr *PokerRoom) DeleteUserByUserID(uid string) {
 	delete(pr.Users, uid)
 }
+
+// JoiningがtrueかつAllInがfalseユーザーのActionedをfalseに変える
+func (pr *PokerRoom) ResetAllUserActioned() {}
+
+//
+// func (pr *PokerRoom)
