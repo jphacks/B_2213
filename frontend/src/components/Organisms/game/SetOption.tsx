@@ -1,10 +1,24 @@
-import { memo, useState } from "react";
-import styles from "../../../../styles/Home.module.css";
+import { memo, useContext, useState } from "react";
+import { MemberContext } from "../../../../pages/game/waitRoom/[roomId]";
+import { OptionType } from "../../../types/game/type";
 import BackWaitRoom from "../../atoms/transition/game/BackWaitRoom";
 
 // eslint-disable-next-line react/display-name
 const SetOption = memo<{ setShowOption: (showOption: boolean) => void }>(
   ({ setShowOption }) => {
+    const { memberInfo } = useContext(MemberContext);
+    const [options, setOptions] = useState<OptionType>({
+      stacks: {},
+      bb: 100,
+      sb: 50,
+    });
+
+    const setUserChips = (chips: number, userID: string) => {
+      const optionsObj = options;
+      optionsObj.stacks[userID] = chips;
+      setOptions(optionsObj);
+    };
+
     return (
       <div className="w-screen bg-poker-color z-20 absolute top-0 left-0">
         <BackWaitRoom {...{ setShowOption }} />
@@ -89,7 +103,10 @@ const SetOption = memo<{ setShowOption: (showOption: boolean) => void }>(
                 </div>
               </div>
               <div className="pt-3 pb-8 z-10 absolute bottom-0 right-0 bg-poker-color">
-                <button className="px-6 py-2 bg-gold-button transition-colors duration-300 transform rounded-md">
+                <button
+                  className="px-6 py-2 bg-gold-button transition-colors duration-300 transform rounded-md"
+                  onClick={() => setUserChips(100, "aa")}
+                >
                   Start
                 </button>
               </div>
