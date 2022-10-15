@@ -19,6 +19,7 @@ const StartQuitRoom = memo<PropType>(({ round, setShowOption }) => {
     setShowOnlyAdmin(memberInfo[userInfo.userID!].admin);
 
     if (round > 0) {
+      // roundが0から変わると全員がplayRoomへ移動する。
       router.push("/playRoom/" + userInfo.roomID);
     }
     console.log(round);
@@ -34,7 +35,7 @@ const StartQuitRoom = memo<PropType>(({ round, setShowOption }) => {
           className="px-6 py-2 bg-gold-button transition-colors duration-300 transform rounded-md"
           onClick={() => setShowOption(true)}
         >
-          Start Room
+          Set Options
         </button>
       ) : (
         <div></div>

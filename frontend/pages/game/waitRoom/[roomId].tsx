@@ -125,8 +125,8 @@ const WaitRoom: NextPage = () => {
   return (
     <MemberContext.Provider value={{ memberInfo, setMemberInfo }}>
       <div className="bg-poker-color font-poker-color font-poker-family">
-        {showOption ? <SetOption /> : <div></div>}{" "}
         {/* スタートボタンが押された時表示  */}
+        {showOption ? <SetOption {...{ setShowOption }} /> : <div></div>}
         <section className="h-screen bg-cover">
           <div className="flex w-full items-center justify-center container mx-auto px-8">
             <div className="max-w-2xl text-center">
