@@ -3,8 +3,13 @@ import { memo, useContext, useEffect, useState } from "react";
 import { MemberContext } from "../../../../pages/game/waitRoom/[roomId]";
 import { UserContext } from "../../../../pages/_app";
 
+type PropType = {
+  round: number;
+  setShowOption: (showOption: boolean) => void;
+};
+
 // eslint-disable-next-line react/display-name
-const StartQuitRoom = memo<{ round: number }>(({ round }) => {
+const StartQuitRoom = memo<PropType>(({ round, setShowOption }) => {
   const { userInfo } = useContext(UserContext);
   const { memberInfo } = useContext(MemberContext);
   const [showOnlyAdmin, setShowOnlyAdmin] = useState(false);
@@ -25,7 +30,10 @@ const StartQuitRoom = memo<{ round: number }>(({ round }) => {
         Quit Room
       </button>
       {showOnlyAdmin ? (
-        <button className="px-6 py-2 bg-gold-button transition-colors duration-300 transform rounded-md">
+        <button
+          className="px-6 py-2 bg-gold-button transition-colors duration-300 transform rounded-md"
+          onClick={() => setShowOption(true)}
+        >
           Start Room
         </button>
       ) : (

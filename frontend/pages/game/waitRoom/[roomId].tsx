@@ -14,6 +14,7 @@ import type {
   GameInfoType,
 } from "../../../src/types/game/type";
 import StartQuitRoom from "../../../src/components/Organisms/game/StartQuitRoom";
+import SetOption from "../../../src/components/Organisms/game/SetOption";
 
 // useContextでメンバー情報を子コンポーネントに共有
 export const MemberContext = createContext<MemberContextType>({
@@ -26,6 +27,7 @@ const WaitRoom: NextPage = () => {
   const router = useRouter();
   const socketRef = useRef<WebSocket>();
   const [memberInfo, setMemberInfo] = useState<MemberInfoType>({});
+  const [showOption, setShowOption] = useState(false);
   const [round, setRound] = useState(0);
   const [isReady, setIsReady] = useState({
     userInfoReady: false, // userInfoが取得できているか
@@ -123,13 +125,17 @@ const WaitRoom: NextPage = () => {
   return (
     <MemberContext.Provider value={{ memberInfo, setMemberInfo }}>
       <div className="bg-poker-color font-poker-color font-poker-family">
+        {showOption ? <SetOption /> : <div></div>}{" "}
+        {/* スタートボタンが押された時表示  */}
         <section className="h-screen bg-cover">
           <div className="flex w-full items-center justify-center container mx-auto px-8">
             <div className="max-w-2xl text-center">
               <AnimationStrWaiting />
               <ShowRoomId roomID={userInfo.roomID as string} />
               <WaitingMember />
-              <StartQuitRoom round={round} />
+              <StartQuitRoom
+                {...{ round: round, setShowOption: setShowOption }}
+              />
             </div>
           </div>
         </section>
