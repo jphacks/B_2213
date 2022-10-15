@@ -42,3 +42,8 @@ export type GameInfoType = {
   RoomData: RoomDataType;
   users: MemberInfoType;
 };
+
+export type MemberContextType = {
+  memberInfo: MemberInfoType;
+  setMemberInfo: (memberInfo: MemberInfoType) => void;
+};

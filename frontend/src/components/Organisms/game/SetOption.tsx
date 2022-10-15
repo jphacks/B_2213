@@ -14,6 +14,16 @@ const SetOption = memo(() => {
             <li className="pb-3 text-xl flex justify-between">
               <p>HHHHHHHHHH</p>
               <input
+                data-testid="chips_num"
+                name="chips_num"
+                type="number"
+                className="bg-poker-color border-b-2 border-[#95913f] focus:outline-none w-2/5 text-right"
+                autoComplete="off"
+              />
+            </li>
+            <li className="pb-3 text-xl flex justify-between">
+              <p>HHHHHHHHHH</p>
+              <input
                 data-testid="username"
                 name="username"
                 type="text"
@@ -21,52 +31,58 @@ const SetOption = memo(() => {
                 autoComplete="off"
               />
             </li>
-            <li className="pb-3  text-xl">
-              <p>jjjjjjjjjj</p>
+            <li className="pb-3 text-xl flex justify-between">
+              <p>HHHHHHHHHH</p>
+              <input
+                data-testid="username"
+                name="username"
+                type="text"
+                className="bg-poker-color border-b-2 border-[#95913f] focus:outline-none w-2/5 text-right"
+                autoComplete="off"
+              />
             </li>
-            <li className="pb-3  text-xl">
-              <p>AkitoHaseg</p>
+            <li className="pb-3 text-xl flex justify-between">
+              <p>HHHHHHHHHH</p>
+              <input
+                data-testid="username"
+                name="username"
+                type="text"
+                className="bg-poker-color border-b-2 border-[#95913f] focus:outline-none w-2/5 text-right"
+                autoComplete="off"
+              />
             </li>
-            <li className="pb-3  text-xl">
-              <p>AkitoHaseg</p>
-            </li>
-            <li className="pb-3  text-xl">
-              <p>AkitoHaseg</p>
-            </li>
-            <li className="pb-3  text-xl">
-              <p>AkitoHaseg</p>
-            </li>
-            <li className="pb-3  text-xl">
-              <p>AkitoHaseg</p>
-            </li>
-            <li className="pb-3  text-xl">
-              <p>AkitoHaseg</p>
-            </li>
-            <li className="pb-3  text-xl">
-              <p>AkitoHaseg</p>
+            <li className="pb-3 text-xl flex justify-between">
+              <p>HHHHHHHHHH</p>
+              <input
+                data-testid="username"
+                name="username"
+                type="text"
+                className="bg-poker-color border-b-2 border-[#95913f] focus:outline-none w-2/5 text-right"
+                autoComplete="off"
+              />
             </li>
           </ul>
 
           <div className="pt-3 pl-2">
-            <div className="py-4 flex justify-between border-b-2 border-[#95913f]">
-              <h1 className="text-3xl w-full">BB</h1>
-              <select
-                name="BB"
-                className="text-xl bg-poker-color focus:outline-none text-right"
-              >
-                <option value="man">HHHHHHHHHH</option>
-                <option value="woman">AAAAAAAAAAA</option>
-              </select>
+            <div className="py-4 flex justify-between">
+              <h1 className="text-3xl w-full">Chips of BB</h1>
+              <input
+                data-testid="bb_chips"
+                name="bb_chips"
+                type="number"
+                className="bg-poker-color border-b-2 border-[#95913f] focus:outline-none w-2/5 text-right"
+                autoComplete="off"
+              />
             </div>
-            <div className="py-4 flex justify-between border-b-2 border-[#95913f]">
-              <h1 className="text-3xl w-full">SB</h1>
-              <select
-                name="SB"
-                className="text-xl bg-poker-color focus:outline-none text-right"
-              >
-                <option value="man">HHHHHHHHHH</option>
-                <option value="woman">AAAAAAAAAAA</option>
-              </select>
+            <div className="py-4 flex justify-between">
+              <h1 className="text-3xl w-full">Chips of SB</h1>
+              <input
+                data-testid="bb_chips"
+                name="bb_chips"
+                type="number"
+                className="bg-poker-color border-b-2 border-[#95913f] focus:outline-none w-2/5 text-right"
+                autoComplete="off"
+              />
             </div>
           </div>
           <div className="pt-3 pb-8 z-10 absolute bottom-0 right-0 bg-poker-color">
