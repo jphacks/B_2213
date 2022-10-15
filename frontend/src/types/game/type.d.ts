@@ -39,7 +39,7 @@ export type MemberInfoType = {
 };
 
 export type GameInfoType = {
-  RoomData: RoomDataType;
+  roomData: RoomDataType;
   users: MemberInfoType;
 };
 

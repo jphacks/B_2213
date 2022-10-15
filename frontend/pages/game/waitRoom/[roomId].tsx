@@ -11,8 +11,9 @@ import type {
   MemberContextType,
   RoomStatusType,
   MemberInfoType,
+  GameInfoType,
 } from "../../../src/types/game/type";
-import StartQuitRoomButton from "../../../src/components/modules/forms/game/StartQuitRoomButton";
+import StartQuitRoom from "../../../src/components/Organisms/game/StartQuitRoom";
 
 // useContextでメンバー情報を子コンポーネントに共有
 export const MemberContext = createContext<MemberContextType>({
@@ -24,8 +25,8 @@ const WaitRoom: NextPage = () => {
   const { userInfo, confirmUserInfo_context_cookie } = useUserInfo();
   const router = useRouter();
   const socketRef = useRef<WebSocket>();
-  const [isConnected, setIsConnected] = useState<boolean>(false);
   const [memberInfo, setMemberInfo] = useState<MemberInfoType>({});
+  const [round, setRound] = useState(0);
   const [isReady, setIsReady] = useState({
     userInfoReady: false, // userInfoが取得できているか
     roomStatusReady: false, // roomStatusがwaiting状態であるかどうか
@@ -85,20 +86,19 @@ const WaitRoom: NextPage = () => {
     );
 
     socketRef.current.onopen = function () {
-      setIsConnected(true);
       console.log("Connected");
     };
 
     socketRef.current.onclose = function () {
       console.log("closed");
-      setIsConnected(false);
     };
 
     // server 側から送られてきたデータを受け取る
     socketRef.current.onmessage = function (event) {
       const gameInfo_JSON = event.data;
-      const gameInfo_obj = JSON.parse(gameInfo_JSON);
+      const gameInfo_obj: GameInfoType = JSON.parse(gameInfo_JSON);
       setMemberInfo(gameInfo_obj.users);
+      setRound(gameInfo_obj.roomData.round);
       setIsReady((isReady) => ({ ...isReady, message_WS_Ready: true }));
     };
 
@@ -129,7 +129,7 @@ const WaitRoom: NextPage = () => {
               <AnimationStrWaiting />
               <ShowRoomId roomID={userInfo.roomID as string} />
               <WaitingMember />
-              <StartQuitRoomButton />
+              <StartQuitRoom round={round} />
             </div>
           </div>
         </section>

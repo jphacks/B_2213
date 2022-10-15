@@ -1,16 +1,23 @@
-import { memo, useContext, useEffect, useRef, useState } from "react";
-import { MemberContext } from "../../../../../pages/game/waitRoom/[roomId]";
-import { UserContext } from "../../../../../pages/_app";
+import { useRouter } from "next/router";
+import { memo, useContext, useEffect, useState } from "react";
+import { MemberContext } from "../../../../pages/game/waitRoom/[roomId]";
+import { UserContext } from "../../../../pages/_app";
 
 // eslint-disable-next-line react/display-name
-const StartQuitRoomButton = memo(() => {
+const StartQuitRoom = memo<{ round: number }>(({ round }) => {
   const { userInfo } = useContext(UserContext);
   const { memberInfo } = useContext(MemberContext);
   const [showOnlyAdmin, setShowOnlyAdmin] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     setShowOnlyAdmin(memberInfo[userInfo.userID!].admin);
-  }, []);
+
+    if (round > 0) {
+      router.push("/playRoom/" + userInfo.roomID);
+    }
+    console.log(round);
+  }, [memberInfo, userInfo.userID, round]);
 
   return (
     <div className="pt-3 pb-20 w-full z-10 absolute bottom-0 left-0 lg:pb-10 bg-poker-color">
@@ -28,4 +35,4 @@ const StartQuitRoomButton = memo(() => {
   );
 });
 
-export default StartQuitRoomButton;
+export default StartQuitRoom;
