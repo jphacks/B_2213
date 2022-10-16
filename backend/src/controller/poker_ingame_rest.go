@@ -81,6 +81,9 @@ func IngameOptions(c *gin.Context) {
 		}
 		u.Stack = amount
 	}
+	if pr.RoomData.Round == 0 {
+		pr.RoomData.Round += 1
+	}
 	view.NoContext(c)
 	WritePokerRoombyWS(pr)
 }
