@@ -108,11 +108,18 @@ func IngameSB(c *gin.Context) {
 	if (*u).Stack <= sb {
 		// SBがAllInしないとSBをベットできない場合
 		// AllIn Flagをtrueにする
-
+		(*u).BettingTips = (*u).Stack
+		(*pr).RoomData.PotAmount += (*u).Stack
+		(*u).Stack = 0
+		(*pr).RoomData.SB.UserID = u.UserID
+		(*u).AllIn = true
+		(*u).Actioned = true
 	} else {
 		// 通常のSBベット
 		(*u).BettingTips = sb
 		(*u).Stack -= sb
+		(*pr).RoomData.SB.UserID = u.UserID
+		(*pr).RoomData.PotAmount += sb
 	}
 	view.NoContext(c)
 	WritePokerRoombyWS(pr)

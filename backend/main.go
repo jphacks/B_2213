@@ -46,13 +46,13 @@ func Router() *gin.Engine {
 		ingame.GET("/:roomID/", controller.IngameReload)
 		ingame.POST("/:roomID/options", controller.IngameOptions)
 		ingame.POST("/:roomID/quitGame", controller.IngameQuitGame)
-		// ingame.POST("/:roomID/sb", controller.IngameSB)
+		ingame.POST("/:roomID/sb", controller.IngameSB)
 	}
 
 	ws.GET("/:roomID", controller.ConnectRoom)
 
 	// for debug
-	r.GET("/debug", func(c *gin.Context){
+	r.GET("/debug", func(c *gin.Context) {
 		u := model.User{}
 		c.JSON(200, model.PokerRoom{
 			Users: map[string]*(model.User){
