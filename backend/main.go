@@ -51,6 +51,16 @@ func Router() *gin.Engine {
 
 	ws.GET("/:roomID", controller.ConnectRoom)
 
+	// for debug
+	r.GET("/debug", func(c *gin.Context){
+		u := model.User{}
+		c.JSON(200, model.PokerRoom{
+			Users: map[string]*(model.User){
+				"Uasdfas": &u,
+			},
+		})
+	})
+
 	return r
 }
 
