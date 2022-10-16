@@ -12,17 +12,23 @@ type CreateRoomRequest struct {
 }
 
 type PokerRoom struct {
-	RoomID   string           `json:"roomId"`
-	RoomData RoomData         `json:"roomData"`
-	Users    map[string]*User `json:"users"`
+	RoomID   string          `json:"roomId"`
+	RoomData RoomData        `json:"roomData"`
+	Users    map[string]User `json:"users"`
 }
 
 type RoomData struct {
-	Round int `json:"round"`
-	Stage int `json:"stage"`
-	SB    int `json:"sb"`
-	BB    int `json:"bb"`
-	Pot   Pot `json:"pot"`
+	Round       int   `json:"round"`
+	Stage       int   `json:"stage"`
+	RequiredPot int   `json:"toCall"`
+	SB          Blind `json:"sb"`
+	BB          Blind `json:"bb"`
+	Pot         Pot   `json:"pot"`
+}
+
+type Blind struct {
+	UserID string `json:"user"`
+	Amount int    `json:"amount"`
 }
 
 type Pot struct {
@@ -60,4 +66,10 @@ type RegisterRes struct {
 type JoinRoomRequest struct {
 	UserName string `json:"userName"`
 	RoomID   string `json:"roomId"`
+}
+
+type IngameActionCallRequest struct {
+	Stacks map[string]int `json:"stacks"`
+	BB     int            `json:"BB" binding:"required"`
+	SB     int            `json:"SB" binding:"required"`
 }

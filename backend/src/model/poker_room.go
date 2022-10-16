@@ -25,11 +25,11 @@ func CreatePokerRoom(rid string, uid string, u *User) (*PokerRoom, error) {
 	PR[rid] = &PokerRoom{
 		RoomID: rid,
 		RoomData: RoomData{
-			SB: 50,
-			BB: 100,
+			SB: Blind{"", 50},
+			BB: Blind{"", 100},
 		},
-		Users: map[string]*User{
-			uid: u,
+		Users: map[string]User{
+			uid: *u,
 		},
 	}
 	return PR[rid], nil
@@ -40,20 +40,20 @@ func (pr *PokerRoom) AddUser(uid string, u *User) error {
 	if ok {
 		return errors.New("UserID is already taken")
 	} else {
-		pr.Users[uid] = u
+		pr.Users[uid] = *u
 		return nil
 	}
 }
 
 func (pr *PokerRoom) FindUserByUserID(uid string) (*User, bool) {
 	u, ok := pr.Users[uid]
-	return u, ok
+	return &u, ok
 }
 
 func (pr *PokerRoom) GetUserByUserID(uid string) *User {
 	u, ok := pr.Users[uid]
 	if ok {
-		return u
+		return &u
 	} else {
 		return nil
 	}
@@ -62,3 +62,9 @@ func (pr *PokerRoom) GetUserByUserID(uid string) *User {
 func (pr *PokerRoom) DeleteUserByUserID(uid string) {
 	delete(pr.Users, uid)
 }
+
+// JoiningがtrueかつAllInがfalseユーザーのActionedをfalseに変える
+func (pr *PokerRoom) ResetAllUserActioned() {}
+
+//
+// func (pr *PokerRoom)
