@@ -39,6 +39,24 @@ export type MemberInfoType = {
 };
 
 export type GameInfoType = {
-  RoomData: RoomDataType;
+  roomData: RoomDataType;
   users: MemberInfoType;
+};
+
+export type MemberContextType = {
+  memberInfo: MemberInfoType;
+  setMemberInfo: (memberInfo: MemberInfoType) => void;
+};
+
+export type OptionsType = {
+  stacks: {
+    [key: string]: number;
+  };
+  bb: number;
+  sb: number;
+};
+
+export type OptionsContextType = {
+  options: OptionsType;
+  setOptions: (options: OptionsType) => void;
 };

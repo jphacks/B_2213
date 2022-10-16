@@ -1,20 +1,38 @@
 import { NextPage } from "next";
 import { useRouter } from "next/router";
-import { useCallback, useEffect, useState } from "react";
+import { createContext, useCallback, useEffect, useRef, useState } from "react";
 import AnimationStrWaiting from "../../../src/components/atoms/show/game/AnimationStrWaiting";
 import ShowRoomId from "../../../src/components/atoms/show/game/ShowRoomId";
 import WaitingMember from "../../../src/components/atoms/show/game/WaitingMember";
 import { useUserInfo } from "../../../src/components/hooks/user/useUserInfo";
 import Loading from "../../../src/components/templates/Loading";
 import axios from "axios";
-import type { RoomStatusType } from "../../../src/types/game/type";
+import type {
+  MemberContextType,
+  RoomStatusType,
+  MemberInfoType,
+  GameInfoType,
+} from "../../../src/types/game/type";
+import StartQuitRoom from "../../../src/components/Organisms/game/StartQuitRoom";
+import SetOption from "../../../src/components/Organisms/game/SetOption";
+
+// useContextでメンバー情報を子コンポーネントに共有
+export const MemberContext = createContext<MemberContextType>({
+  memberInfo: {},
+  setMemberInfo: (memberInfo) => {},
+});
 
 const WaitRoom: NextPage = () => {
   const { userInfo, confirmUserInfo_context_cookie } = useUserInfo();
   const router = useRouter();
+  const socketRef = useRef<WebSocket>();
+  const [memberInfo, setMemberInfo] = useState<MemberInfoType>({});
+  const [showOption, setShowOption] = useState(false);
+  const [round, setRound] = useState(0);
   const [isReady, setIsReady] = useState({
     userInfoReady: false, // userInfoが取得できているか
     roomStatusReady: false, // roomStatusがwaiting状態であるかどうか
+    message_WS_Ready: false, //WSでbackendからmember情報を受け取っているか
   });
 
   const confirmRoomStatus = useCallback(async () => {
@@ -54,30 +72,79 @@ const WaitRoom: NextPage = () => {
     })();
   }, []);
 
-  if (!(isReady.userInfoReady && isReady.roomStatusReady)) {
+  // WSによるリアルタイム通信
+  useEffect(() => {
+    if (!isReady.roomStatusReady) {
+      // roomの状態やuser情報が確認でき次第WS通信を行う。
+      return;
+    }
+
+    socketRef.current = new WebSocket(
+      process.env.NEXT_PUBLIC_WS_URL +
+        "/ws/" +
+        userInfo.roomID +
+        "?userID=" +
+        userInfo.userID
+    );
+
+    socketRef.current.onopen = function () {
+      console.log("Connected");
+    };
+
+    socketRef.current.onclose = function () {
+      console.log("closed");
+    };
+
+    // server 側から送られてきたデータを受け取る
+    socketRef.current.onmessage = function (event) {
+      const gameInfo_JSON = event.data;
+      const gameInfo_obj: GameInfoType = JSON.parse(gameInfo_JSON);
+      console.log(gameInfo_obj);
+      setMemberInfo(gameInfo_obj.users);
+      setRound(gameInfo_obj.roomData.round);
+      setIsReady((isReady) => ({ ...isReady, message_WS_Ready: true }));
+    };
+
+    return () => {
+      if (socketRef.current == null) {
+        return;
+      }
+      socketRef.current.close();
+    };
+  }, [isReady.roomStatusReady, userInfo.roomID, userInfo.userID]);
+
+  if (
+    !(
+      isReady.userInfoReady &&
+      isReady.roomStatusReady &&
+      isReady.message_WS_Ready
+    )
+  ) {
     return <Loading />;
   }
 
   return (
-    <div className="bg-poker-color font-poker-color font-poker-family">
-      <section className="h-screen bg-cover">
-        <div className="flex w-full items-center justify-center container mx-auto px-8">
-          <div className="max-w-2xl text-center">
-            <AnimationStrWaiting />
-            <ShowRoomId roomID={userInfo.roomID as string} />
-            <WaitingMember />
-            <div className="pt-3 pb-20 w-full z-10 absolute bottom-0 left-0 lg:pb-10 bg-poker-color">
-              <button className="px-6 py-2 mr-1 border-gold-button transition-colors duration-300 transform rounded-md">
-                Quit Room
-              </button>
-              <button className="px-6 py-2 ml-1 bg-gold-button transition-colors duration-300 transform rounded-md">
-                Start Room
-              </button>
+    <MemberContext.Provider value={{ memberInfo, setMemberInfo }}>
+      <div className="bg-poker-color font-poker-color font-poker-family">
+        {/* スタートボタンが押された時表示
+            flex, hiddenによって表示制御することで際レンダリングによるoptionの値の初期化を防ぐ */}
+        <div className={showOption ? "flex" : "hidden"}>
+          <SetOption {...{ setShowOption }} />
+        </div>
+        <section className="h-screen bg-cover">
+          <div className="flex w-full items-center justify-center container mx-auto px-8">
+            <div className="max-w-2xl text-center">
+              <AnimationStrWaiting />
+              <ShowRoomId roomID={userInfo.roomID as string} />
+              <WaitingMember />
+              <StartQuitRoom
+                {...{ round: round, setShowOption: setShowOption }}
+              />
             </div>
           </div>
-        </div>
-      </section>
-    </div>
+        </section>
+      </div>
+    </MemberContext.Provider>
   );
 };
 
