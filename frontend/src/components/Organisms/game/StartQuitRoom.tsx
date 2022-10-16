@@ -22,7 +22,6 @@ const StartQuitRoom = memo<PropType>(({ round, setShowOption }) => {
       // roundが0から変わると全員がplayRoomへ移動する。
       router.push("/playRoom/" + userInfo.roomID);
     }
-    console.log(round);
   }, [memberInfo, userInfo.userID, round]);
 
   return (
