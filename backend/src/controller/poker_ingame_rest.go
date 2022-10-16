@@ -2,6 +2,7 @@ package controller
 
 import (
 	"github.com/gin-gonic/gin"
+	"log"
 	"pms/src/model"
 	"pms/src/view"
 )
@@ -83,6 +84,45 @@ func IngameOptions(c *gin.Context) {
 	}
 	if pr.RoomData.Round == 0 {
 		pr.RoomData.Round += 1
+	}
+	view.NoContext(c)
+	WritePokerRoombyWS(pr)
+}
+
+// HandlerFunc for POST /api/ingame/:roomID/sb?userID=:userID
+func IngameSB(c *gin.Context) {
+	rid := c.Param("roomID")
+	uid := c.Query("userID")
+
+	// validation check
+	pr, ok := model.FindRoomByRoomID(rid)
+	log.Println(ok)
+	if !ok {
+		view.RequestError(c, "RoomID is Wrong")
+		return
+	}
+	u := pr.GetUserByUserID(uid)
+	if u == nil {
+		view.RequestUnauthorized(c, "UserID in QueryParam is invalid")
+		return
+	}
+
+	sb := pr.RoomData.SB.Amount
+	if (*u).Stack <= sb {
+		// SBがAllInしないとSBをベットできない場合
+		// AllIn Flagをtrueにする
+		(*u).BettingTips = (*u).Stack
+		(*pr).RoomData.PotAmount += (*u).Stack
+		(*u).Stack = 0
+		(*pr).RoomData.SB.UserID = u.UserID
+		(*u).AllIn = true
+		(*u).Actioned = true
+	} else {
+		// 通常のSBベット
+		(*u).BettingTips = sb
+		(*u).Stack -= sb
+		(*pr).RoomData.SB.UserID = u.UserID
+		(*pr).RoomData.PotAmount += sb
 	}
 	view.NoContext(c)
 	WritePokerRoombyWS(pr)
