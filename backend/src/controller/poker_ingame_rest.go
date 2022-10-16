@@ -127,3 +127,44 @@ func IngameSB(c *gin.Context) {
 	view.NoContext(c)
 	WritePokerRoombyWS(pr)
 }
+
+// HandlerFunc for POST /api/ingame/:roomID/bb?userID=:userID
+func IngameBB(c *gin.Context) {
+	rid := c.Param("roomID")
+	uid := c.Query("userID")
+
+	// validation check
+	pr, ok := model.FindRoomByRoomID(rid)
+	log.Println(ok)
+	if !ok {
+		view.RequestError(c, "RoomID is Wrong")
+		return
+	}
+	u := pr.GetUserByUserID(uid)
+	if u == nil {
+		view.RequestUnauthorized(c, "UserID in QueryParam is invalid")
+		return
+	}
+
+	bb := pr.RoomData.BB.Amount
+	log.Println("BB!")
+	if u.Stack <= bb {
+		// BBがAllInしないとBBをベットできない場合
+		// AllIn Flagをtrueにする
+		u.BettingTips = (*u).Stack
+		pr.RoomData.PotAmount += (*u).Stack
+		u.Stack = 0
+		pr.RoomData.BB.UserID = u.UserID
+		u.AllIn = true
+		u.Actioned = true
+	} else {
+		// 通常のbbベット
+		log.Println("here")
+		u.BettingTips = bb
+		u.Stack -= bb
+		pr.RoomData.BB.UserID = u.UserID
+		pr.RoomData.PotAmount += bb
+	}
+	view.NoContext(c)
+	WritePokerRoombyWS(pr)
+}
