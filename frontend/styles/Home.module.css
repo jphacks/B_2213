@@ -83,7 +83,7 @@
 .fadeout {
   position: fixed;
   width: 100%;
-  height: 40%;
+  height: 45%;
   z-index: 10;
   bottom: 0;
   left: -100%;
@@ -92,7 +92,7 @@
 .fadein {
   position: fixed;
   width: 100%;
-  height: 40%;
+  height: 45%;
   z-index: 10;
   bottom: 0;
   left: 0;

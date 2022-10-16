@@ -1,5 +1,6 @@
 import { memo, useState } from "react";
 import styles from "../../../../styles/Home.module.css";
+import { ActionInfoType } from "../../../types/game/type";
 import BetChips from "../../modules/forms/game/BetChips";
 import ActionButtons from "../../modules/select/game/ActionButtons";
 
@@ -15,13 +16,18 @@ const allChips = 100001; // 所持しているchipを入れるようにする。
 const ActionSelect = memo<ShowActionProps>((props) => {
   const { showAction, setShowAction } = props;
 
-  const [bet, setBet] = useState<number>(maxBet < allChips ? maxBet : allChips); // 初期値はそのゲームでの最高bet額を入れるようにする。
+  const [bet, setBet] = useState(maxBet < allChips ? maxBet : allChips); // 初期値はそのゲームでの最高bet額を入れるようにする。
+  const [actionInfo, setActionInfo] = useState<ActionInfoType>({
+    canActions: ["call", "raise", "fold"],
+    selectedAction: 0,
+    bet: maxBet < allChips ? maxBet : allChips,
+  });
 
   return (
     <div className={showAction ? styles.fadein : styles.fadeout}>
       <div className="bg-[#393939] rounded-t-lg text-center h-full pt-2">
         {/* maxbetやallchipsはuseContextで渡す */}
-        <ActionButtons />
+        <ActionButtons {...{ actionInfo, setActionInfo }} />
 
         <BetChips {...{ bet, setBet }} />
 

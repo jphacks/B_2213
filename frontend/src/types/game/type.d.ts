@@ -6,11 +6,6 @@ export type SetGameProps = {
   setGameType: (gameType: string | null) => void;
 };
 
-export type BetProps = {
-  bet: number;
-  setBet: (bet: number) => void;
-};
-
 export type RoomStatusType = "waiting" | "on game" | "finished";
 
 export type RoomDataType = {
@@ -59,4 +54,20 @@ export type OptionsType = {
 export type OptionsContextType = {
   options: OptionsType;
   setOptions: (options: OptionsType) => void;
+};
+
+export type ActionInfoType = {
+  canActions: string[];
+  selectedAction: number;
+  bet: number;
+};
+
+export type BetProps = {
+  bet: number;
+  setBet: (bet: number) => void;
+};
+
+export type ActionInfoProps = {
+  actionInfo: ActionInfoType;
+  setActionInfo: (actionInfo: ActionInfoType) => void;
 };
