@@ -39,8 +39,8 @@ func WebSocketServer(w http.ResponseWriter, r *http.Request, rid string, uid str
 	}
 	pr, _ := model.FindRoomByRoomID(rid)
 	user := pr.GetUserByUserID(uid)
-	user.WsConn = conn
-	user.SessionAlive = true
+	(*user).WsConn = conn
+	(*user).SessionAlive = true
 	WritePokerRoombyWS(pr)
 	for {
 		if _, _, err := conn.ReadMessage(); err != nil {
@@ -49,8 +49,8 @@ func WebSocketServer(w http.ResponseWriter, r *http.Request, rid string, uid str
 			} else {
 				log.Println("!!!")
 				log.Println(err)
-				user.WsConn = nil
-				user.SessionAlive = false
+				(*user).WsConn = nil
+				(*user).SessionAlive = false
 			}
 			conn.Close()
 			WritePokerRoombyWS(pr)
@@ -61,6 +61,7 @@ func WebSocketServer(w http.ResponseWriter, r *http.Request, rid string, uid str
 
 // PokerRoomの全てのUserにPokerRoomをJSONで送信
 func WritePokerRoombyWS(pr *model.PokerRoom) {
+	log.Println(*pr)
 	for _, u := range pr.Users {
 		if u.WsConn == nil {
 			// WsConnがnilでWriteJSONするとぬるぽ吐くので振り分け

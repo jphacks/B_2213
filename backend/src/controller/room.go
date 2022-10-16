@@ -54,7 +54,7 @@ func CreateRoom(c *gin.Context) {
 	u := model.User{
 		UserName: userName,
 		UserID:   userID,
-		Stack:    1000,
+		Stack:    10000,
 		Admin:    true,
 	}
 	_, err := model.CreatePokerRoom(roomID, userID, &u)
@@ -108,6 +108,7 @@ func JoinRoom(c *gin.Context) {
 	u := model.User{
 		UserName: userName,
 		Admin:    false,
+		Stack:    10000,
 	}
 	err := pr.AddUser(userID, &u)
 	if err != nil {

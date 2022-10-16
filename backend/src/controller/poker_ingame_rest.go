@@ -43,9 +43,6 @@ func IngameQuitGame(c *gin.Context) {
 	})
 }
 
-// HandlerFunc For POST /api/ingame/:roomID/call
-func IngameActionCall(c *gin.Context) {}
-
 // HandlerFunc For POST /api/ingame/:roomID/options
 func IngameOptions(c *gin.Context) {
 	rid := c.Param("roomID")
