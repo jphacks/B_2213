@@ -61,7 +61,6 @@ func WebSocketServer(w http.ResponseWriter, r *http.Request, rid string, uid str
 
 // PokerRoomの全てのUserにPokerRoomをJSONで送信
 func WritePokerRoombyWS(pr *model.PokerRoom) {
-	log.Println(*pr)
 	for _, u := range pr.Users {
 		if u.WsConn == nil {
 			// WsConnがnilでWriteJSONするとぬるぽ吐くので振り分け
