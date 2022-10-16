@@ -9,12 +9,13 @@ const SendOptions = () => {
 
   const sendOptions = async () => {
     try {
-      const apiUrl =
+      const apiSendOptionsUrl =
         process.env.NEXT_PUBLIC_API_URL +
         "/api/ingame/" +
         userInfo.roomID +
-        "/options";
-      await axios.post(apiUrl, options);
+        "/options?userID=" +
+        userInfo.userID;
+      await axios.post(apiSendOptionsUrl, options);
     } catch (e) {
       console.log(e);
     }

@@ -20,9 +20,10 @@ const StartQuitRoom = memo<PropType>(({ round, setShowOption }) => {
 
     if (round > 0) {
       // roundが0から変わると全員がplayRoomへ移動する。
-      router.push("/playRoom/" + userInfo.roomID);
+      router.push("/game/playRoom/" + userInfo.roomID);
+      return;
     }
-  }, [memberInfo, userInfo.userID, round]);
+  }, [round]);
 
   return (
     <div className="pt-3 pb-20 w-full z-10 absolute bottom-0 left-0 lg:pb-10 bg-poker-color">
