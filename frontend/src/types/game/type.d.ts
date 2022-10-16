@@ -59,12 +59,11 @@ export type OptionsContextType = {
 export type ActionInfoType = {
   canActions: string[];
   selectedAction: number;
+  allChips: number;
   bet: number;
-};
-
-export type BetProps = {
-  bet: number;
-  setBet: (bet: number) => void;
+  pastBet: number;
+  memberMaxBet: number;
+  pot: number;
 };
 
 export type ActionInfoProps = {

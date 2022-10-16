@@ -9,18 +9,21 @@ type ShowActionProps = {
   setShowAction: (showAction: Boolean) => void;
 };
 
-const maxBet = 100; // ゲームでの最高bet額を入れるようにする。
-const allChips = 100001; // 所持しているchipを入れるようにする。
+const maxBet = 1000; // ゲームでの最高bet額を入れるようにする。
+const allChips = 10000; // 所持しているchipを入れるようにする。
+const pot = 1000;
 
 // eslint-disable-next-line react/display-name
 const ActionSelect = memo<ShowActionProps>((props) => {
   const { showAction, setShowAction } = props;
-
-  const [bet, setBet] = useState(maxBet < allChips ? maxBet : allChips); // 初期値はそのゲームでの最高bet額を入れるようにする。
   const [actionInfo, setActionInfo] = useState<ActionInfoType>({
-    canActions: ["call", "raise", "fold"],
+    canActions: ["check", "bet", "fold"],
     selectedAction: 0,
+    allChips: allChips,
     bet: maxBet < allChips ? maxBet : allChips,
+    pastBet: 0, // そのステージでそれまでbetした値, bet額を足していく。　もしかしたらwsでの値を逐一更新するかも
+    memberMaxBet: maxBet,
+    pot: pot,
   });
 
   return (
@@ -29,7 +32,7 @@ const ActionSelect = memo<ShowActionProps>((props) => {
         {/* maxbetやallchipsはuseContextで渡す */}
         <ActionButtons {...{ actionInfo, setActionInfo }} />
 
-        <BetChips {...{ bet, setBet }} />
+        <BetChips {...{ actionInfo, setActionInfo }} />
 
         <div className="mt-10">
           <button
