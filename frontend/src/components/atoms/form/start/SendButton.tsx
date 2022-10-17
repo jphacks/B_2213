@@ -1,4 +1,3 @@
-// このコンポーネントはhandleSendButtonが頻繁に更新されるためメモ化する必要がない
 const SendButton = ({ handleSendButton }: { handleSendButton: () => void }) => {
   return (
     <div className="mt-20">

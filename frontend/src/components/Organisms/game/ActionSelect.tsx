@@ -1,5 +1,7 @@
-import { memo, useState } from "react";
+import { useState } from "react";
 import styles from "../../../../styles/Home.module.css";
+import { ActionInfoType } from "../../../types/game/type";
+import { useGameInfo } from "../../hooks/game/useGameInfo";
 import BetChips from "../../modules/forms/game/BetChips";
 import ActionButtons from "../../modules/select/game/ActionButtons";
 
@@ -8,22 +10,25 @@ type ShowActionProps = {
   setShowAction: (showAction: Boolean) => void;
 };
 
-const maxBet = 100; // ゲームでの最高bet額を入れるようにする。
-const allChips = 100001; // 所持しているchipを入れるようにする。
+const ActionSelect = ({ showAction, setShowAction }: ShowActionProps) => {
+  const { gameInfo } = useGameInfo(); //undefind回避のcontextのカスタムフック
+  const toCall = gameInfo.roomData.toCall;
+  const bettingTips = gameInfo.users["Uasdfas"].bettingTips; // useIDに自分のを入れるように今後する
+  const stack = gameInfo.users["Uasdfas"].stack; // useIDに自分のを入れるように今後する
 
-// eslint-disable-next-line react/display-name
-const ActionSelect = memo<ShowActionProps>((props) => {
-  const { showAction, setShowAction } = props;
-
-  const [bet, setBet] = useState<number>(maxBet < allChips ? maxBet : allChips); // 初期値はそのゲームでの最高bet額を入れるようにする。
+  const [actionInfo, setActionInfo] = useState<ActionInfoType>({
+    canActions: ["check", "bet", "fold"],
+    selectedAction: 0,
+    willBet: toCall - bettingTips < stack ? toCall - bettingTips : stack,
+  });
 
   return (
     <div className={showAction ? styles.fadein : styles.fadeout}>
       <div className="bg-[#393939] rounded-t-lg text-center h-full pt-2">
         {/* maxbetやallchipsはuseContextで渡す */}
-        <ActionButtons />
+        <ActionButtons {...{ actionInfo, setActionInfo }} />
 
-        <BetChips {...{ bet, setBet }} />
+        <BetChips {...{ actionInfo, setActionInfo }} />
 
         <div className="mt-10">
           <button
@@ -39,6 +44,6 @@ const ActionSelect = memo<ShowActionProps>((props) => {
       </div>
     </div>
   );
-});
+};
 
 export default ActionSelect;

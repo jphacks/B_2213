@@ -1,13 +1,9 @@
-import { memo } from "react";
-
 type UserStateType = {
   userName: string;
   setUserName: (userName: string) => void;
 };
 
-// メモ化により不必要な再描画をなくす
-// eslint-disable-next-line react/display-name
-const UserNameInput = memo<UserStateType>(({ userName, setUserName }) => {
+const UserNameInput = ({ userName, setUserName }: UserStateType) => {
   // 十文字制限
   const changeUserName = (changeValue: string) => {
     if (changeValue.length <= 10) setUserName(changeValue);
@@ -32,6 +28,6 @@ const UserNameInput = memo<UserStateType>(({ userName, setUserName }) => {
       </div>
     </div>
   );
-});
+};
 
 export default UserNameInput;

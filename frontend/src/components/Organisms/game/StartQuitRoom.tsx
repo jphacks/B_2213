@@ -9,8 +9,7 @@ type PropType = {
   setShowOption: (showOption: boolean) => void;
 };
 
-// eslint-disable-next-line react/display-name
-const StartQuitRoom = memo<PropType>(({ round, setShowOption }) => {
+const StartQuitRoom = ({ round, setShowOption }: PropType) => {
   const { userInfo } = useContext(UserContext);
   const { memberInfo } = useContext(MemberContext);
   const [showOnlyAdmin, setShowOnlyAdmin] = useState(false);
@@ -63,6 +62,6 @@ const StartQuitRoom = memo<PropType>(({ round, setShowOption }) => {
       )}
     </div>
   );
-});
+};
 
 export default StartQuitRoom;
