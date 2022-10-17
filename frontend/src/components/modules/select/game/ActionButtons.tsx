@@ -1,8 +1,14 @@
 import { useEffect } from "react";
 import { ActionInfoProps } from "../../../../types/game/type";
+import { useGameInfo } from "../../../hooks/game/useGameInfo";
 
 // eslint-disable-next-line react/display-name
 const ActionButtons = ({ actionInfo, setActionInfo }: ActionInfoProps) => {
+  const { gameInfo } = useGameInfo(); //undefind回避のcontextのカスタムフック
+  const toCall = gameInfo.roomData.toCall;
+  const bettingTips = gameInfo.users["Uasdfas"].bettingTips; // useIDに自分のを入れるように今後する
+  const stack = gameInfo.users["Uasdfas"].stack; // useIDに自分のを入れるように今後する
+
   const selectAction = (selectNumber: number) => {
     const actionName = actionInfo.canActions[selectNumber];
     switch (actionName) {
@@ -13,19 +19,13 @@ const ActionButtons = ({ actionInfo, setActionInfo }: ActionInfoProps) => {
       case "raise": // betまたはraiseの場合checkと同じ値+100に初期設定。持ち金を越えれば持ち金の値に設定
         setActionInfo({
           ...actionInfo,
-          bet: Math.min(
-            actionInfo.memberMaxBet - actionInfo.pastBet + 100,
-            actionInfo.allChips
-          ),
+          bet: Math.min(toCall - bettingTips + 100, stack),
         });
         break;
       default:
         setActionInfo({
           ...actionInfo,
-          bet: Math.min(
-            actionInfo.memberMaxBet - actionInfo.pastBet,
-            actionInfo.allChips
-          ),
+          bet: Math.min(toCall - bettingTips, stack),
         });
     }
   };
@@ -33,7 +33,7 @@ const ActionButtons = ({ actionInfo, setActionInfo }: ActionInfoProps) => {
   useEffect(() => {
     const canActions = actionInfo.canActions;
     switch (true) {
-      case actionInfo.bet == actionInfo.memberMaxBet - actionInfo.pastBet:
+      case actionInfo.bet == toCall - bettingTips:
         setActionInfo({
           ...actionInfo,
           selectedAction: Math.max(
@@ -48,7 +48,7 @@ const ActionButtons = ({ actionInfo, setActionInfo }: ActionInfoProps) => {
           selectedAction: canActions.indexOf("fold"),
         });
         break;
-      case actionInfo.bet < actionInfo.memberMaxBet - actionInfo.pastBet:
+      case actionInfo.bet < toCall - bettingTips:
         setActionInfo({
           ...actionInfo,
           selectedAction: Math.max(

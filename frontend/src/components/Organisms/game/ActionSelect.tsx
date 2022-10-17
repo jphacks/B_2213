@@ -1,6 +1,7 @@
 import { memo, useState } from "react";
 import styles from "../../../../styles/Home.module.css";
 import { ActionInfoType } from "../../../types/game/type";
+import { useGameInfo } from "../../hooks/game/useGameInfo";
 import BetChips from "../../modules/forms/game/BetChips";
 import ActionButtons from "../../modules/select/game/ActionButtons";
 
@@ -9,21 +10,19 @@ type ShowActionProps = {
   setShowAction: (showAction: Boolean) => void;
 };
 
-const maxBet = 1000; // ゲームでの最高bet額を入れるようにする。
-const allChips = 10000; // 所持しているchipを入れるようにする。
-const pot = 1000;
-
 // eslint-disable-next-line react/display-name
 const ActionSelect = memo<ShowActionProps>((props) => {
   const { showAction, setShowAction } = props;
+
+  const { gameInfo } = useGameInfo(); //undefind回避のcontextのカスタムフック
+  const toCall = gameInfo.roomData.toCall;
+  const bettingTips = gameInfo.users["Uasdfas"].bettingTips; // useIDに自分のを入れるように今後する
+  const stack = gameInfo.users["Uasdfas"].stack; // useIDに自分のを入れるように今後する
+
   const [actionInfo, setActionInfo] = useState<ActionInfoType>({
     canActions: ["check", "bet", "fold"],
     selectedAction: 0,
-    allChips: allChips,
-    bet: maxBet < allChips ? maxBet : allChips,
-    pastBet: 0, // そのステージでそれまでbetした値, bet額を足していく。　もしかしたらwsでの値を逐一更新するかも
-    memberMaxBet: maxBet,
-    pot: pot,
+    bet: toCall - bettingTips < stack ? toCall - bettingTips : stack,
   });
 
   return (

@@ -9,13 +9,18 @@ export type SetGameProps = {
 export type RoomStatusType = "waiting" | "on game" | "finished";
 
 export type RoomDataType = {
-  pot: {
-    main: number;
-    sub?: number | null;
-  };
   round: number;
   stage: number;
-  roomID: string;
+  toCall: number;
+  sb: {
+    user: string;
+    amount: number;
+  };
+  bb: {
+    user: string;
+    amount: number;
+  };
+  pot: number;
 };
 
 export type UserGameType = {
@@ -33,14 +38,20 @@ export type MemberInfoType = {
   [key: string]: UserGameType;
 };
 
+export type MemberContextType = {
+  memberInfo: MemberInfoType;
+  setMemberInfo: (memberInfo: MemberInfoType) => void;
+};
+
 export type GameInfoType = {
+  roomID: string;
   roomData: RoomDataType;
   users: MemberInfoType;
 };
 
-export type MemberContextType = {
-  memberInfo: MemberInfoType;
-  setMemberInfo: (memberInfo: MemberInfoType) => void;
+export type GameContextType = {
+  gameInfo: GameInfoType;
+  setGameInfo: (gameInfo: GameInfoType) => void;
 };
 
 export type OptionsType = {
@@ -59,11 +70,7 @@ export type OptionsContextType = {
 export type ActionInfoType = {
   canActions: string[];
   selectedAction: number;
-  allChips: number;
   bet: number;
-  pastBet: number;
-  memberMaxBet: number;
-  pot: number;
 };
 
 export type ActionInfoProps = {

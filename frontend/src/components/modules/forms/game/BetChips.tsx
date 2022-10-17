@@ -1,21 +1,25 @@
 import type { ActionInfoProps } from "../../../../types/game/type";
+import { useGameInfo } from "../../../hooks/game/useGameInfo";
 
 // eslint-disable-next-line react/display-name
 const BetChips = ({ actionInfo, setActionInfo }: ActionInfoProps) => {
+  const { gameInfo } = useGameInfo(); //undefind回避のcontextのカスタムフック
+  const toCall = gameInfo.roomData.toCall;
+  const bettingTips = gameInfo.users["Uasdfas"].bettingTips; // useIDに自分のを入れるように今後する
+  const stack = gameInfo.users["Uasdfas"].stack; // useIDに自分のを入れるように今後する
+  const pot = gameInfo.roomData.pot;
+
   // 条件分岐が複雑なためswitchを用いてわかりやすくする。
   const changeBetValue = (betValue: number) => {
     switch (true) {
-      case betValue < actionInfo.memberMaxBet - actionInfo.pastBet:
+      case betValue < toCall - bettingTips:
         setActionInfo({
           ...actionInfo,
-          bet: Math.min(
-            actionInfo.memberMaxBet - actionInfo.pastBet,
-            actionInfo.allChips
-          ),
+          bet: Math.min(toCall - bettingTips, stack),
         });
         break;
-      case betValue > actionInfo.allChips:
-        setActionInfo({ ...actionInfo, bet: actionInfo.allChips });
+      case betValue > stack:
+        setActionInfo({ ...actionInfo, bet: stack });
         break;
       default:
         setActionInfo({ ...actionInfo, bet: betValue });
@@ -42,8 +46,8 @@ const BetChips = ({ actionInfo, setActionInfo }: ActionInfoProps) => {
             <button
               key={key}
               className="px-2 py-2 mr-3 border-gold-button transition-colors duration-300 transform rounded-md"
-              onClick={() => changeBetValue(actionInfo.pot * value)}
-              // ^^^もしstage変わるまでpotが変わらないパターンのときは(pot + memberMaxBet) * value
+              onClick={() => changeBetValue(pot * value)}
+              // ^^^もしstage変わるまでpotが変わらないパターンのときは(pot + toCall) * value
             >
               ×{value}
             </button>
@@ -52,7 +56,7 @@ const BetChips = ({ actionInfo, setActionInfo }: ActionInfoProps) => {
 
         <button
           className="px-2 py-2 ml-3 border-gold-button transition-colors duration-300 transform rounded-md"
-          onClick={() => changeBetValue(actionInfo.allChips)}
+          onClick={() => changeBetValue(stack)}
         >
           all in
         </button>
