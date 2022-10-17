@@ -1,7 +1,6 @@
 import type { ActionInfoProps } from "../../../../types/game/type";
 import { useGameInfo } from "../../../hooks/game/useGameInfo";
 
-// eslint-disable-next-line react/display-name
 const BetChips = ({ actionInfo, setActionInfo }: ActionInfoProps) => {
   const { gameInfo } = useGameInfo(); //undefind回避のcontextのカスタムフック
   const toCall = gameInfo.roomData.toCall;

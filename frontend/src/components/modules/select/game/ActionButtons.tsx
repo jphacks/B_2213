@@ -2,7 +2,6 @@ import { useEffect } from "react";
 import { ActionInfoProps } from "../../../../types/game/type";
 import { useGameInfo } from "../../../hooks/game/useGameInfo";
 
-// eslint-disable-next-line react/display-name
 const ActionButtons = ({ actionInfo, setActionInfo }: ActionInfoProps) => {
   const { gameInfo } = useGameInfo(); //undefind回避のcontextのカスタムフック
   const toCall = gameInfo.roomData.toCall;

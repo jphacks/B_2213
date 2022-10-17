@@ -1,4 +1,4 @@
-import { memo, useState } from "react";
+import { useState } from "react";
 import styles from "../../../../styles/Home.module.css";
 import { ActionInfoType } from "../../../types/game/type";
 import { useGameInfo } from "../../hooks/game/useGameInfo";
@@ -10,10 +10,7 @@ type ShowActionProps = {
   setShowAction: (showAction: Boolean) => void;
 };
 
-// eslint-disable-next-line react/display-name
-const ActionSelect = memo<ShowActionProps>((props) => {
-  const { showAction, setShowAction } = props;
-
+const ActionSelect = ({ showAction, setShowAction }: ShowActionProps) => {
   const { gameInfo } = useGameInfo(); //undefind回避のcontextのカスタムフック
   const toCall = gameInfo.roomData.toCall;
   const bettingTips = gameInfo.users["Uasdfas"].bettingTips; // useIDに自分のを入れるように今後する
@@ -47,6 +44,6 @@ const ActionSelect = memo<ShowActionProps>((props) => {
       </div>
     </div>
   );
-});
+};
 
 export default ActionSelect;

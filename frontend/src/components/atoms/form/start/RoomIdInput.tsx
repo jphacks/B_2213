@@ -1,13 +1,9 @@
-import { memo } from "react";
-
 type RoomIdStateType = {
   roomID: string;
   setRoomID: (roomID: string) => void;
 };
 
-// メモ化により不必要な再描画をなくす
-// eslint-disable-next-line react/display-name
-const RoomIdInput = memo<RoomIdStateType>(({ roomID, setRoomID }) => {
+const RoomIdInput = ({ roomID, setRoomID }: RoomIdStateType) => {
   const changeRoomID = (changeValue: string) => {
     if (changeValue.length <= 10) setRoomID(changeValue);
   };
@@ -30,6 +26,6 @@ const RoomIdInput = memo<RoomIdStateType>(({ roomID, setRoomID }) => {
       </div>
     </div>
   );
-});
+};
 
 export default RoomIdInput;

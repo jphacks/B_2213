@@ -1,9 +1,7 @@
-import { memo, useContext, useEffect, useRef, useState } from "react";
+import { useContext } from "react";
 import { MemberContext } from "../../../../../pages/game/waitRoom/[roomId]";
-import { UserContext } from "../../../../../pages/_app";
 
-// eslint-disable-next-line react/display-name
-const WaitingMember = memo(() => {
+const WaitingMember = () => {
   const { memberInfo, setMemberInfo } = useContext(MemberContext);
 
   return (
@@ -13,6 +11,6 @@ const WaitingMember = memo(() => {
       ))}
     </ul>
   );
-});
+};
 
 export default WaitingMember;

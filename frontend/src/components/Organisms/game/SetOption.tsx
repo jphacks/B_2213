@@ -17,43 +17,43 @@ export const OptionsContext = createContext<OptionsContextType>({
   setOptions: (options: OptionsType) => {},
 });
 
-// eslint-disable-next-line react/display-name
-const SetOption = memo<{ setShowOption: (showOption: boolean) => void }>(
-  ({ setShowOption }) => {
-    const { memberInfo } = useContext(MemberContext);
-    const [options, setOptions] = useState(initOptions);
+type SetOptionType = {
+  setShowOption: (showOption: boolean) => void;
+};
 
-    useEffect(() => {
-      // 初めに初期値として各ユーザーに1000を設定
-      const optionsObj = options; // stateを代入しワンクッション踏ませることでoptionを追加している
-      Object.keys(memberInfo).map((key) => {
-        // userIDのkey名でまだoption設定されていない場合は1000を登録
-        optionsObj.stacks[key] = optionsObj.stacks[key] ?? 1000;
-      });
-      // 下の方法でstateオブジェクトを更新しないとjsx内で即時反映されない
-      setOptions({ ...options, stacks: optionsObj.stacks });
-    }, [memberInfo]);
+const SetOption = ({ setShowOption }: SetOptionType) => {
+  const { memberInfo } = useContext(MemberContext);
+  const [options, setOptions] = useState(initOptions);
 
-    return (
-      <div className="w-screen bg-poker-color z-20 absolute top-0 left-0">
-        <BackWaitRoom {...{ setShowOption }} />
-        <section className="h-screen bg-cover">
-          <div className="flex h-full w-full container mx-auto px-8 max-w-lg">
-            <div className="relative">
-              <h1 className="text-5xl pt-20 pb-10 w-full">Option</h1>
-              <OptionsContext.Provider value={{ options, setOptions }}>
-                <OptionsUserChips />
+  useEffect(() => {
+    // 初めに初期値として各ユーザーに1000を設定
+    const optionsObj = options; // stateを代入しワンクッション踏ませることでoptionを追加している
+    Object.keys(memberInfo).map((key) => {
+      // userIDのkey名でまだoption設定されていない場合は1000を登録
+      optionsObj.stacks[key] = optionsObj.stacks[key] ?? 1000;
+    });
+    // 下の方法でstateオブジェクトを更新しないとjsx内で即時反映されない
+    setOptions({ ...options, stacks: optionsObj.stacks });
+  }, [memberInfo]);
 
-                <OptionsBBSB />
+  return (
+    <div className="w-screen bg-poker-color z-20 absolute top-0 left-0">
+      <BackWaitRoom {...{ setShowOption }} />
+      <section className="h-screen bg-cover">
+        <div className="flex h-full w-full container mx-auto px-8 max-w-lg">
+          <div className="relative">
+            <h1 className="text-5xl pt-20 pb-10 w-full">Option</h1>
+            <OptionsContext.Provider value={{ options, setOptions }}>
+              <OptionsUserChips />
 
-                <SendOptions />
-              </OptionsContext.Provider>
-            </div>
+              <OptionsBBSB />
+
+              <SendOptions />
+            </OptionsContext.Provider>
           </div>
-        </section>
-      </div>
-    );
-  }
-);
-
+        </div>
+      </section>
+    </div>
+  );
+};
 export default SetOption;
