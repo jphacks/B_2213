@@ -13,19 +13,19 @@ const ActionButtons = ({ actionInfo, setActionInfo }: ActionInfoProps) => {
     const actionName = actionInfo.canActions[selectNumber];
     switch (actionName) {
       case "fold":
-        setActionInfo({ ...actionInfo, bet: 0 });
+        setActionInfo({ ...actionInfo, willBet: 0 });
         break;
       case "bet":
       case "raise": // betまたはraiseの場合checkと同じ値+100に初期設定。持ち金を越えれば持ち金の値に設定
         setActionInfo({
           ...actionInfo,
-          bet: Math.min(toCall - bettingTips + 100, stack),
+          willBet: Math.min(toCall - bettingTips + 100, stack),
         });
         break;
       default:
         setActionInfo({
           ...actionInfo,
-          bet: Math.min(toCall - bettingTips, stack),
+          willBet: Math.min(toCall - bettingTips, stack),
         });
     }
   };
@@ -33,7 +33,7 @@ const ActionButtons = ({ actionInfo, setActionInfo }: ActionInfoProps) => {
   useEffect(() => {
     const canActions = actionInfo.canActions;
     switch (true) {
-      case actionInfo.bet == toCall - bettingTips:
+      case actionInfo.willBet == toCall - bettingTips:
         setActionInfo({
           ...actionInfo,
           selectedAction: Math.max(
@@ -42,13 +42,13 @@ const ActionButtons = ({ actionInfo, setActionInfo }: ActionInfoProps) => {
           ),
         });
         break;
-      case actionInfo.bet == 0:
+      case actionInfo.willBet == 0:
         setActionInfo({
           ...actionInfo,
           selectedAction: canActions.indexOf("fold"),
         });
         break;
-      case actionInfo.bet < toCall - bettingTips:
+      case actionInfo.willBet < toCall - bettingTips:
         setActionInfo({
           ...actionInfo,
           selectedAction: Math.max(
@@ -66,7 +66,7 @@ const ActionButtons = ({ actionInfo, setActionInfo }: ActionInfoProps) => {
           ),
         });
     }
-  }, [actionInfo.bet]);
+  }, [actionInfo.willBet]);
 
   return (
     <div className="pt-5 justify-between">

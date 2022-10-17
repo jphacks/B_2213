@@ -29,7 +29,7 @@ const PlayRoom: NextPage = () => {
     users: {
       Uasdfas: {
         userName: "",
-        stack: 1000,
+        stack: 80,
         joining: true,
         bettingTips: 0,
         allIn: false,

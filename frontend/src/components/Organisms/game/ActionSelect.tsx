@@ -22,7 +22,7 @@ const ActionSelect = memo<ShowActionProps>((props) => {
   const [actionInfo, setActionInfo] = useState<ActionInfoType>({
     canActions: ["check", "bet", "fold"],
     selectedAction: 0,
-    bet: toCall - bettingTips < stack ? toCall - bettingTips : stack,
+    willBet: toCall - bettingTips < stack ? toCall - bettingTips : stack,
   });
 
   return (

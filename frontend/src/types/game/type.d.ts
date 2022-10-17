@@ -70,7 +70,7 @@ export type OptionsContextType = {
 export type ActionInfoType = {
   canActions: string[];
   selectedAction: number;
-  bet: number;
+  willBet: number;
 };
 
 export type ActionInfoProps = {

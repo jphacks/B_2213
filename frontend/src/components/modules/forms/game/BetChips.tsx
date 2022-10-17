@@ -15,14 +15,14 @@ const BetChips = ({ actionInfo, setActionInfo }: ActionInfoProps) => {
       case betValue < toCall - bettingTips:
         setActionInfo({
           ...actionInfo,
-          bet: Math.min(toCall - bettingTips, stack),
+          willBet: Math.min(toCall - bettingTips, stack),
         });
         break;
       case betValue > stack:
-        setActionInfo({ ...actionInfo, bet: stack });
+        setActionInfo({ ...actionInfo, willBet: stack });
         break;
       default:
-        setActionInfo({ ...actionInfo, bet: betValue });
+        setActionInfo({ ...actionInfo, willBet: betValue });
     }
   };
 
@@ -32,11 +32,11 @@ const BetChips = ({ actionInfo, setActionInfo }: ActionInfoProps) => {
         <input
           type="number"
           autoComplete="off"
-          value={actionInfo.bet}
+          value={actionInfo.willBet}
           onChange={(e) =>
-            setActionInfo({ ...actionInfo, bet: Number(e.target.value) })
+            setActionInfo({ ...actionInfo, willBet: Number(e.target.value) })
           }
-          onBlur={() => changeBetValue(actionInfo.bet)}
+          onBlur={() => changeBetValue(actionInfo.willBet)}
           className="text-center text-5xl p-2 h-16 w-9/12 sm:w-5/12 md:w-3/12 bg-[#4f4e4e] text-[#95913f] rounded-md outline-none"
         />
       </div>
