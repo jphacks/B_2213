@@ -13,7 +13,7 @@ type CreateRoomRequest struct {
 
 type PokerRoom struct {
 	RoomID   string           `json:"roomId"`
-	RoomData RoomData         `json:"roomData"`
+	RoomData *RoomData         `json:"roomData"`
 	Users    map[string]*User `json:"users"`
 }
 

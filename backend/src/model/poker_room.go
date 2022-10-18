@@ -23,12 +23,13 @@ func CreatePokerRoom(rid string, uid string, u *User) (*PokerRoom, error) {
 	if _, ok := FindRoomByRoomID(rid); ok {
 		return nil, errors.New("RoomID is already taken")
 	}
+	rd := &RoomData{
+		SB: Blind{"", 50},
+		BB: Blind{"", 100},
+	}
 	PR[rid] = &PokerRoom{
-		RoomID: rid,
-		RoomData: RoomData{
-			SB: Blind{"", 50},
-			BB: Blind{"", 100},
-		},
+		RoomID:   rid,
+		RoomData: rd,
 		Users: map[string]*User{
 			uid: u,
 		},
