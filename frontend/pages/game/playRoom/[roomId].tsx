@@ -116,11 +116,9 @@ const PlayRoom: NextPage = () => {
   }
   return (
     <GameContext.Provider value={{ gameInfo, setGameInfo }}>
-      <div className="bg-poker-color font-poker-color font-poker-family">
-        <GameController
-          {...{ showAction: showAction, setShowAction: setShowAction }}
-        />
-      </div>
+      <GameController
+        {...{ showAction: showAction, setShowAction: setShowAction }}
+      />
     </GameContext.Provider>
   );
 };

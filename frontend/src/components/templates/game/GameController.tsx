@@ -8,7 +8,7 @@ const GameController = ({ showAction, setShowAction }: ShowActionProps) => {
   const { gameInfo } = useGameInfo(); //undefind回避のcontextのカスタムフック
   const stage = gameInfo.roomData.stage;
   return (
-    <div>
+    <div className="bg-poker-color font-poker-color font-poker-family">
       {stage == 0 ? (
         <ModalBBSB />
       ) : (
