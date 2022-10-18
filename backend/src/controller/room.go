@@ -107,6 +107,7 @@ func JoinRoom(c *gin.Context) {
 
 	u := model.User{
 		UserName: userName,
+		UserID:   userID,
 		Admin:    false,
 		Stack:    10000,
 	}
