@@ -1,10 +1,13 @@
+import { useContext } from "react";
+import { UserContext } from "../../../../pages/_app";
 import { ShowActionProps } from "../../../types/game/type";
 import { useGameInfo } from "../../hooks/game/useGameInfo";
 
 const PlayMenu = ({ setShowAction }: ShowActionProps) => {
+  const { userInfo } = useContext(UserContext);
   const { gameInfo } = useGameInfo(); //undefind回避のcontextのカスタムフック
-  const userInfo = gameInfo.users["Uasdfas"]; // 自分のuserIDを入れるようあとで変更
-  const canAction = userInfo.joining && !userInfo.actioned; // actionすることができるかどうか
+  const userInfoInGameInfo = gameInfo.users[userInfo.userID!];
+  const canAction = userInfoInGameInfo.joining && !userInfoInGameInfo.actioned; // actionすることができるかどうか
 
   const handleActionButton = () => {
     if (!canAction) {

@@ -1,11 +1,14 @@
+import { useContext } from "react";
+import { UserContext } from "../../../../../pages/_app";
 import type { ActionInfoProps } from "../../../../types/game/type";
 import { useGameInfo } from "../../../hooks/game/useGameInfo";
 
 const BetChips = ({ actionInfo, setActionInfo }: ActionInfoProps) => {
+  const { userInfo } = useContext(UserContext);
   const { gameInfo } = useGameInfo(); //undefind回避のcontextのカスタムフック
   const toCall = gameInfo.roomData.toCall;
-  const bettingTips = gameInfo.users["Uasdfas"].bettingTips; // useIDに自分のを入れるように今後する
-  const stack = gameInfo.users["Uasdfas"].stack; // useIDに自分のを入れるように今後する
+  const bettingTips = gameInfo.users[userInfo.userID!].bettingTips;
+  const stack = gameInfo.users[userInfo.userID!].stack;
   const pot = gameInfo.roomData.pot;
 
   // 条件分岐が複雑なためswitchを用いてわかりやすくする。

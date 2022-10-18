@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { UserContext } from "../../../../pages/_app";
 import styles from "../../../../styles/Home.module.css";
 import { ActionInfoType, ShowActionProps } from "../../../types/game/type";
 import { useGameInfo } from "../../hooks/game/useGameInfo";
@@ -6,10 +7,11 @@ import BetChips from "../../modules/forms/game/BetChips";
 import ActionButtons from "../../modules/select/game/ActionButtons";
 
 const ActionSelect = ({ showAction, setShowAction }: ShowActionProps) => {
+  const { userInfo } = useContext(UserContext);
   const { gameInfo } = useGameInfo(); //undefind回避のcontextのカスタムフック
   const toCall = gameInfo.roomData.toCall;
-  const bettingTips = gameInfo.users["Uasdfas"].bettingTips; // useIDに自分のを入れるように今後する
-  const stack = gameInfo.users["Uasdfas"].stack; // useIDに自分のを入れるように今後する
+  const bettingTips = gameInfo.users[userInfo.userID!].bettingTips;
+  const stack = gameInfo.users[userInfo.userID!].stack;
 
   const [actionInfo, setActionInfo] = useState<ActionInfoType>({
     canActions: ["call", "raise", "fold"],
