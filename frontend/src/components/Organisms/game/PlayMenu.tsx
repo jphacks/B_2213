@@ -17,7 +17,7 @@ const PlayMenu = ({ setShowAction }: ShowActionProps) => {
   };
 
   return (
-    <div className="pt-3 pb-20 w-full z-10 absolute bottom-0 left-0 lg:pb-10 bg-poker-color">
+    <div className="text-center pt-3 pb-20 w-full z-10 absolute bottom-0 left-0 lg:pb-10 bg-poker-color">
       <button
         className={
           "px-6 py-2 mx-3 border-gold-button transition-colors duration-300 transform rounded-md " +
