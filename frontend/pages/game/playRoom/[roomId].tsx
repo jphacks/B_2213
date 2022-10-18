@@ -1,6 +1,7 @@
 import { NextPage } from "next";
 import { createContext, useState } from "react";
 import ActionSelect from "../../../src/components/Organisms/game/ActionSelect";
+import PlayMenu from "../../../src/components/Organisms/game/PlayMenu";
 import { GameContextType, GameInfoType } from "../../../src/types/game/type";
 
 export const GameContext = createContext<GameContextType | undefined>(
@@ -30,7 +31,7 @@ const PlayRoom: NextPage = () => {
       Uasdfas: {
         userName: "",
         stack: 80,
-        joining: true,
+        joining: false,
         bettingTips: 0,
         allIn: false,
         actioned: false,
@@ -46,7 +47,9 @@ const PlayRoom: NextPage = () => {
         <section className="h-screen bg-cover">
           <div className="flex w-full items-center justify-center container mx-auto px-8">
             <div className="max-w-2xl text-center">
-              <h1 onClick={() => setShowAction(true)}>aa</h1>
+              <PlayMenu
+                {...{ showAction: showAction, setShowAction: setShowAction }}
+              />
             </div>
           </div>
 
