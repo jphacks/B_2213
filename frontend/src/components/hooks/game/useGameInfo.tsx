@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { GameContext } from "../../../../pages/game/playRoom/[roomID]";
+import { GameContext } from "../../../../pages/game/playRoom/[roomId]";
 
 // GameContextは<GameContextType | undefind>で定義しているためこのカスタムフックによるエラー処理が必要
 // stateも初期値を設定しておらずundefindであるためそのエラー処理を行う
