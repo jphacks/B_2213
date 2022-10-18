@@ -50,8 +50,8 @@ export type GameInfoType = {
 };
 
 export type GameContextType = {
-  gameInfo: GameInfoType;
-  setGameInfo: (gameInfo: GameInfoType) => void;
+  gameInfo?: GameInfoType;
+  setGameInfo?: (gameInfo: GameInfoType) => void;
 };
 
 export type OptionsType = {
