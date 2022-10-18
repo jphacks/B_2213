@@ -122,6 +122,9 @@ func IngameSB(c *gin.Context) {
 		pr.RoomData.SB.UserID = u.UserID
 		pr.RoomData.PotAmount += sb
 	}
+	if pr.RoomData.BB.UserID != "" {
+		pr.RoomData.Stage = 1
+	}
 	view.NoContext(c)
 	WritePokerRoombyWS(pr)
 }
@@ -159,6 +162,9 @@ func IngameBB(c *gin.Context) {
 		u.Stack -= bb
 		pr.RoomData.BB.UserID = u.UserID
 		pr.RoomData.PotAmount += bb
+	}
+	if pr.RoomData.SB.UserID != "" {
+		pr.RoomData.Stage = 1
 	}
 	view.NoContext(c)
 	WritePokerRoombyWS(pr)
