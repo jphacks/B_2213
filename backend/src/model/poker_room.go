@@ -2,6 +2,7 @@ package model
 
 import (
 	"errors"
+	"log"
 	// "github.com/gorilla/websocket"
 )
 
@@ -63,8 +64,23 @@ func (pr *PokerRoom) DeleteUserByUserID(uid string) {
 	delete(pr.Users, uid)
 }
 
-// JoiningがtrueかつAllInがfalseユーザーのActionedをfalseに変える
-func (pr *PokerRoom) ResetAllUserActioned() {}
+// JoiningがtrueかつAllInがfalseユーザーのActionedをfalseに変える Round進行
+func (pr *PokerRoom) ResetAllUserActioned() {
+	for _, u := range pr.Users {
+		if !u.AllIn {
+			u.Actioned = false
+		}
+	}
+}
+
+func (pr *PokerRoom) NextRound() {
+	pr.ResetAllUserActioned()
+	pr.RoomData.Stage += 1
+	if pr.RoomData.Stage >= 5 {
+		// 終了処理(チップをストックに移動する)
+		log.Println("終了処理")
+	}
+}
 
 //
 // func (pr *PokerRoom)

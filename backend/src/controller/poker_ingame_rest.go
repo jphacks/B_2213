@@ -168,3 +168,12 @@ func IngameBB(c *gin.Context) {
 	view.NoContext(c)
 	WritePokerRoombyWS(pr)
 }
+
+func RoomNextRound(c *gin.Context) {
+	rid := c.Param("roomID")
+	// uid := c.Query("userID")
+
+	pr, _ := model.FindRoomByRoomID(rid)
+
+	pr.NextRound()
+}
