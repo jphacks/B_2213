@@ -2,7 +2,6 @@ package controller
 
 import (
 	"github.com/gin-gonic/gin"
-	"log"
 	"pms/src/model"
 	"pms/src/view"
 )
@@ -96,7 +95,6 @@ func IngameSB(c *gin.Context) {
 
 	// validation check
 	pr, ok := model.FindRoomByRoomID(rid)
-	log.Println(ok)
 	if !ok {
 		view.RequestError(c, "RoomID is Wrong")
 		return
@@ -135,7 +133,6 @@ func IngameBB(c *gin.Context) {
 
 	// validation check
 	pr, ok := model.FindRoomByRoomID(rid)
-	log.Println(ok)
 	if !ok {
 		view.RequestError(c, "RoomID is Wrong")
 		return
@@ -147,7 +144,6 @@ func IngameBB(c *gin.Context) {
 	}
 
 	bb := pr.RoomData.BB.Amount
-	log.Println("BB!")
 	if u.Stack <= bb {
 		// BBがAllInしないとBBをベットできない場合
 		// AllIn Flagをtrueにする
@@ -159,7 +155,6 @@ func IngameBB(c *gin.Context) {
 		u.Actioned = true
 	} else {
 		// 通常のbbベット
-		log.Println("here")
 		u.BettingTips = bb
 		u.Stack -= bb
 		pr.RoomData.BB.UserID = u.UserID
