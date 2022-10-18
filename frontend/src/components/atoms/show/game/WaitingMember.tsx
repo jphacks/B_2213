@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { MemberContext } from "../../../../../pages/game/waitRoom/[roomId]";
+import { MemberContext } from "../../../../../pages/game/waitRoom/[roomID]";
 
 const WaitingMember = () => {
   const { memberInfo, setMemberInfo } = useContext(MemberContext);

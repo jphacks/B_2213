@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { MemberContext } from "../../../../../pages/game/waitRoom/[roomId]";
+import { MemberContext } from "../../../../../pages/game/waitRoom/[roomID]";
 import { OptionsContext } from "../../../Organisms/game/SetOption";
 
 type PropsType = {
