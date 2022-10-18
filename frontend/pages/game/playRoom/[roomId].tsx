@@ -3,8 +3,7 @@ import { NextPage } from "next";
 import { useRouter } from "next/router";
 import { createContext, useCallback, useEffect, useRef, useState } from "react";
 import { useUserInfo } from "../../../src/components/hooks/user/useUserInfo";
-import ActionSelect from "../../../src/components/Organisms/game/ActionSelect";
-import PlayMenu from "../../../src/components/Organisms/game/PlayMenu";
+import GameController from "../../../src/components/templates/game/GameController";
 import Loading from "../../../src/components/templates/Loading";
 import {
   GameContextType,
@@ -21,8 +20,7 @@ const PlayRoom: NextPage = () => {
   const router = useRouter();
   const socketRef = useRef<WebSocket>();
   const [isReady, setIsReady] = useState({
-    userInfoReady: false, // userInfoが取得できているか
-    roomStatusReady: false, // roomStatusがwaiting状態であるかどうか
+    isRoomReady: false,
     message_WS_Ready: false, //WSでbackendからmember情報を受け取っているか
   });
 
@@ -58,7 +56,6 @@ const PlayRoom: NextPage = () => {
         router.push("/start");
         return;
       }
-      setIsReady((isReady) => ({ ...isReady, userInfoReady: true }));
 
       const { roomID } = router.query;
       if (roomID !== userInfo.roomID) {
@@ -70,13 +67,13 @@ const PlayRoom: NextPage = () => {
         router.push("/start");
         return;
       }
-      setIsReady((isReady) => ({ ...isReady, roomStatusReady: true }));
+      setIsReady((isReady) => ({ ...isReady, isRoomReady: true }));
     })();
   }, []);
 
   // WSによるリアルタイム通信
   useEffect(() => {
-    if (!isReady.roomStatusReady) {
+    if (!isReady.isRoomReady) {
       // roomの状態やuser情報が確認でき次第WS通信を行う。
       return;
     }
@@ -112,34 +109,17 @@ const PlayRoom: NextPage = () => {
       }
       socketRef.current.close();
     };
-  }, [isReady.roomStatusReady, userInfo.roomID, userInfo.userID]);
+  }, [isReady.isRoomReady, userInfo.roomID, userInfo.userID]);
 
-  if (
-    !(
-      isReady.userInfoReady &&
-      isReady.roomStatusReady &&
-      isReady.message_WS_Ready
-    )
-  ) {
+  if (!(isReady.isRoomReady && isReady.message_WS_Ready)) {
     return <Loading />;
   }
-
   return (
     <GameContext.Provider value={{ gameInfo, setGameInfo }}>
       <div className="bg-poker-color font-poker-color font-poker-family">
-        <section className="h-screen bg-cover">
-          <div className="flex w-full items-center justify-center container mx-auto px-8">
-            <div className="max-w-2xl text-center">
-              <PlayMenu
-                {...{ showAction: showAction, setShowAction: setShowAction }}
-              />
-            </div>
-          </div>
-
-          <ActionSelect
-            {...{ showAction: showAction, setShowAction: setShowAction }}
-          />
-        </section>
+        <GameController
+          {...{ showAction: showAction, setShowAction: setShowAction }}
+        />
       </div>
     </GameContext.Provider>
   );
