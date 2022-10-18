@@ -73,8 +73,13 @@ func (pr *PokerRoom) ResetAllUserActioned() {
 	}
 }
 
-func (pr *PokerRoom) NextRound() {
+func (pr *PokerRoom) NextStage() {
 	pr.ResetAllUserActioned()
+
+	for _, u := range pr.Users {
+		u.PotAmount += u.BettingTips
+	}
+
 	pr.RoomData.Stage += 1
 	if pr.RoomData.Stage >= 5 {
 		// 終了処理(チップをストックに移動する)

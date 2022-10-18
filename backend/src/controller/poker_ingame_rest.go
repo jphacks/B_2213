@@ -175,5 +175,7 @@ func RoomNextRound(c *gin.Context) {
 
 	pr, _ := model.FindRoomByRoomID(rid)
 
-	pr.NextRound()
+	pr.NextStage()
+
+	view.NoContext(c)
 }
