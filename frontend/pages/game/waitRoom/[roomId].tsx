@@ -62,8 +62,8 @@ const WaitRoom: NextPage = () => {
         return;
       }
 
-      const { roomID } = router.query;
-      if (roomID !== userInfo.roomID) {
+      const { roomId } = router.query;
+      if (roomId !== userInfo.roomID) {
         router.push("/start");
         return;
       }

@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useRouter } from "next/router";
 import { memo, useContext, useEffect, useState } from "react";
-import { MemberContext } from "../../../../pages/game/waitRoom/[roomID]";
+import { MemberContext } from "../../../../pages/game/waitRoom/[roomId]";
 import { UserContext } from "../../../../pages/_app";
 
 type PropType = {
