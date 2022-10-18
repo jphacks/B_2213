@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { GameContext } from "../../../../pages/game/playRoom/[roomId]";
+import { GameContext } from "../../../../pages/game/playRoom/[roomID]";
 
 // GameContextは<GameContextType | undefind>で定義しているためこのカスタムフックによるエラー処理が必要
 export const useGameInfo = () => {

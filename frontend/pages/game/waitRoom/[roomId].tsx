@@ -64,6 +64,12 @@ const WaitRoom: NextPage = () => {
       }
       setIsReady((isReady) => ({ ...isReady, userInfoReady: true }));
 
+      const { roomID } = router.query;
+      if (roomID !== userInfo.roomID) {
+        router.push("/start");
+        return;
+      }
+
       if (!(await confirmRoomStatus())) {
         router.push("/start");
         return;

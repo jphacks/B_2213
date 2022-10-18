@@ -1,5 +1,5 @@
 import { createContext, memo, useContext, useEffect, useState } from "react";
-import { MemberContext } from "../../../../pages/game/waitRoom/[roomId]";
+import { MemberContext } from "../../../../pages/game/waitRoom/[roomID]";
 import { OptionsContextType, OptionsType } from "../../../types/game/type";
 import OptionsUserChips from "../../modules/forms/game/OptionsUserChips";
 import BackWaitRoom from "../../atoms/transition/game/BackWaitRoom";
