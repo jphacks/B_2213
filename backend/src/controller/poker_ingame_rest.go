@@ -2,6 +2,7 @@ package controller
 
 import (
 	"github.com/gin-gonic/gin"
+	"log"
 	"pms/src/model"
 	"pms/src/view"
 )
@@ -230,5 +231,46 @@ func IngameFold(c *gin.Context) {
 	}
 
 	view.NoContext(c)
+	WritePokerRoombyWS(pr)
+}
+
+func IngameCall(c *gin.Context) {
+	log.Println("call")
+	rid := c.Param("roomID")
+	uid := c.Query("userID")
+
+	// validation check
+	pr, ok := model.FindRoomByRoomID(rid)
+	if !ok {
+		view.RequestError(c, "RoomID is Wrong")
+		return
+	}
+	u := pr.GetUserByUserID(uid)
+	if u == nil {
+		view.RequestUnauthorized(c, "UserID in QueryParam is invalid")
+		return
+	}
+
+	if (u.Stack + u.BettingTips) > pr.RoomData.RequiredPot {
+		u.AllIn = true
+	}
+	pr.RoomData.PotAmount += (pr.RoomData.RequiredPot - u.BettingTips)
+	u.Stack -= (pr.RoomData.RequiredPot - u.BettingTips)
+	u.BettingTips = pr.RoomData.RequiredPot
+	u.Actioned = true
+
+	allActioned := true
+	for _, u := range pr.Users {
+		if !u.AllIn && u.Joining {
+			if !u.Actioned {
+				allActioned = false
+			}
+		}
+	}
+	if allActioned {
+		pr.NextStage()
+	}
+
+	view.StatusOK(c, pr)
 	WritePokerRoombyWS(pr)
 }
