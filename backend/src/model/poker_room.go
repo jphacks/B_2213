@@ -81,6 +81,9 @@ func (pr *PokerRoom) NextStage() {
 	for _, u := range pr.Users {
 		u.PotAmount += u.BettingTips
 		u.BettingTips = 0
+		if !u.AllIn {
+			u.Actioned = false
+		}
 	}
 
 	// ステージが5の場合、ラウンド終了処理を起動する
