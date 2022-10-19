@@ -22,8 +22,12 @@ const ActionSelect = () => {
   });
 
   useEffect(() => {
-    if (toCall - bettingTips == 0) {
+    if (bettingTips == 0) {
       setActionInfo({ ...actionInfo, canActions: ["check", "bet", "fold"] });
+    }
+
+    if (toCall - bettingTips == 0) {
+      setActionInfo({ ...actionInfo, canActions: ["check", "raise", "fold"] });
     }
   }, []);
 
