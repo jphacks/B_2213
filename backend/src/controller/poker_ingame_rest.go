@@ -2,7 +2,6 @@ package controller
 
 import (
 	"github.com/gin-gonic/gin"
-	"log"
 	"pms/src/model"
 	"pms/src/view"
 )
@@ -235,7 +234,7 @@ func IngameFold(c *gin.Context) {
 }
 
 func IngameCall(c *gin.Context) {
-	log.Println("call")
+	// log.Println("call")
 	rid := c.Param("roomID")
 	uid := c.Query("userID")
 
