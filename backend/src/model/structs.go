@@ -18,12 +18,13 @@ type PokerRoom struct {
 }
 
 type RoomData struct {
-	Round       int   `json:"round"`
-	Stage       int   `json:"stage"`
-	RequiredPot int   `json:"toCall"` // このラウンドでコールするのに必要なチップ数
-	SB          Blind `json:"sb"`
-	BB          Blind `json:"bb"`
-	PotAmount   int   `json:"pot"` // ゲーム画面に表示される賭けられてるチップの合計
+	Round       int      `json:"round"`
+	Stage       int      `json:"stage"`
+	RequiredPot int      `json:"toCall"` // このラウンドでコールするのに必要なチップ数
+	SB          Blind    `json:"sb"`
+	BB          Blind    `json:"bb"`
+	PotAmount   int      `json:"pot"` // ゲーム画面に表示される賭けられてるチップの合計
+	Winners     []string `json:"-"`
 }
 
 type Blind struct {

@@ -81,8 +81,14 @@ func IngameOptions(c *gin.Context) {
 		}
 		u.Stack = amount
 	}
+
+	// Roundが0のときだけはUserのJoiningをTrueにする
 	if pr.RoomData.Round == 0 {
 		pr.RoomData.Round += 1
+		for _, u := range pr.Users {
+			u.Joining = true
+
+		}
 	}
 	view.NoContext(c)
 	WritePokerRoombyWS(pr)
@@ -179,4 +185,5 @@ func RoomNextRound(c *gin.Context) {
 	pr.NextStage()
 
 	view.NoContext(c)
+	WritePokerRoombyWS(pr)
 }
