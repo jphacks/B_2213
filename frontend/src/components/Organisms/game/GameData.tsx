@@ -1,54 +1,30 @@
+import { useContext } from "react";
+import MemberBet from "../../atoms/show/game/MemberBet";
+import MemberStack from "../../atoms/show/game/MemberStack";
+import RequiredBet from "../../atoms/show/game/RequiredBet";
+import ShowPot from "../../atoms/show/game/ShowPot";
+import { useGameInfo } from "../../hooks/game/useGameInfo";
+import { UIControllContext } from "../../templates/game/GameController";
+
 const GameData = () => {
+  const { gameInfo } = useGameInfo(); //undefind回避のcontextのカスタムフック
+  const roomData = gameInfo.roomData;
+  const { dataName } = useContext(UIControllContext);
+
   return (
     <div>
-      <h1 className="text-4xl pt-8 pb-1 w-full">Stage : 1</h1>
-
-      <div className="text-center mt-8 py-4 border-2 border-gold rounded-md">
-        <h1 className="text-4xl w-full">POT</h1>
-        <h1 className="text-3xl pt-2 w-full">100000</h1>
-      </div>
-
-      <div className="pt-8">
-        <h1 className="text-3xl w-full">Bets of member</h1>
-        <ul className="pl-2 pt-3">
-          <li className="pb-3 text-xl flex justify-between">
-            <p>HHHHHHHHHH</p>
-            <p className="text-right">100000</p>
-          </li>
-          <li className="pb-3 text-xl flex justify-between">
-            <p>Hfsefegs</p>
-            <p className="text-right">1000</p>
-          </li>
-          <li className="pb-3 text-xl flex justify-between">
-            <p>Hfsefegs</p>
-            <p className="text-right">1000</p>
-          </li>
-          <li className="pb-3 text-xl flex justify-between">
-            <p>Hfsefegs</p>
-            <p className="text-right">1000</p>
-          </li>
-          <li className="pb-3 text-xl flex justify-between">
-            <p>Hfsefegs</p>
-            <p className="text-right">1000</p>
-          </li>
-          <li className="pb-3 text-xl flex justify-between">
-            <p>Hfsefegs</p>
-            <p className="text-right">1000</p>
-          </li>
-          <li className="pb-3 text-xl flex justify-between">
-            <p>Hfsefegs</p>
-            <p className="text-right">1000</p>
-          </li>
-          <li className="pb-3 text-xl flex justify-between">
-            <p>Hfsefegs</p>
-            <p className="text-right">1000</p>
-          </li>
-          <li className="pb-3 text-xl flex justify-between">
-            <p>Hfsefegs</p>
-            <p className="text-right">1000</p>
-          </li>
-        </ul>
-      </div>
+      <h1 className="text-4xl pt-8 pb-1 w-full">Stage : {roomData.stage}</h1>
+      {dataName == "bet" ? (
+        <div>
+          <RequiredBet />
+          <MemberBet />
+        </div>
+      ) : (
+        <div>
+          <ShowPot />
+          <MemberStack />
+        </div>
+      )}
     </div>
   );
 };
