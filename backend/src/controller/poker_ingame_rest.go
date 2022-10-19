@@ -85,10 +85,7 @@ func IngameOptions(c *gin.Context) {
 	// Roundが0のときだけはUserのJoiningをTrueにする
 	if pr.RoomData.Round == 0 {
 		pr.RoomData.Round += 1
-		for _, u := range pr.Users {
-			u.Joining = true
-
-		}
+		pr.ResetRoom()
 	}
 	view.NoContext(c)
 	WritePokerRoombyWS(pr)
@@ -183,6 +180,41 @@ func RoomNextRound(c *gin.Context) {
 	pr, _ := model.FindRoomByRoomID(rid)
 
 	pr.NextStage()
+
+	view.NoContext(c)
+	WritePokerRoombyWS(pr)
+}
+
+// HandlerFunc for POST /api/ingame/:roomID/fold
+func IngameFold(c *gin.Context) {
+	rid := c.Param("roomID")
+	uid := c.Query("userID")
+
+	// validation check
+	pr, ok := model.FindRoomByRoomID(rid)
+	if !ok {
+		view.RequestError(c, "RoomID is Wrong")
+		return
+	}
+	u := pr.GetUserByUserID(uid)
+	if u == nil {
+		view.RequestUnauthorized(c, "UserID in QueryParam is invalid")
+		return
+	}
+
+	u.Joining = false
+
+	userNum := 0
+	for _, u := range pr.Users {
+		if !u.AllIn && u.Joining {
+			userNum += 1
+		}
+	}
+
+	if userNum == 1 {
+		pr.RoomData.Stage = 4
+		pr.NextStage()
+	}
 
 	view.NoContext(c)
 	WritePokerRoombyWS(pr)
