@@ -210,7 +210,12 @@ func IngameFold(c *gin.Context) {
 		return
 	}
 
-	u.Joining = false
+	if u.BettingTips >= pr.RoomData.RequiredPot {
+		// コールに必要なチップ数が0の時、コールとして扱う。
+		u.Actioned = true
+	} else {
+		u.Joining = false
+	}
 
 	userNum := 0
 	for _, u := range pr.Users {
