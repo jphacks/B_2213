@@ -21,13 +21,22 @@ var wsupgrader = websocket.Upgrader{
 
 // HandlerFunc for WS /ws/:roomID
 func ConnectRoom(c *gin.Context) {
-	roomID := c.Param("roomID")
-	userID := c.Query("userID")
-	if _, ok := model.FindRoomByRoomID(roomID); !ok {
+	rid := c.Param("roomID")
+	uid := c.Query("userID")
+
+	// validation check
+	pr, ok := model.FindRoomByRoomID(rid)
+	if !ok {
 		view.RequestError(c, "RoomID is Wrong")
 		return
 	}
-	WebSocketServer(c.Writer, c.Request, roomID, userID)
+	u := pr.GetUserByUserID(uid)
+	if u == nil {
+		view.RequestUnauthorized(c, "UserID in QueryParam is invalid")
+		return
+	}
+	
+	WebSocketServer(c.Writer, c.Request, rid, uid)
 }
 
 // main part of ConnectRoom()
