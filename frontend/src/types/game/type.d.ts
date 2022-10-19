@@ -79,6 +79,15 @@ export type ActionInfoProps = {
 };
 
 export type ShowActionProps = {
-  showAction: Boolean;
-  setShowAction: (showAction: Boolean) => void;
+  showAction: boolean;
+  setShowAction: (showAction: boolean) => void;
+};
+
+export type ShowDataType = "stack" | "bet";
+
+export type UIControllContextType = {
+  showAction: boolean;
+  setShowAction: (showAction: boolean) => void;
+  dataName: ShowDataType;
+  setDataName: (dataName: ShowDataType) => void;
 };
