@@ -94,7 +94,7 @@ func (pr *PokerRoom) NextStage() {
 	}
 }
 
-func(pr *PokerRoom) ResetRoom() {
+func (pr *PokerRoom) ResetRoom() {
 	pr.RoomData.Stage = 0
 	pr.RoomData.RequiredPot = 0
 	pr.RoomData.PotAmount = 0
