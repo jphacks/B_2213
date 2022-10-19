@@ -24,7 +24,6 @@ const PlayRoom: NextPage = () => {
     message_WS_Ready: false, //WSでbackendからmember情報を受け取っているか
   });
 
-  const [showAction, setShowAction] = useState<Boolean>(false);
   const [gameInfo, setGameInfo] = useState<GameInfoType>();
   // ^^^ contet ProviderのvalueがundefinedとなってしまうためカスタムフックのuseGameInfoでエラー処理済み
   // ^^^ 初期値を設定しないのは初期値が大量であり、context部分がレンダーされる時はstateがsetされることが確定のため
@@ -116,9 +115,7 @@ const PlayRoom: NextPage = () => {
   }
   return (
     <GameContext.Provider value={{ gameInfo, setGameInfo }}>
-      <GameController
-        {...{ showAction: showAction, setShowAction: setShowAction }}
-      />
+      <GameController />
     </GameContext.Provider>
   );
 };

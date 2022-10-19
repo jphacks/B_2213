@@ -2,6 +2,7 @@ package controller
 
 import (
 	"github.com/gin-gonic/gin"
+	"log"
 	"pms/src/model"
 	"pms/src/view"
 )
@@ -81,8 +82,11 @@ func IngameOptions(c *gin.Context) {
 		}
 		u.Stack = amount
 	}
+
+	// Roundが0のときだけはUserのJoiningをTrueにする
 	if pr.RoomData.Round == 0 {
 		pr.RoomData.Round += 1
+		pr.ResetRoom()
 	}
 	view.NoContext(c)
 	WritePokerRoombyWS(pr)
@@ -125,6 +129,10 @@ func IngameSB(c *gin.Context) {
 	if pr.RoomData.BB.UserID != "" {
 		pr.RoomData.Stage = 1
 	}
+
+	if sb > pr.RoomData.RequiredPot {
+		pr.RoomData.RequiredPot = sb
+	}
 	view.NoContext(c)
 	WritePokerRoombyWS(pr)
 }
@@ -166,6 +174,10 @@ func IngameBB(c *gin.Context) {
 	if pr.RoomData.SB.UserID != "" {
 		pr.RoomData.Stage = 1
 	}
+
+	if bb > pr.RoomData.RequiredPot {
+		pr.RoomData.RequiredPot = bb
+	}
 	view.NoContext(c)
 	WritePokerRoombyWS(pr)
 }
@@ -176,5 +188,89 @@ func RoomNextRound(c *gin.Context) {
 
 	pr, _ := model.FindRoomByRoomID(rid)
 
-	pr.NextRound()
+	pr.NextStage()
+
+	view.NoContext(c)
+	WritePokerRoombyWS(pr)
+}
+
+// HandlerFunc for POST /api/ingame/:roomID/fold
+func IngameFold(c *gin.Context) {
+	rid := c.Param("roomID")
+	uid := c.Query("userID")
+
+	// validation check
+	pr, ok := model.FindRoomByRoomID(rid)
+	if !ok {
+		view.RequestError(c, "RoomID is Wrong")
+		return
+	}
+	u := pr.GetUserByUserID(uid)
+	if u == nil {
+		view.RequestUnauthorized(c, "UserID in QueryParam is invalid")
+		return
+	}
+
+	if u.BettingTips >= pr.RoomData.RequiredPot {
+		// コールに必要なチップ数が0の時、コールとして扱う。
+		u.Actioned = true
+	} else {
+		u.Joining = false
+	}
+
+	userNum := 0
+	for _, u := range pr.Users {
+		if !u.AllIn && u.Joining {
+			userNum += 1
+		}
+	}
+
+	if userNum == 1 {
+		pr.RoomData.Stage = 4
+		pr.NextStage()
+	}
+
+	view.NoContext(c)
+	WritePokerRoombyWS(pr)
+}
+
+func IngameCall(c *gin.Context) {
+	log.Println("call")
+	rid := c.Param("roomID")
+	uid := c.Query("userID")
+
+	// validation check
+	pr, ok := model.FindRoomByRoomID(rid)
+	if !ok {
+		view.RequestError(c, "RoomID is Wrong")
+		return
+	}
+	u := pr.GetUserByUserID(uid)
+	if u == nil {
+		view.RequestUnauthorized(c, "UserID in QueryParam is invalid")
+		return
+	}
+
+	if (u.Stack + u.BettingTips) > pr.RoomData.RequiredPot {
+		u.AllIn = true
+	}
+	pr.RoomData.PotAmount += (pr.RoomData.RequiredPot - u.BettingTips)
+	u.Stack -= (pr.RoomData.RequiredPot - u.BettingTips)
+	u.BettingTips = pr.RoomData.RequiredPot
+	u.Actioned = true
+
+	allActioned := true
+	for _, u := range pr.Users {
+		if !u.AllIn && u.Joining {
+			if !u.Actioned {
+				allActioned = false
+			}
+		}
+	}
+	if allActioned {
+		pr.NextStage()
+	}
+
+	view.StatusOK(c, pr)
+	WritePokerRoombyWS(pr)
 }

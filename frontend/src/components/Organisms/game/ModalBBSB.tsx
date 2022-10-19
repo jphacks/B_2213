@@ -1,10 +1,13 @@
 import axios from "axios";
 import { memo, useContext, useState } from "react";
 import { UserContext } from "../../../../pages/_app";
+import { useGameInfo } from "../../hooks/game/useGameInfo";
 
 // eslint-disable-next-line react/display-name
 const ModalBBSB = memo(() => {
   const { userInfo } = useContext(UserContext);
+  const { gameInfo } = useGameInfo(); //undefind回避のcontextのカスタムフック
+  const roomData = gameInfo.roomData;
 
   const selectBBSB = async (type_bb_sb: "bb" | "sb") => {
     try {
@@ -30,7 +33,8 @@ const ModalBBSB = memo(() => {
       <div className="absolute bg-[#636363] inset-0 z-0"></div>
       <div className="w-full  max-w-lg p-5 relative mx-auto my-auto rounded-xl shadow-lg bg-poker-color font-poker-color font-poker-family">
         <div className="text-center p-5 flex-auto justify-center">
-          <h2 className="text-4xl pt-4">Select BB SB</h2>
+          <h2 className="text-4xl">Round : {roomData.round}</h2>
+          <h2 className="text-4xl pt-8">Select BB SB</h2>
           <p className="text-[12px] pt-2 pb-8">
             Do not select if you are not BB or SB
           </p>

@@ -5,9 +5,11 @@ import { ActionInfoType, ShowActionProps } from "../../../types/game/type";
 import { useGameInfo } from "../../hooks/game/useGameInfo";
 import BetChips from "../../modules/forms/game/BetChips";
 import ActionButtons from "../../modules/select/game/ActionButtons";
+import { UIControllContext } from "../../templates/game/GameController";
 
-const ActionSelect = ({ showAction, setShowAction }: ShowActionProps) => {
+const ActionSelect = () => {
   const { userInfo } = useContext(UserContext);
+  const { showAction, setShowAction } = useContext(UIControllContext);
   const { gameInfo } = useGameInfo(); //undefind回避のcontextのカスタムフック
   const toCall = gameInfo.roomData.toCall;
   const bettingTips = gameInfo.users[userInfo.userID!].bettingTips;
