@@ -90,19 +90,23 @@ func (pr *PokerRoom) NextStage() {
 		pr.NextRound()
 		// Roundをすすめる
 		pr.RoomData.Round += 1
-		pr.RoomData.Stage = 0
-		pr.RoomData.RequiredPot = 0
-		pr.RoomData.PotAmount = 0
-		pr.RoomData.Winners = nil
-		pr.RoomData.SB.UserID = ""
-		pr.RoomData.BB.UserID = ""
+		pr.ResetRoom()
+	}
+}
 
-		for _, u := range pr.Users {
-			u.Joining = true
-			u.AllIn = false
-			u.Actioned = false
-			u.PotAmount = 0
-		}
+func(pr *PokerRoom) ResetRoom() {
+	pr.RoomData.Stage = 0
+	pr.RoomData.RequiredPot = 0
+	pr.RoomData.PotAmount = 0
+	pr.RoomData.Winners = nil
+	pr.RoomData.SB.UserID = ""
+	pr.RoomData.BB.UserID = ""
+
+	for _, u := range pr.Users {
+		u.Joining = true
+		u.AllIn = false
+		u.Actioned = false
+		u.PotAmount = 0
 	}
 }
 
