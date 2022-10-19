@@ -74,14 +74,87 @@ func (pr *PokerRoom) ResetAllUserActioned() {
 	}
 }
 
-func (pr *PokerRoom) NextRound() {
+// ステージ進行処理
+func (pr *PokerRoom) NextStage() {
 	pr.ResetAllUserActioned()
+
+	for _, u := range pr.Users {
+		u.PotAmount += u.BettingTips
+		u.BettingTips = 0
+	}
+
+	// ステージが5の場合、ラウンド終了処理を起動する
 	pr.RoomData.Stage += 1
 	if pr.RoomData.Stage >= 5 {
-		// 終了処理(チップをストックに移動する)
-		log.Println("終了処理")
+		log.Println("NextStage()から終了処理を呼び出す")
+		pr.NextRound()
+		// Roundをすすめる
+		pr.RoomData.Round += 1
+		pr.RoomData.Stage = 0
+		pr.RoomData.RequiredPot = 0
+		pr.RoomData.PotAmount = 0
+		pr.RoomData.Winners = nil
+		pr.RoomData.SB.UserID = ""
+		pr.RoomData.BB.UserID = ""
+
+		for _, u := range pr.Users {
+			u.Joining = true
+			u.AllIn = false
+			u.Actioned = false
+			u.PotAmount = 0
+		}
 	}
 }
 
-//
-// func (pr *PokerRoom)
+// 勝敗判定が必要なところをフロントエンドに渡す
+func (pr *PokerRoom) NextRound() {
+	if winners := pr.RoomData.Winners; winners != nil && len(winners) != 1 {
+		pr.CollectChips(winners[0])
+		pr.NextRound()
+		return
+	} else if winners != nil {
+	} else {
+		log.Println("winners is nil")
+		winners = []string{}
+		for uid, u := range pr.Users {
+			if u.Joining {
+				log.Println("appending user for winners")
+				winners = append(winners, uid)
+			}
+		}
+		log.Println(len(winners))
+		if len(winners) == 1 {
+			if pr.GetUserByUserID(winners[0]).PotAmount == 0 {
+				return
+			}
+			pr.CollectChips(winners[0])
+			pr.NextRound()
+			return
+		} else if len(winners) == 0 {
+			log.Println("no winners")
+			return
+		} else {
+			pr.RoomData.Winners = winners
+		}
+	}
+
+	log.Println(pr)
+	log.Println(pr.RoomData)
+	// } else if pr.RoomData.Winners != nil &&
+}
+
+// すべてのUserからuidのUserにPotAmountを没収する
+// ただ、uidのPotAmount以上は取らない
+func (pr *PokerRoom) CollectChips(uid string) {
+	winner := pr.GetUserByUserID(uid)
+	maxCollection := pr.GetUserByUserID(uid).PotAmount
+	for _, u := range pr.Users {
+		if u.PotAmount > maxCollection {
+			u.PotAmount -= maxCollection
+			winner.Stack += maxCollection
+		} else {
+			winner.Stack += u.PotAmount
+			u.PotAmount = 0
+		}
+	}
+}
