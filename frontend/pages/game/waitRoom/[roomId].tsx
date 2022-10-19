@@ -30,8 +30,7 @@ const WaitRoom: NextPage = () => {
   const [showOption, setShowOption] = useState(false);
   const [round, setRound] = useState(0);
   const [isReady, setIsReady] = useState({
-    userInfoReady: false, // userInfoが取得できているか
-    roomStatusReady: false, // roomStatusがwaiting状態であるかどうか
+    isRoomReady: false,
     message_WS_Ready: false, //WSでbackendからmember情報を受け取っているか
   });
 
@@ -62,19 +61,24 @@ const WaitRoom: NextPage = () => {
         router.push("/start");
         return;
       }
-      setIsReady((isReady) => ({ ...isReady, userInfoReady: true }));
+
+      const { roomId } = router.query;
+      if (roomId !== userInfo.roomID) {
+        router.push("/start");
+        return;
+      }
 
       if (!(await confirmRoomStatus())) {
         router.push("/start");
         return;
       }
-      setIsReady((isReady) => ({ ...isReady, roomStatusReady: true }));
+      setIsReady((isReady) => ({ ...isReady, isRoomReady: true }));
     })();
   }, []);
 
   // WSによるリアルタイム通信
   useEffect(() => {
-    if (!isReady.roomStatusReady) {
+    if (!isReady.isRoomReady) {
       // roomの状態やuser情報が確認でき次第WS通信を行う。
       return;
     }
@@ -111,15 +115,9 @@ const WaitRoom: NextPage = () => {
       }
       socketRef.current.close();
     };
-  }, [isReady.roomStatusReady, userInfo.roomID, userInfo.userID]);
+  }, [isReady.isRoomReady, userInfo.roomID, userInfo.userID]);
 
-  if (
-    !(
-      isReady.userInfoReady &&
-      isReady.roomStatusReady &&
-      isReady.message_WS_Ready
-    )
-  ) {
+  if (!(isReady.isRoomReady && isReady.message_WS_Ready)) {
     return <Loading />;
   }
 

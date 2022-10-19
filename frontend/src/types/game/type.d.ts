@@ -50,8 +50,8 @@ export type GameInfoType = {
 };
 
 export type GameContextType = {
-  gameInfo: GameInfoType;
-  setGameInfo: (gameInfo: GameInfoType) => void;
+  gameInfo?: GameInfoType;
+  setGameInfo?: (gameInfo: GameInfoType) => void;
 };
 
 export type OptionsType = {
@@ -76,4 +76,9 @@ export type ActionInfoType = {
 export type ActionInfoProps = {
   actionInfo: ActionInfoType;
   setActionInfo: (actionInfo: ActionInfoType) => void;
+};
+
+export type ShowActionProps = {
+  showAction: Boolean;
+  setShowAction: (showAction: Boolean) => void;
 };
