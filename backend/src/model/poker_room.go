@@ -73,6 +73,7 @@ func (pr *PokerRoom) ResetAllUserActioned() {
 	}
 }
 
+// ステージ進行処理
 func (pr *PokerRoom) NextStage() {
 	pr.ResetAllUserActioned()
 
@@ -80,12 +81,25 @@ func (pr *PokerRoom) NextStage() {
 		u.PotAmount += u.BettingTips
 	}
 
+	// ステージが5の場合、ラウンド終了処理を起動する
 	pr.RoomData.Stage += 1
 	if pr.RoomData.Stage >= 5 {
-		// 終了処理(チップをストックに移動する)
 		log.Println("終了処理")
+		pr.NextRound()
 	}
 }
 
-//
-// func (pr *PokerRoom)
+// 勝敗判定が必要なところをフロントエンドに渡す
+func (pr *PokerRoom) NextRound() {
+	// 勝敗判定が必要なところをフロントエンドに渡す
+	joiningUsers := 0
+	for _, u := range pr.Users {
+		if u.Joining {
+			joiningUsers += 1
+		}
+	}
+
+	if joiningUsers == 1 {
+		
+	}
+}
