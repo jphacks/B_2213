@@ -128,6 +128,10 @@ func IngameSB(c *gin.Context) {
 	if pr.RoomData.BB.UserID != "" {
 		pr.RoomData.Stage = 1
 	}
+
+	if sb > pr.RoomData.RequiredPot {
+		pr.RoomData.RequiredPot = sb
+	}
 	view.NoContext(c)
 	WritePokerRoombyWS(pr)
 }
@@ -168,6 +172,10 @@ func IngameBB(c *gin.Context) {
 	}
 	if pr.RoomData.SB.UserID != "" {
 		pr.RoomData.Stage = 1
+	}
+
+	if bb > pr.RoomData.RequiredPot {
+		pr.RoomData.RequiredPot = bb
 	}
 	view.NoContext(c)
 	WritePokerRoombyWS(pr)
