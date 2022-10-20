@@ -14,20 +14,19 @@ const PlayMenu = () => {
   return (
     <div className="text-center pt-3 pb-20 w-full z-10 absolute bottom-0 left-0 lg:pb-10 bg-poker-color">
       <button
+        className="px-6 py-2 mx-3 border-gold-button transition-colors duration-300 transform rounded-md"
+        onClick={() => setDataName(dataName == "bet" ? "stack" : "bet")}
+      >
+        Change Data
+      </button>
+      <button
         className={
-          "px-6 py-2 mx-3 border-gold-button transition-colors duration-300 transform rounded-md " +
+          "px-6 py-2 mx-3 bg-gold-button transition-colors duration-300 transform rounded-md " +
           (canAction ? "opacity-100" : "opacity-20 pointer-events-none") //ボタンイベントを無効化
         }
         onClick={() => setShowAction(true)}
       >
         Action
-      </button>
-
-      <button
-        className="px-6 py-2 mx-3 bg-gold-button transition-colors duration-300 transform rounded-md"
-        onClick={() => setDataName(dataName == "bet" ? "stack" : "bet")}
-      >
-        Change Data
       </button>
     </div>
   );

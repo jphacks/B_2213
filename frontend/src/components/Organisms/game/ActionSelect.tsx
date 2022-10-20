@@ -4,6 +4,7 @@ import styles from "../../../../styles/Home.module.css";
 import { ActionInfoType, ShowActionProps } from "../../../types/game/type";
 import { useGameInfo } from "../../hooks/game/useGameInfo";
 import BetChips from "../../modules/forms/game/BetChips";
+import SendAndCancelAction from "../../modules/forms/game/SendAndCancelAction";
 import ActionButtons from "../../modules/select/game/ActionButtons";
 import { UIControllContext } from "../../templates/game/GameController";
 
@@ -22,10 +23,22 @@ const ActionSelect = () => {
   });
 
   useEffect(() => {
-    if (toCall - bettingTips == 0) {
-      setActionInfo({ ...actionInfo, canActions: ["check", "bet", "fold"] });
-    }
-  }, []);
+    const canActionList = (() => {
+      if (toCall == 0) {
+        return ["check", "bet", "fold"];
+      }
+      if (toCall - bettingTips == 0) {
+        return ["check", "bet", "fold"];
+      }
+      return ["call", "raise", "fold"];
+    })(); // 即時関数
+
+    setActionInfo({
+      ...actionInfo,
+      canActions: canActionList,
+      willBet: toCall - bettingTips < stack ? toCall - bettingTips : stack,
+    });
+  }, [toCall, bettingTips, stack]);
 
   return (
     <div className={showAction ? styles.fadein : styles.fadeout}>
@@ -34,17 +47,7 @@ const ActionSelect = () => {
 
         <BetChips {...{ actionInfo, setActionInfo }} />
 
-        <div className="mt-10">
-          <button
-            className="px-6 py-2 mx-5 border-gold-button transition-colors duration-300 transform rounded-md"
-            onClick={() => setShowAction(false)}
-          >
-            Cancel
-          </button>
-          <button className="px-6 py-2 mx-5 bg-gold-button transition-colors duration-300 transform rounded-md">
-            Send
-          </button>
-        </div>
+        <SendAndCancelAction {...{ actionInfo, setActionInfo }} />
       </div>
     </div>
   );
