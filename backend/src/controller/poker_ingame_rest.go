@@ -281,10 +281,10 @@ func IngameRaise(c *gin.Context) {
 		view.RequestError(c, "invalid JSON")
 	}
 
-	if req.Amount+pr.RoomData.RequiredPot >= u.Stack+u.BettingTips {
+	if req.Amount >= u.Stack {
 		log.Println("req.Amount > u.Stack is false")
 		u.AllIn = true
-		req.Amount = u.Stack + u.BettingTips - pr.RoomData.RequiredPot
+		req.Amount = u.Stack
 	}
 
 	for _, us := range pr.Users {
@@ -293,11 +293,10 @@ func IngameRaise(c *gin.Context) {
 		}
 	}
 
-	pr.RoomData.RequiredPot += req.Amount
-
-	u.Stack = u.Stack - pr.RoomData.RequiredPot + u.BettingTips
-	pr.RoomData.PotAmount += pr.RoomData.RequiredPot - u.BettingTips
-	u.BettingTips = pr.RoomData.RequiredPot
+	u.Stack -= req.Amount
+	u.BettingTips += req.Amount
+	pr.RoomData.RequiredPot = u.BettingTips
+	pr.RoomData.PotAmount += req.Amount
 
 	u.Actioned = true
 
