@@ -69,3 +69,7 @@ type IngameActionCallRequest struct {
 type IngameSelectWinnerRequest struct {
 	Winner string `json:"winner"`
 }
+
+type IngameRaiseRequest struct {
+	Amount int `json:"amount" binding:"required"`
+}

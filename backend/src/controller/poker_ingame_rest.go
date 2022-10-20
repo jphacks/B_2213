@@ -1,6 +1,8 @@
 package controller
 
 import (
+	"errors"
+	"log"
 	"pms/src/model"
 	"pms/src/view"
 
@@ -23,22 +25,13 @@ func IngameReload(c *gin.Context) {
 
 // HandlerFunc for POST /api/ingame/:roomID/quitGame
 func IngameQuitGame(c *gin.Context) {
-	rid := c.Param("roomID")
-	uid := c.Query("userID")
-
-	pr, ok := model.FindRoomByRoomID(rid)
-	if !ok {
-		view.RequestError(c, "RoomID is Wrong")
+	pr, u, err := ValidationCheck(c)
+	if err != nil {
 		return
 	}
 
-	u, ok := pr.FindUserByUserID(uid)
-	if !ok {
-		view.RequestError(c, "UserID is wrong")
-	}
-
 	u.WsConn.Close()
-	pr.DeleteUserByUserID(uid)
+	pr.DeleteUserByUserID(u.UserID)
 	view.StatusOK(c, gin.H{
 		"message": "deleted successfully",
 	})
@@ -46,22 +39,12 @@ func IngameQuitGame(c *gin.Context) {
 
 // HandlerFunc For POST /api/ingame/:roomID/options
 func IngameOptions(c *gin.Context) {
-	rid := c.Param("roomID")
-	uid := c.Query("userID")
-
-	pr, ok := model.FindRoomByRoomID(rid)
-	if !ok {
-		view.RequestError(c, "RoomID is Wrong")
+	pr, u, err := ValidationCheck(c)
+	if err != nil {
 		return
 	}
 
-	if uid == "" {
-		view.RequestUnauthorized(c, "UserID in QueryParam is required")
-		return
-	} else if u, ok := pr.FindUserByUserID(uid); !ok {
-		view.RequestUnauthorized(c, "UserID in QueryParam is invalid")
-		return
-	} else if !u.Admin {
+	if !u.Admin {
 		view.RequestForbidden(c, "You are not admin")
 		return
 	}
@@ -94,18 +77,8 @@ func IngameOptions(c *gin.Context) {
 
 // HandlerFunc for POST /api/ingame/:roomID/sb?userID=:userID
 func IngameSB(c *gin.Context) {
-	rid := c.Param("roomID")
-	uid := c.Query("userID")
-
-	// validation check
-	pr, ok := model.FindRoomByRoomID(rid)
-	if !ok {
-		view.RequestError(c, "RoomID is Wrong")
-		return
-	}
-	u := pr.GetUserByUserID(uid)
-	if u == nil {
-		view.RequestUnauthorized(c, "UserID in QueryParam is invalid")
+	pr, u, err := ValidationCheck(c)
+	if err != nil {
 		return
 	}
 
@@ -139,18 +112,8 @@ func IngameSB(c *gin.Context) {
 
 // HandlerFunc for POST /api/ingame/:roomID/bb?userID=:userID
 func IngameBB(c *gin.Context) {
-	rid := c.Param("roomID")
-	uid := c.Query("userID")
-
-	// validation check
-	pr, ok := model.FindRoomByRoomID(rid)
-	if !ok {
-		view.RequestError(c, "RoomID is Wrong")
-		return
-	}
-	u := pr.GetUserByUserID(uid)
-	if u == nil {
-		view.RequestUnauthorized(c, "UserID in QueryParam is invalid")
+	pr, u, err := ValidationCheck(c)
+	if err != nil {
 		return
 	}
 
@@ -196,18 +159,8 @@ func RoomNextRound(c *gin.Context) {
 
 // HandlerFunc for POST /api/ingame/:roomID/fold
 func IngameFold(c *gin.Context) {
-	rid := c.Param("roomID")
-	uid := c.Query("userID")
-
-	// validation check
-	pr, ok := model.FindRoomByRoomID(rid)
-	if !ok {
-		view.RequestError(c, "RoomID is Wrong")
-		return
-	}
-	u := pr.GetUserByUserID(uid)
-	if u == nil {
-		view.RequestUnauthorized(c, "UserID in QueryParam is invalid")
+	pr, u, err := ValidationCheck(c)
+	if err != nil {
 		return
 	}
 
@@ -235,18 +188,8 @@ func IngameFold(c *gin.Context) {
 }
 
 func IngameCall(c *gin.Context) {
-	rid := c.Param("roomID")
-	uid := c.Query("userID")
-
-	// validation check
-	pr, ok := model.FindRoomByRoomID(rid)
-	if !ok {
-		view.RequestError(c, "RoomID is Wrong")
-		return
-	}
-	u := pr.GetUserByUserID(uid)
-	if u == nil {
-		view.RequestUnauthorized(c, "UserID in QueryParam is invalid")
+	pr, u, err := ValidationCheck(c)
+	if err != nil {
 		return
 	}
 
@@ -325,4 +268,62 @@ func IngameSelectWinner(c *gin.Context) {
 			return
 		}
 	}
+}
+
+func IngameRaise(c *gin.Context) {
+	pr, u, err := ValidationCheck(c)
+	if err != nil {
+		return
+	}
+
+	var req model.IngameRaiseRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		view.RequestError(c, "invalid JSON")
+	}
+
+	if req.Amount+pr.RoomData.RequiredPot >= u.Stack+u.BettingTips {
+		log.Println("req.Amount > u.Stack is false")
+		u.AllIn = true
+		req.Amount = u.Stack + u.BettingTips - pr.RoomData.RequiredPot
+	}
+
+	for _, us := range pr.Users {
+		if !us.AllIn {
+			us.Actioned = false
+		}
+	}
+
+	pr.RoomData.RequiredPot += req.Amount
+
+	u.Stack = u.Stack - pr.RoomData.RequiredPot + u.BettingTips
+	pr.RoomData.PotAmount += pr.RoomData.RequiredPot - u.BettingTips
+	u.BettingTips = pr.RoomData.RequiredPot
+
+	u.Actioned = true
+
+	view.NoContext(c)
+	WritePokerRoombyWS(pr)
+}
+
+// gin.ContextのParamとQueryからroomIDとuserIDを取得して、レスポンスまで返す
+// roomIDとuserIDが正しければエラーはnil
+func ValidationCheck(c *gin.Context) (pr *model.PokerRoom, u *model.User, err error) {
+	rid := c.Param("roomID")
+	uid := c.Query("userID")
+
+	err = errors.New("Valid error")
+
+	// validation check
+	pr, ok := model.FindRoomByRoomID(rid)
+	if !ok {
+		view.RequestError(c, "RoomID is Wrong")
+		return
+	}
+	u = pr.GetUserByUserID(uid)
+	if u == nil {
+		view.RequestUnauthorized(c, "UserID in QueryParam is invalid")
+		return
+	}
+	err = nil
+	return
 }
