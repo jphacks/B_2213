@@ -1,10 +1,13 @@
-import { createContext, useState } from "react";
+import { createContext, useContext, useState } from "react";
+import { UserContext } from "../../../../pages/_app";
 import { ShowDataType, UIControllContextType } from "../../../types/game/type";
 import { useGameInfo } from "../../hooks/game/useGameInfo";
 import ActionSelect from "../../Organisms/game/ActionSelect";
 import GameData from "../../Organisms/game/GameData";
 import ModalBBSB from "../../Organisms/game/ModalBBSB";
+import ModalSelectWinner from "../../Organisms/game/ModalSelectWinner";
 import PlayMenu from "../../Organisms/game/PlayMenu";
+import Loading from "../Loading";
 
 export const UIControllContext = createContext<UIControllContextType>({
   showAction: false,
@@ -14,6 +17,7 @@ export const UIControllContext = createContext<UIControllContextType>({
 });
 
 const GameController = () => {
+  const { userInfo } = useContext(UserContext);
   const { gameInfo } = useGameInfo(); //undefind回避のcontextのカスタムフック
   const stage = gameInfo.roomData.stage;
   const [showAction, setShowAction] = useState<boolean>(false);
@@ -25,6 +29,8 @@ const GameController = () => {
       <div className="bg-poker-color font-poker-color font-poker-family">
         {stage == 0 ? (
           <ModalBBSB />
+        ) : stage == 5 ? (
+          <ModalSelectWinner />
         ) : (
           <section className="h-screen bg-cover">
             <div className="h-full w-full container mx-auto px-8 max-w-lg">
