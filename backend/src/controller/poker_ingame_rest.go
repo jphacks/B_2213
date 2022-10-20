@@ -2,6 +2,7 @@ package controller
 
 import (
 	"errors"
+	"log"
 	"pms/src/model"
 	"pms/src/view"
 
@@ -267,6 +268,41 @@ func IngameSelectWinner(c *gin.Context) {
 			return
 		}
 	}
+}
+
+func IngameRaise(c *gin.Context) {
+	pr, u, err := ValidationCheck(c)
+	if err != nil {
+		return
+	}
+
+	var req model.IngameRaiseRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		view.RequestError(c, "invalid JSON")
+	}
+
+	if req.Amount+pr.RoomData.RequiredPot >= u.Stack+u.BettingTips {
+		log.Println("req.Amount > u.Stack is false")
+		u.AllIn = true
+		req.Amount = u.Stack + u.BettingTips - pr.RoomData.RequiredPot
+	}
+
+	for _, us := range pr.Users {
+		if !us.AllIn {
+			us.Actioned = false
+		}
+	}
+
+	pr.RoomData.RequiredPot += req.Amount
+
+	u.Stack = u.Stack - pr.RoomData.RequiredPot + u.BettingTips
+	pr.RoomData.PotAmount += pr.RoomData.RequiredPot - u.BettingTips
+	u.BettingTips = pr.RoomData.RequiredPot
+
+	u.Actioned = true
+
+	view.NoContext(c)
+	WritePokerRoombyWS(pr)
 }
 
 // gin.ContextのParamとQueryからroomIDとuserIDを取得して、レスポンスまで返す
