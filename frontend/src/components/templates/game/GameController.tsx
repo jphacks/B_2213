@@ -7,7 +7,6 @@ import GameData from "../../Organisms/game/GameData";
 import ModalBBSB from "../../Organisms/game/ModalBBSB";
 import ModalSelectWinner from "../../Organisms/game/ModalSelectWinner";
 import PlayMenu from "../../Organisms/game/PlayMenu";
-import Loading from "../Loading";
 
 export const UIControllContext = createContext<UIControllContextType>({
   showAction: false,
