@@ -35,7 +35,7 @@ func ConnectRoom(c *gin.Context) {
 		view.RequestUnauthorized(c, "UserID in QueryParam is invalid")
 		return
 	}
-	
+
 	WebSocketServer(c.Writer, c.Request, rid, uid)
 }
 

@@ -235,7 +235,6 @@ func IngameFold(c *gin.Context) {
 }
 
 func IngameCall(c *gin.Context) {
-	// log.Println("call")
 	rid := c.Param("roomID")
 	uid := c.Query("userID")
 
@@ -259,13 +258,22 @@ func IngameCall(c *gin.Context) {
 	u.BettingTips = pr.RoomData.RequiredPot
 	u.Actioned = true
 
+	// allinがfalseでJoiningのUserが1人しかいなかったらNextRoundにしたい
+	// 全員がActionedだったらNextStageにしたい
 	allActioned := true
+	notAllInJoining := 0
 	for _, u := range pr.Users {
 		if !u.AllIn && u.Joining {
 			if !u.Actioned {
 				allActioned = false
 			}
 		}
+		if !u.AllIn && u.Joining {
+			notAllInJoining++
+		}
+	}
+	if notAllInJoining == 1 {
+		pr.RoomData.Stage = 4
 	}
 	if allActioned {
 		pr.NextStage()
