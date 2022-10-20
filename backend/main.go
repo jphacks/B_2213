@@ -50,6 +50,7 @@ func Router() *gin.Engine {
 		ingame.POST("/:roomID/bb", controller.IngameBB)
 		ingame.POST("/:roomID/fold", controller.IngameFold)
 		ingame.POST("/:roomID/call", controller.IngameCall)
+		ingame.POST("/:roomID/selectWinner", controller.IngameSelectWinner)
 		ingame.POST("/:roomID/next", controller.RoomNextRound)
 	}
 
