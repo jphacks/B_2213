@@ -251,7 +251,7 @@ func IngameCall(c *gin.Context) {
 		return
 	}
 
-	if (u.Stack + u.BettingTips) > pr.RoomData.RequiredPot {
+	if (u.Stack + u.BettingTips) < pr.RoomData.RequiredPot {
 		u.AllIn = true
 	}
 	pr.RoomData.PotAmount += (pr.RoomData.RequiredPot - u.BettingTips)
@@ -271,6 +271,6 @@ func IngameCall(c *gin.Context) {
 		pr.NextStage()
 	}
 
-	view.StatusOK(c, pr)
+	view.NoContext(c)
 	WritePokerRoombyWS(pr)
 }
