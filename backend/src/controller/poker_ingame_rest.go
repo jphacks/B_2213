@@ -2,7 +2,6 @@ package controller
 
 import (
 	"errors"
-	"log"
 	"pms/src/model"
 	"pms/src/view"
 
@@ -173,7 +172,7 @@ func IngameFold(c *gin.Context) {
 
 	userNum := 0
 	for _, u := range pr.Users {
-		if !u.AllIn && u.Joining {
+		if u.Joining {
 			userNum += 1
 		}
 	}
@@ -255,6 +254,7 @@ func IngameSelectWinner(c *gin.Context) {
 		_, ok = pr.FindUserByUserID(req.Winner)
 		if !ok {
 			view.RequestError(c, "No such user: "+req.Winner)
+			return
 		} else {
 			pr.RoomData.Winners = []string{req.Winner}
 		}
@@ -265,6 +265,7 @@ func IngameSelectWinner(c *gin.Context) {
 			return
 		} else {
 			view.StatusOK(c, gin.H{"winner": pr.RoomData.Winners})
+			WritePokerRoombyWS(pr)
 			return
 		}
 	}
@@ -282,7 +283,6 @@ func IngameRaise(c *gin.Context) {
 	}
 
 	if req.Amount >= u.Stack {
-		log.Println("req.Amount > u.Stack is false")
 		u.AllIn = true
 		req.Amount = u.Stack
 	}

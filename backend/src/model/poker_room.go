@@ -2,7 +2,6 @@ package model
 
 import (
 	"errors"
-	"log"
 	// "github.com/gorilla/websocket"
 )
 
@@ -90,7 +89,6 @@ func (pr *PokerRoom) NextStage() {
 	// ステージが5の場合、ラウンド終了処理を起動する
 	pr.RoomData.Stage += 1
 	if pr.RoomData.Stage >= 5 {
-		log.Println("NextStage()から終了処理を呼び出す")
 		pr.NextRound()
 
 	}
@@ -122,34 +120,29 @@ func (pr *PokerRoom) NextRound() {
 		return
 	} else if winners != nil {
 	} else {
-		log.Println("winners is nil")
 		winners = []string{}
 		for uid, u := range pr.Users {
-			if u.PotAmount > 0 {
-				log.Println("appending user for winners")
+			if u.Joining {
 				winners = append(winners, uid)
 			}
 		}
-		log.Println(len(winners))
 		if len(winners) == 1 {
-			if pr.GetUserByUserID(winners[0]).PotAmount == 0 {
+			u := pr.GetUserByUserID(winners[0])
+			if u.PotAmount == 0 {
 				return
 			}
 			pr.CollectChips(winners[0])
+			u.Joining = false
 			pr.NextRound()
 			return
 		} else if len(winners) == 0 {
-			log.Println("no winners")
 		} else {
 			pr.RoomData.Winners = winners
 		}
 	}
 
-	log.Println(pr.RoomData.Winners)
-
 	if pr.RoomData.Winners != nil {
 		// selectWinnerが必要なので何もしない
-		log.Println("Winner Select is required")
 	} else {
 		// Roundをすすめる
 		pr.RoomData.Round += 1
@@ -169,6 +162,9 @@ func (pr *PokerRoom) CollectChips(uid string) {
 		} else {
 			winner.Stack += u.PotAmount
 			u.PotAmount = 0
+		}
+		if u.PotAmount == 0 {
+			u.Joining = false
 		}
 	}
 }
