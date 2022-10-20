@@ -23,14 +23,22 @@ const ActionSelect = () => {
   });
 
   useEffect(() => {
-    if (bettingTips == 0) {
-      setActionInfo({ ...actionInfo, canActions: ["check", "bet", "fold"] });
-    }
+    const canActionList = (() => {
+      if (toCall == 0) {
+        return ["check", "bet", "fold"];
+      }
+      if (toCall - bettingTips == 0) {
+        return ["check", "bet", "fold"];
+      }
+      return ["call", "raise", "fold"];
+    })(); // 即時関数
 
-    if (toCall - bettingTips == 0) {
-      setActionInfo({ ...actionInfo, canActions: ["check", "raise", "fold"] });
-    }
-  }, []);
+    setActionInfo({
+      ...actionInfo,
+      canActions: canActionList,
+      willBet: toCall - bettingTips < stack ? toCall - bettingTips : stack,
+    });
+  }, [toCall, bettingTips, stack]);
 
   return (
     <div className={showAction ? styles.fadein : styles.fadeout}>
