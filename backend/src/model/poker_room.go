@@ -92,9 +92,7 @@ func (pr *PokerRoom) NextStage() {
 	if pr.RoomData.Stage >= 5 {
 		log.Println("NextStage()から終了処理を呼び出す")
 		pr.NextRound()
-		// Roundをすすめる
-		pr.RoomData.Round += 1
-		pr.ResetRoom()
+
 	}
 }
 
@@ -114,10 +112,12 @@ func (pr *PokerRoom) ResetRoom() {
 	}
 }
 
-// 勝敗判定が必要なところをフロントエンドに渡す
+// 勝敗判定が必要なところがあればWinnersに記録し、FrontendがselectWinnerを叩いたときに渡す
+// 勝敗判定が必要なければPotからUsersに移動する
 func (pr *PokerRoom) NextRound() {
-	if winners := pr.RoomData.Winners; winners != nil && len(winners) != 1 {
+	if winners := pr.RoomData.Winners; len(winners) == 1 {
 		pr.CollectChips(winners[0])
+		pr.RoomData.Winners = nil
 		pr.NextRound()
 		return
 	} else if winners != nil {
@@ -125,7 +125,7 @@ func (pr *PokerRoom) NextRound() {
 		log.Println("winners is nil")
 		winners = []string{}
 		for uid, u := range pr.Users {
-			if u.Joining {
+			if u.PotAmount > 0 {
 				log.Println("appending user for winners")
 				winners = append(winners, uid)
 			}
@@ -140,15 +140,21 @@ func (pr *PokerRoom) NextRound() {
 			return
 		} else if len(winners) == 0 {
 			log.Println("no winners")
-			return
 		} else {
 			pr.RoomData.Winners = winners
 		}
 	}
 
-	log.Println(pr)
-	log.Println(pr.RoomData)
-	// } else if pr.RoomData.Winners != nil &&
+	log.Println(pr.RoomData.Winners)
+
+	if pr.RoomData.Winners != nil {
+		// selectWinnerが必要なので何もしない
+		log.Println("Winner Select is required")
+	} else {
+		// Roundをすすめる
+		pr.RoomData.Round += 1
+		pr.ResetRoom()
+	}
 }
 
 // すべてのUserからuidのUserにPotAmountを没収する
