@@ -85,6 +85,7 @@ func (pr *PokerRoom) NextStage() {
 			u.Actioned = false
 		}
 	}
+	pr.RoomData.RequiredPot = 0
 
 	// ステージが5の場合、ラウンド終了処理を起動する
 	pr.RoomData.Stage += 1
