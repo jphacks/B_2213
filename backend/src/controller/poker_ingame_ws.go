@@ -71,12 +71,14 @@ func WebSocketServer(w http.ResponseWriter, r *http.Request, rid string, uid str
 // PokerRoomの全てのUserにPokerRoomをJSONで送信
 func WritePokerRoombyWS(pr *model.PokerRoom) {
 	for _, u := range pr.Users {
-		if u.WsConn == nil {
-			// WsConnがnilでWriteJSONするとぬるぽ吐くので振り分け
-		} else if err := view.WriteRoomInfobyWS(u.WsConn, pr); err != nil {
-			u.WsConn.Close()
-			u.WsConn = nil
-			u.SessionAlive = false
-		}
+		go func(u *model.User) {
+			if u.WsConn == nil {
+				// WsConnがnilでWriteJSONするとぬるぽ吐くので振り分け
+			} else if err := view.WriteRoomInfobyWS(u.WsConn, pr); err != nil {
+				u.WsConn.Close()
+				u.WsConn = nil
+				u.SessionAlive = false
+			}
+		}(u)
 	}
 }
