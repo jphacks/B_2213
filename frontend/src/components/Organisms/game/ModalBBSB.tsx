@@ -2,12 +2,14 @@ import axios from "axios";
 import { memo, useContext, useState } from "react";
 import { UserContext } from "../../../../pages/_app";
 import { useGameInfo } from "../../hooks/game/useGameInfo";
+import Result from "./Result";
 
 // eslint-disable-next-line react/display-name
 const ModalBBSB = memo(() => {
   const { userInfo } = useContext(UserContext);
   const { gameInfo } = useGameInfo(); //undefind回避のcontextのカスタムフック
   const roomData = gameInfo.roomData;
+  const [showResult, setShowResult] = useState(false);
 
   const selectBBSB = async (type_bb_sb: "bb" | "sb") => {
     try {
@@ -27,10 +29,20 @@ const ModalBBSB = memo(() => {
 
   return (
     <div
-      className="min-w-screen h-screen animated fadeIn faster  fixed  left-0 top-0 flex justify-center items-center inset-0 z-50 outline-none focus:outline-none bg-no-repeat bg-center bg-cover"
+      className="min-w-screen h-screen animated fadeIn faster fixed  left-0 top-0 flex justify-center items-center inset-0 z-30 outline-none focus:outline-none bg-no-repeat bg-center bg-cover"
       id="modal-id"
     >
-      <div className="absolute bg-[#636363] inset-0 z-0"></div>
+      <div className="absolute bg-[#636363] inset-0 z-0">
+        <div className="mt-10">
+          <button
+            className="px-6 py-2 mx-5 bg-black-button transition-colors duration-300 transform rounded-md"
+            onClick={() => setShowResult(true)}
+          >
+            Show Result
+          </button>
+        </div>
+      </div>
+
       <div className="w-full  max-w-lg p-5 relative mx-auto my-auto rounded-xl shadow-lg bg-poker-color font-poker-color font-poker-family">
         <div className="text-center p-5 flex-auto justify-center">
           <h2 className="text-4xl">Round : {roomData.round}</h2>
@@ -52,6 +64,7 @@ const ModalBBSB = memo(() => {
           </button>
         </div>
       </div>
+      {showResult ? <Result setShowResult={setShowResult} /> : null}
     </div>
   );
 });
