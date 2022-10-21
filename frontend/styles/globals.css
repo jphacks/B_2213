@@ -46,3 +46,13 @@
   border-width: 1px;
   color: #95913f;
 }
+
+.bg-black-button {
+  background-color: #2d2d2d;
+  border-color: #95913f;
+  border-width: 1px;
+}
+.bg-black-button:hover {
+  background-color: #95913f;
+  color: #2d2d2d;
+}
