@@ -6,7 +6,7 @@ services:
       dockerfile: Dockerfile-deployment
     environment:
       - WATCHPACK_POLLING=true
-    command: sh -c "npm run dev"
+    command: sh -c "npm run start"
     ports:
       - "80:3000"
   backend:
