@@ -103,7 +103,6 @@ const WaitRoom: NextPage = () => {
     socketRef.current.onmessage = function (event) {
       const gameInfo_JSON = event.data;
       const gameInfo_obj: GameInfoType = JSON.parse(gameInfo_JSON);
-      console.log(gameInfo_obj);
       setMemberInfo(gameInfo_obj.users);
       setRound(gameInfo_obj.roomData.round);
       setIsReady((isReady) => ({ ...isReady, message_WS_Ready: true }));

@@ -97,7 +97,6 @@ const PlayRoom: NextPage = () => {
     socketRef.current.onmessage = function (event) {
       const gameInfo_JSON = event.data;
       const gameInfo_obj: GameInfoType = JSON.parse(gameInfo_JSON);
-      console.log(gameInfo_obj);
       setGameInfo(gameInfo_obj);
       setIsReady((isReady) => ({ ...isReady, message_WS_Ready: true }));
     };
