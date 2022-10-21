@@ -1,0 +1,21 @@
+version: "3"
+services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile-deployment
+    environment:
+      - WATCHPACK_POLLING=true
+    command: sh -c "npm run dev"
+    ports:
+      - "80:3000"
+  backend:
+    container_name: app
+    build:
+      context: ./backend
+      dockerfile: ./docker/app/Dockerfile
+    ports:
+      - "8000:8080"
+    tty: true
+    environment:
+      TZ: Asia/Tokyo
