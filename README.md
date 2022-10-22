@@ -2,6 +2,12 @@
 
 私たちのサービスは[こちら](https://p-dealer.com/start)
 
+[実際に使用している様子](https://youtu.be/wa69u-Ejo9M)
+
+[開発時にPRやIssue管理をしていたリポジトリ](https://github.com/tokyo-azisai-paradise/poker-mahjong-calculation)
+
+[スライド(Googleスライド)](https://docs.google.com/presentation/d/10tEQEf6BuTYb5GO2TfdExJ8YbgX8lSnH/edit?usp=sharing&ouid=106899970248434666400&rtpof=true&sd=true)
+
 [![IMAGE ALT TEXT HERE](https://jphacks.com/wp-content/uploads/2022/08/JPHACKS2022_ogp.jpg)](https://www.youtube.com/watch?v=LUPQFB4QyVo)
 
 ## 製品概要
