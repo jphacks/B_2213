@@ -10,8 +10,14 @@ or
 
 `make dev-run`
 or
-`docker compose up -d`
+`docker compose -f docker-compose-deploy.yml up -d    `
 
-# API Endpoints
+# Backend Documents
 
-[EndPoints](https://great-bongo-965.notion.site/Backend-Documents-8c7c8d5ee6384ca99aff5a40f8471199)
+- [ゲームに参加するために使用するエンドポイント](./doc/outgame.md)
+
+- [ゲーム中に使用するエンドポイント](./doc/ingame.md)
+
+- [WebSocket Response Example](./doc/websocket.md)
+
+![JPHacks.png](./doc/JPHacks.png)
