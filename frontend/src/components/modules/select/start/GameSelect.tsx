@@ -1,7 +1,6 @@
 import type { SetGameProps } from "../../../../types/game/type";
 
-const GameSelect = (props: SetGameProps) => {
-  const { setGameType } = props;
+const GameSelect = ({ setGameType }: SetGameProps) => {
   return (
     <div className="max-w-2xl text-center">
       <h1
