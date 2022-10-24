@@ -4,6 +4,7 @@ import { useState } from "react";
 import BackGameSelect from "../../src/components/atoms/transition/start/BackGameSelect";
 import GameSelect from "../../src/components/modules/select/start/GameSelect";
 import StartTypeSelect from "../../src/components/modules/select/start/StartTypeSelect";
+import ComingSoon from "../../src/components/templates/start/ComingSoon";
 
 const Start: NextPage = () => {
   // queryにgameTypeの値があれば使用。
@@ -12,7 +13,12 @@ const Start: NextPage = () => {
   // gameTypeにstring[]がないことを強制させる
   const gameType_from_query = (router.query.gameType ?? null) as string | null;
 
-  const [gameType, setGameType] = useState<string | null>(gameType_from_query);
+  const [gameType, setGameType] = useState(gameType_from_query);
+
+  // mahjongの機能はまだ実装していないためComing soon ページへ飛ばす
+  if (gameType == "mahjong") {
+    return <ComingSoon setGameType={setGameType} />;
+  }
 
   return (
     <div className="bg-poker-color font-poker-color font-poker-family">
