@@ -13,6 +13,7 @@ const BetChips = ({ actionInfo, setActionInfo }: ActionInfoProps) => {
 
   // 条件分岐が複雑なためswitchを用いてわかりやすくする。
   const changeBetValue = (betValue: number) => {
+    console.log(betValue);
     switch (true) {
       case betValue < toCall - bettingTips:
         setActionInfo({
@@ -28,17 +29,24 @@ const BetChips = ({ actionInfo, setActionInfo }: ActionInfoProps) => {
     }
   };
 
+  // 文字列(#など)が入力されNaNとなるのを防止
+  const setBetValue = (changedNum: number) => {
+    if (isNaN(changedNum)) {
+      return;
+    }
+
+    setActionInfo({ ...actionInfo, willBet: Number(changedNum) });
+  };
+
   return (
     <div>
       <div className="pt-5 flex justify-center items-center">
         <p className="text-center text-6xl pr-2">+</p>
         <input
-          type="number"
+          type="tel"
           autoComplete="off"
           value={actionInfo.willBet}
-          onChange={(e) =>
-            setActionInfo({ ...actionInfo, willBet: Number(e.target.value) })
-          }
+          onChange={(e) => setBetValue(Number(e.target.value))}
           onBlur={() => changeBetValue(actionInfo.willBet)}
           className="text-center text-5xl p-2 h-16 w-1/2 sm:w-5/12 md:w-3/12 bg-[#4f4e4e] text-[#95913f] rounded-md outline-none"
         />
