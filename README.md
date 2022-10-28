@@ -1,4 +1,4 @@
-# [P-Dealer](https://p-dealer.com/start)
+# [Dealer](https://p-dealer.com/start)
 
 私たちのサービスは[こちら](https://p-dealer.com/start)
 
@@ -8,7 +8,7 @@
 
 [スライド(Googleスライド)](https://docs.google.com/presentation/d/10tEQEf6BuTYb5GO2TfdExJ8YbgX8lSnH/edit?usp=sharing&ouid=106899970248434666400&rtpof=true&sd=true)
 
-[![IMAGE ALT TEXT HERE](https://jphacks.com/wp-content/uploads/2022/08/JPHACKS2022_ogp.jpg)](https://www.youtube.com/watch?v=LUPQFB4QyVo)
+[![Dealer](doc/Dealer.png)](https://youtu.be/wa69u-Ejo9M)
 
 ## 製品概要
 ポーカーのチップ管理を行うアプリケーション
@@ -20,7 +20,7 @@
 
 ### 製品説明（具体的な製品の説明）
 ボタン操作やポイント入力を行うだけで、ポーカーのゲーム進行をスムーズにすることができるアプリケーションです。<br>このアプリケーションは参加者一人一人が自分の携帯でゲーム内のアクションを選択し、ゲームの終了や参加者の持ちポイントの設定などゲームに参加するすべての人を管理することができます。<br><br>つまり、プレイヤー全員がこのアプリケーションを使用するだけでポーカーというゲームを簡単に楽しむことができます。
-![プレイ画面](backend/doc/play.png)
+![プレイ画面](doc/play.png)
 
 ### 特長
 #### 1. 高級感のあるUIを作成
@@ -69,4 +69,4 @@
 - All slides authored by [田野壮一郎](https://github.com/soichi12188)
 - Other:    Nginx, ConoHa VPS
 
-![InfraStructure](backend/doc/infrastructure.jpeg)
+![InfraStructure](doc/infrastructure.jpeg)
