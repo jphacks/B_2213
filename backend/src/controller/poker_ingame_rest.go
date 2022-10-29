@@ -34,6 +34,7 @@ func IngameQuitGame(c *gin.Context) {
 	view.StatusOK(c, gin.H{
 		"message": "deleted successfully",
 	})
+	WritePokerRoombyWS(pr)
 }
 
 // HandlerFunc For POST /api/ingame/:roomID/options
