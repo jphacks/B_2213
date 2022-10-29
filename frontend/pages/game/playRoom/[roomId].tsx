@@ -3,8 +3,8 @@ import { NextPage } from "next";
 import { useRouter } from "next/router";
 import { createContext, useCallback, useEffect, useRef, useState } from "react";
 import { useUserInfo } from "../../../src/components/hooks/user/useUserInfo";
+import Connecting from "../../../src/components/templates/game/Connecting";
 import GameController from "../../../src/components/templates/game/GameController";
-import Loading from "../../../src/components/templates/Loading";
 import {
   GameContextType,
   GameInfoType,
@@ -70,13 +70,8 @@ const PlayRoom: NextPage = () => {
     })();
   }, []);
 
-  // WSによるリアルタイム通信
-  useEffect(() => {
-    if (!isReady.isRoomReady) {
-      // roomの状態やuser情報が確認でき次第WS通信を行う。
-      return;
-    }
-
+  // WS接続用。closeしてもconnectiongページでこの関数を実行し再接続可能
+  const connectWS = useCallback(() => {
     socketRef.current = new WebSocket(
       process.env.NEXT_PUBLIC_WS_URL +
         "/ws/" +
@@ -90,6 +85,7 @@ const PlayRoom: NextPage = () => {
     };
 
     socketRef.current.onclose = function () {
+      setIsReady((isReady) => ({ ...isReady, message_WS_Ready: false }));
       console.log("closed");
     };
 
@@ -100,6 +96,16 @@ const PlayRoom: NextPage = () => {
       setGameInfo(gameInfo_obj);
       setIsReady((isReady) => ({ ...isReady, message_WS_Ready: true }));
     };
+  }, []);
+
+  // WSによるリアルタイム通信
+  useEffect(() => {
+    if (!isReady.isRoomReady) {
+      // roomの状態やuser情報が確認でき次第WS通信を行う。
+      return;
+    }
+
+    connectWS(); // WSを設定
 
     return () => {
       if (socketRef.current == null) {
@@ -110,7 +116,7 @@ const PlayRoom: NextPage = () => {
   }, [isReady.isRoomReady, userInfo.roomID, userInfo.userID]);
 
   if (!(isReady.isRoomReady && isReady.message_WS_Ready)) {
-    return <Loading />;
+    return <Connecting connectWS={() => connectWS()} />;
   }
   return (
     <GameContext.Provider value={{ gameInfo, setGameInfo }}>

@@ -5,7 +5,6 @@ import AnimationStrWaiting from "../../../src/components/atoms/show/game/Animati
 import ShowRoomId from "../../../src/components/atoms/show/game/ShowRoomId";
 import WaitingMember from "../../../src/components/atoms/show/game/WaitingMember";
 import { useUserInfo } from "../../../src/components/hooks/user/useUserInfo";
-import Loading from "../../../src/components/templates/Loading";
 import axios from "axios";
 import type {
   MemberContextType,
@@ -15,6 +14,7 @@ import type {
 } from "../../../src/types/game/type";
 import StartQuitRoom from "../../../src/components/Organisms/game/StartQuitRoom";
 import SetOption from "../../../src/components/Organisms/game/SetOption";
+import Connecting from "../../../src/components/templates/game/Connecting";
 
 // useContextでメンバー情報を子コンポーネントに共有
 export const MemberContext = createContext<MemberContextType>({
@@ -76,13 +76,8 @@ const WaitRoom: NextPage = () => {
     })();
   }, []);
 
-  // WSによるリアルタイム通信
-  useEffect(() => {
-    if (!isReady.isRoomReady) {
-      // roomの状態やuser情報が確認でき次第WS通信を行う。
-      return;
-    }
-
+  // WS接続用。closeしてもconnectiongページでこの関数を実行し再接続可能
+  const connectWS = useCallback(() => {
     socketRef.current = new WebSocket(
       process.env.NEXT_PUBLIC_WS_URL +
         "/ws/" +
@@ -96,6 +91,7 @@ const WaitRoom: NextPage = () => {
     };
 
     socketRef.current.onclose = function () {
+      setIsReady((isReady) => ({ ...isReady, message_WS_Ready: false }));
       console.log("closed");
     };
 
@@ -107,6 +103,15 @@ const WaitRoom: NextPage = () => {
       setRound(gameInfo_obj.roomData.round);
       setIsReady((isReady) => ({ ...isReady, message_WS_Ready: true }));
     };
+  }, []);
+
+  useEffect(() => {
+    if (!isReady.isRoomReady) {
+      // roomの状態やuser情報が確認でき次第WS通信を行う。
+      return;
+    }
+
+    connectWS(); // WSを設定
 
     return () => {
       if (socketRef.current == null) {
@@ -117,7 +122,7 @@ const WaitRoom: NextPage = () => {
   }, [isReady.isRoomReady, userInfo.roomID, userInfo.userID]);
 
   if (!(isReady.isRoomReady && isReady.message_WS_Ready)) {
-    return <Loading />;
+    return <Connecting connectWS={() => connectWS()} />;
   }
 
   return (
