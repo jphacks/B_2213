@@ -2,8 +2,8 @@ package controller
 
 import (
 	"errors"
-	"pms/src/model"
-	"pms/src/view"
+	"github.com/tokyo-azisai-paradise/poker-mahjong-calculation/src/model"
+	"github.com/tokyo-azisai-paradise/poker-mahjong-calculation/src/view"
 
 	"github.com/gin-gonic/gin"
 )

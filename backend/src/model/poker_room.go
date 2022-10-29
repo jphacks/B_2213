@@ -2,7 +2,6 @@ package model
 
 import (
 	"errors"
-	// "github.com/gorilla/websocket"
 )
 
 var PR PokerRooms

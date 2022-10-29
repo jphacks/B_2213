@@ -5,11 +5,11 @@ import (
 	"encoding/json"
 	"io"
 	"log"
-	"pms/src/controller"
-	"pms/src/model"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	"github.com/tokyo-azisai-paradise/poker-mahjong-calculation/src/controller"
+	"github.com/tokyo-azisai-paradise/poker-mahjong-calculation/src/model"
 )
 
 func Router() *gin.Engine {
