@@ -34,9 +34,7 @@ const JoinRoom: NextPage = () => {
         <div className="flex h-full w-full items-center justify-center container mx-auto px-8">
           <BackStartPage gameType={gameType as string} />
           {roomType === "createRoom" ? (
-            <div>
-              <CreateRoomForm gameType={gameType as string} />
-            </div>
+            <CreateRoomForm gameType={gameType as string} />
           ) : (
             <JoinRoomForm gameType={gameType as string} />
           )}

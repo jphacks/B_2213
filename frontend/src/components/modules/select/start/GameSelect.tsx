@@ -1,20 +1,15 @@
 import type { SetGameProps } from "../../../../types/game/type";
+import SelectTag from "../../../atoms/transition/start/SelectTag";
 
 const GameSelect = ({ setGameType }: SetGameProps) => {
   return (
     <div className="max-w-2xl text-center">
-      <h1
-        onClick={() => setGameType("poker")}
-        className="text-6xl mb-20 sm:text-5xl capitalize tracking-widest lg:text-7xl"
-      >
-        poker
-      </h1>
-      <h1
-        onClick={() => setGameType("mahjong")}
-        className="text-6xl mb-20 sm:text-5xl capitalize tracking-widest lg:text-7xl"
-      >
-        mahjong
-      </h1>
+      <div onClick={() => setGameType("poker")}>
+        <SelectTag tagName={"poker"} />
+      </div>
+      <div onClick={() => setGameType("mahjong")}>
+        <SelectTag tagName={"mahjong"} />
+      </div>
     </div>
   );
 };
