@@ -5,7 +5,6 @@ import AnimationStrWaiting from "../../../src/components/atoms/show/game/Animati
 import ShowRoomId from "../../../src/components/atoms/show/game/ShowRoomId";
 import WaitingMember from "../../../src/components/atoms/show/game/WaitingMember";
 import { useUserInfo } from "../../../src/components/hooks/user/useUserInfo";
-import Loading from "../../../src/components/templates/Loading";
 import axios from "axios";
 import type {
   MemberContextType,
@@ -78,8 +77,7 @@ const WaitRoom: NextPage = () => {
   }, []);
 
   // WS接続用。closeしてもconnectiongページでこの関数を実行し再接続可能
-  const connectWS = () => {
-    console.log(userInfo.userID);
+  const connectWS = useCallback(() => {
     socketRef.current = new WebSocket(
       process.env.NEXT_PUBLIC_WS_URL +
         "/ws/" +
@@ -105,7 +103,7 @@ const WaitRoom: NextPage = () => {
       setRound(gameInfo_obj.roomData.round);
       setIsReady((isReady) => ({ ...isReady, message_WS_Ready: true }));
     };
-  };
+  }, []);
 
   useEffect(() => {
     if (!isReady.isRoomReady) {

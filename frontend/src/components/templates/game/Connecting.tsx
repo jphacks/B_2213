@@ -1,6 +1,9 @@
 import Image from "next/image";
+import { memo } from "react";
 import reconnectImg from "../../../img/reload.png";
-const Connecting = ({ connectWS }: { connectWS: () => void }) => {
+
+// eslint-disable-next-line react/display-name
+const Connecting = memo<{ connectWS: () => void }>(({ connectWS }) => {
   return (
     <div className="bg-poker-color font-poker-color font-poker-family">
       <section className="h-screen bg-cover">
@@ -25,6 +28,6 @@ const Connecting = ({ connectWS }: { connectWS: () => void }) => {
       </section>
     </div>
   );
-};
+});
 
 export default Connecting;
