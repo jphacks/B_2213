@@ -3,10 +3,9 @@
 package controller
 
 import (
-	"pms/src/model"
-	"pms/src/view"
-
 	"github.com/gin-gonic/gin"
+	"github.com/tokyo-azisai-paradise/poker-mahjong-calculation/src/model"
+	"github.com/tokyo-azisai-paradise/poker-mahjong-calculation/src/view"
 )
 
 // HandlerFunc for GET /api/status/[poker or mahjong]

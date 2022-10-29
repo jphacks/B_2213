@@ -1,4 +1,4 @@
-module pms
+module github.com/tokyo-azisai-paradise/poker-mahjong-calculation
 
 go 1.18
 

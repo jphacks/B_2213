@@ -3,11 +3,11 @@ package controller
 import (
 	"log"
 	"net/http"
-	"pms/src/model"
-	"pms/src/view"
 
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
+	"github.com/tokyo-azisai-paradise/poker-mahjong-calculation/src/model"
+	"github.com/tokyo-azisai-paradise/poker-mahjong-calculation/src/view"
 )
 
 var wsupgrader = websocket.Upgrader{

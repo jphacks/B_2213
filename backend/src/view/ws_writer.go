@@ -2,7 +2,7 @@ package view
 
 import (
 	"github.com/gorilla/websocket"
-	"pms/src/model"
+	"github.com/tokyo-azisai-paradise/poker-mahjong-calculation/src/model"
 )
 
 // User.WsConnにWriteJSONでRoomInfoを送信する
