@@ -1,6 +1,7 @@
 import axios from "axios";
 import { memo, useContext, useState } from "react";
 import { UserContext } from "../../../../pages/_app";
+import GeneralButton from "../../atoms/form/start/GeneralButton";
 import { useGameInfo } from "../../hooks/game/useGameInfo";
 import Result from "./Result";
 
@@ -33,13 +34,12 @@ const ModalBBSB = memo(() => {
       id="modal-id"
     >
       <div className="absolute bg-[#636363] inset-0 z-0">
-        <div className="mt-10">
-          <button
-            className="px-6 py-2 mx-5 bg-black-button transition-colors duration-300 transform rounded-md"
-            onClick={() => setShowResult(true)}
-          >
-            Show Result
-          </button>
+        <div className="mt-10 pl-5">
+          <GeneralButton
+            handleSendButton={() => setShowResult(true)}
+            typeName="Show Result"
+            css="bg-black-button"
+          />
         </div>
       </div>
 

@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import { memo, useContext, useEffect, useState } from "react";
 import { MemberContext } from "../../../../pages/game/waitRoom/[roomId]";
 import { UserContext } from "../../../../pages/_app";
+import GeneralButton from "../../atoms/form/start/GeneralButton";
 
 type PropType = {
   round: number;
@@ -44,22 +45,19 @@ const StartQuitRoom = ({ round, setShowOption }: PropType) => {
 
   return (
     <div className="pt-3 pb-20 w-full z-10 absolute bottom-0 left-0 lg:pb-10 bg-poker-color">
-      <button
-        className="px-6 py-2 mr-2 border-gold-button transition-colors duration-300 transform rounded-md"
-        onClick={() => quitRoom()}
-      >
-        Quit Room
-      </button>
+      <GeneralButton
+        handleSendButton={() => quitRoom()}
+        typeName="Quit Room"
+        css="border-gold-button mx-1"
+      />
+
       {showOnlyAdmin ? (
-        <button
-          className="px-6 py-2 bg-gold-button transition-colors duration-300 transform rounded-md"
-          onClick={() => setShowOption(true)}
-        >
-          Set Options
-        </button>
-      ) : (
-        <div></div>
-      )}
+        <GeneralButton
+          handleSendButton={() => setShowOption(true)}
+          typeName="Set Options"
+          css="bg-gold-button mx-1"
+        />
+      ) : null}
     </div>
   );
 };

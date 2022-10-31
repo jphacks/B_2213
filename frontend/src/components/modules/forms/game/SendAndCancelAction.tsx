@@ -2,6 +2,7 @@ import axios from "axios";
 import { useContext } from "react";
 import { UserContext } from "../../../../../pages/_app";
 import { ActionInfoProps } from "../../../../types/game/type";
+import GeneralButton from "../../../atoms/form/start/GeneralButton";
 import { UIControllContext } from "../../../templates/game/GameController";
 
 const SendAndCancelAction = ({ actionInfo }: ActionInfoProps) => {
@@ -43,18 +44,16 @@ const SendAndCancelAction = ({ actionInfo }: ActionInfoProps) => {
 
   return (
     <div className="mt-10">
-      <button
-        className="px-6 py-2 mx-5 border-gold-button transition-colors duration-300 transform rounded-md"
-        onClick={() => setShowAction(false)}
-      >
-        Cancel
-      </button>
-      <button
-        className="px-6 py-2 mx-5 bg-gold-button transition-colors duration-300 transform rounded-md"
-        onClick={() => sendAction()}
-      >
-        Send
-      </button>
+      <GeneralButton
+        handleSendButton={() => setShowAction(false)}
+        typeName="Cancel"
+        css="mx-5 border-gold-button transition-colors"
+      />
+      <GeneralButton
+        handleSendButton={() => sendAction()}
+        typeName="Send"
+        css="mx-5 bg-gold-button transition-colors"
+      />
     </div>
   );
 };

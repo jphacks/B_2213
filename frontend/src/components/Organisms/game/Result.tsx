@@ -1,5 +1,6 @@
 import { useContext } from "react";
 import { UserContext } from "../../../../pages/_app";
+import GeneralButton from "../../atoms/form/start/GeneralButton";
 import MemberResult from "../../atoms/show/game/MemberResult";
 import MyResult from "../../atoms/show/game/MyResult";
 import { useGameInfo } from "../../hooks/game/useGameInfo";
@@ -23,12 +24,11 @@ const Result = ({ setShowResult }: PropsType) => {
           <MemberResult />
 
           <div className="text-center pt-3 pb-20 w-full z-10 absolute bottom-0 left-0 lg:pb-10">
-            <button
-              className="px-6 py-2 mr-2 border-gold-button transition-colors duration-300 transform rounded-md"
-              onClick={() => setShowResult(false)}
-            >
-              Close Result
-            </button>
+            <GeneralButton
+              handleSendButton={() => setShowResult(false)}
+              typeName="Close Result"
+              css="border-gold-button"
+            />
           </div>
         </div>
       </section>

@@ -1,5 +1,6 @@
 import { useContext } from "react";
 import { UserContext } from "../../../../pages/_app";
+import GeneralButton from "../../atoms/form/start/GeneralButton";
 import { useGameInfo } from "../../hooks/game/useGameInfo";
 import { UIControllContext } from "../../templates/game/GameController";
 
@@ -13,21 +14,23 @@ const PlayMenu = () => {
 
   return (
     <div className="text-center pt-3 pb-20 w-full z-10 absolute bottom-0 left-0 lg:pb-10 bg-poker-color">
-      <button
-        className="px-6 py-2 mx-3 border-gold-button transition-colors duration-300 transform rounded-md"
-        onClick={() => setDataName(dataName == "bet" ? "stack" : "bet")}
-      >
-        Change Data
-      </button>
-      <button
-        className={
-          "px-6 py-2 mx-3 bg-gold-button transition-colors duration-300 transform rounded-md " +
-          (canAction ? "opacity-100" : "opacity-20 pointer-events-none") //ボタンイベントを無効化
+      <GeneralButton
+        handleSendButton={() =>
+          setDataName(dataName == "bet" ? "stack" : "bet")
         }
-        onClick={() => setShowAction(true)}
-      >
-        Action
-      </button>
+        typeName="Change Data"
+        css="border-gold-button mx-3"
+      />
+
+      <GeneralButton
+        handleSendButton={() => setShowAction(true)}
+        typeName="Action"
+        css={
+          "bg-gold-button mx-3 transition-colors " +
+          (canAction ? "opacity-100" : "opacity-20 pointer-events-none")
+        }
+        // ^^^ボタンイベントを無効化
+      />
     </div>
   );
 };
