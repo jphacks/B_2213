@@ -24,7 +24,7 @@ const Result = ({ setShowResult }: PropsType) => {
 
           <div className="text-center pt-3 pb-20 w-full z-10 absolute bottom-0 left-0 lg:pb-10">
             <button
-              className="px-6 py-2 mr-2 border-gold-button transition-colors duration-300 transform rounded-md"
+              className="px-6 py-2 border-gold-button transition-colors duration-300 transform rounded-md"
               onClick={() => setShowResult(false)}
             >
               Close Result
