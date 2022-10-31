@@ -1,5 +1,5 @@
 import UserNameInput from "../../../atoms/form/start/UserNameInput";
-import SendButton from "../../../atoms/form/start/SendButton";
+import GeneralButton from "../../../atoms/form/start/GeneralButton";
 import { useState } from "react";
 import ErrorMessage from "../../../atoms/form/start/ErrorMessage";
 import axios from "axios";
@@ -41,7 +41,15 @@ const CreateRoomForm = ({ gameType }: { gameType: string }) => {
   return (
     <div className="max-w-2xl text-center">
       <UserNameInput {...{ userName, setUserName }} />
-      <SendButton handleSendButton={() => handleSendButton()} />
+
+      <div className="mt-20">
+        <GeneralButton
+          handleSendButton={() => handleSendButton()}
+          typeName="Send"
+          css="border-gold-button"
+        />
+      </div>
+
       <ErrorMessage errorMessage={errorMessage} />
     </div>
   );

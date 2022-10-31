@@ -4,7 +4,9 @@ import { OptionsContextType, OptionsType } from "../../../types/game/type";
 import OptionsUserChips from "../../modules/forms/game/OptionsUserChips";
 import BackWaitRoom from "../../atoms/transition/game/BackWaitRoom";
 import OptionsBBSB from "../../modules/forms/game/OptionsBBSB";
-import SendOptions from "../../modules/forms/game/SendOptions";
+import { UserContext } from "../../../../pages/_app";
+import axios from "axios";
+import GeneralButton from "../../atoms/form/start/GeneralButton";
 
 const initOptions: OptionsType = {
   stacks: {},
@@ -22,6 +24,7 @@ type SetOptionType = {
 };
 
 const SetOption = ({ setShowOption }: SetOptionType) => {
+  const { userInfo } = useContext(UserContext);
   const { memberInfo } = useContext(MemberContext);
   const [options, setOptions] = useState(initOptions);
 
@@ -36,6 +39,20 @@ const SetOption = ({ setShowOption }: SetOptionType) => {
     setOptions({ ...options, stacks: optionsObj.stacks });
   }, [memberInfo]);
 
+  const sendOptions = async () => {
+    try {
+      const apiSendOptionsUrl =
+        process.env.NEXT_PUBLIC_API_URL +
+        "/api/ingame/" +
+        userInfo.roomID +
+        "/options?userID=" +
+        userInfo.userID;
+      await axios.post(apiSendOptionsUrl, options);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   return (
     <div className="w-screen bg-poker-color z-20 absolute top-0 left-0">
       <BackWaitRoom {...{ setShowOption }} />
@@ -48,7 +65,13 @@ const SetOption = ({ setShowOption }: SetOptionType) => {
 
               <OptionsBBSB />
 
-              <SendOptions />
+              <div className="pt-3 pb-20 z-10 absolute bottom-0 right-0 bg-poker-color lg:pb-10">
+                <GeneralButton
+                  handleSendButton={() => sendOptions()}
+                  typeName="start"
+                  css="bg-gold-button"
+                />
+              </div>
             </OptionsContext.Provider>
           </div>
         </div>

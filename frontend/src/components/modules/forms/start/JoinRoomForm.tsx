@@ -1,5 +1,5 @@
 import UserNameInput from "../../../atoms/form/start/UserNameInput";
-import SendButton from "../../../atoms/form/start/SendButton";
+import GeneralButton from "../../../atoms/form/start/GeneralButton";
 import RoomIdInput from "../../../atoms/form/start/RoomIdInput";
 import { useState } from "react";
 import ErrorMessage from "../../../atoms/form/start/ErrorMessage";
@@ -47,7 +47,13 @@ const JoinRoomForm = ({ gameType }: { gameType: string }) => {
 
       <UserNameInput {...{ userName, setUserName }} />
 
-      <SendButton handleSendButton={() => handleSendButton()} />
+      <div className="mt-20">
+        <GeneralButton
+          handleSendButton={() => handleSendButton()}
+          typeName="Send"
+          css="border-gold-button"
+        />
+      </div>
 
       <ErrorMessage errorMessage={errorMessage} />
     </div>
