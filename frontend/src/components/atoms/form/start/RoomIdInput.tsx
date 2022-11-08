@@ -5,7 +5,7 @@ type RoomIdStateType = {
 
 const RoomIdInput = ({ roomID, setRoomID }: RoomIdStateType) => {
   const changeRoomID = (changeValue: string) => {
-    if (changeValue.length <= 10) setRoomID(changeValue);
+    if (changeValue.length <= 10) setRoomID(changeValue.toUpperCase());
   };
   return (
     <div>
