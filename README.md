@@ -65,7 +65,7 @@
   - Document: [README](https://github.com/tokyo-azisai-paradise/poker-mahjong-calculation/blob/develop/frontend/README.md)
 - Backend:  Go, Gin, Gorilla WebSocket
   - Author: [藤田恭輔](https://github.com/Techondorius)
-  - Document: [README](https://github.com/tokyo-azisai-paradise/poker-mahjong-calculation/blob/develop/backend/readme.md)
+  - Document: [README](./backend/readme.md)
 - All slides authored by [田野壮一郎](https://github.com/soichi12188)
 - Other:    Nginx, ConoHa VPS
 

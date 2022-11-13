@@ -14,10 +14,10 @@ or
 
 # Backend Documents
 
-- [ゲームに参加するために使用するエンドポイント](./doc/outgame.md)
+- [ゲームに参加するために使用するエンドポイント](../doc/outgame.md)
 
-- [ゲーム中に使用するエンドポイント](./doc/ingame.md)
+- [ゲーム中に使用するエンドポイント](../doc/ingame.md)
 
-- [WebSocket Response Example](./doc/websocket.md)
+- [WebSocket Response Example](../doc/websocket.md)
 
 ![JPHacks.png](../doc/flow_to_gamestart.jpeg)
