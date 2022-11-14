@@ -22,7 +22,7 @@ const OptionsUserChips = () => {
           <p>{memberInfo[key].userName}</p>
           <input
             value={options.stacks[key] ?? 1000} // 初期ではundefinedとなるため仮に1000をおく
-            type="number"
+            type="tel"
             className="bg-poker-color border-b-2 border-[#95913f] focus:outline-none w-2/5 text-right"
             autoComplete="off"
             onChange={(e) => {

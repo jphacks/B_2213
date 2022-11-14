@@ -9,7 +9,7 @@ const OptionsBBSB = () => {
         <h1 className="text-3xl w-full">Chips of BB</h1>
         <input
           value={options.bb}
-          type="number"
+          type="tel"
           className="bg-poker-color border-b-2 border-[#95913f] focus:outline-none w-2/5 text-right"
           autoComplete="off"
           onChange={(e) =>
@@ -21,7 +21,7 @@ const OptionsBBSB = () => {
         <h1 className="text-3xl w-full">Chips of SB</h1>
         <input
           value={options.sb}
-          type="number"
+          type="tel"
           className="bg-poker-color border-b-2 border-[#95913f] focus:outline-none w-2/5 text-right"
           autoComplete="off"
           onChange={(e) =>
