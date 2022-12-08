@@ -59,8 +59,8 @@ func WebSocketServer(w http.ResponseWriter, r *http.Request, rid string, uid str
 			} else {
 				log.Println("!!!")
 				log.Println(err)
-				(*user).WsConn = nil
-				(*user).SessionAlive = false
+				// (*user).WsConn = nil
+				// (*user).SessionAlive = false
 			}
 			conn.Close()
 			WritePokerRoombyWS(pr)
@@ -79,7 +79,7 @@ func WritePokerRoombyWS(pr *model.PokerRoom) {
 			if u.WsConn == nil {
 				// WsConnがnilでWriteJSONするとぬるぽ吐くので振り分け
 			} else if err := view.WriteRoomInfobyWS(u.WsConn, pr); err != nil {
-				u.WsConn.Close()
+				// u.WsConn.Close()
 				u.WsConn = nil
 				u.SessionAlive = false
 			}
