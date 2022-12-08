@@ -3,6 +3,7 @@ package controller
 import (
 	"log"
 	"net/http"
+	"sync"
 
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
@@ -70,8 +71,11 @@ func WebSocketServer(w http.ResponseWriter, r *http.Request, rid string, uid str
 
 // PokerRoomの全てのUserにPokerRoomをJSONで送信
 func WritePokerRoombyWS(pr *model.PokerRoom) {
+	mu := sync.Mutex{}
 	for _, u := range pr.Users {
 		go func(u *model.User) {
+			mu.Lock()
+			defer mu.Unlock()
 			if u.WsConn == nil {
 				// WsConnがnilでWriteJSONするとぬるぽ吐くので振り分け
 			} else if err := view.WriteRoomInfobyWS(u.WsConn, pr); err != nil {
